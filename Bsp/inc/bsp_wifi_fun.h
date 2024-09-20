@@ -37,7 +37,7 @@ typedef struct usart
 {
     unsigned char UART_Data[150]; 
     unsigned char UART_Flag;
-    unsigned int wifi_uart_counter;
+    unsigned int wifi_uart_rx_counter;
     unsigned char wifi_inputBuf[1];
 }USART_DataBuf;
 
@@ -57,7 +57,7 @@ typedef struct _WIFI_FUN{
 	uint8_t esp8266_smartphone_flag;
 	uint8_t esp8266_link_cloud_flag;
 	uint8_t soft_ap_config_success;
-	uint8_t esp8266_login_cloud_success;
+	uint8_t link_wifi_net_login_tencent_success;
 
 	uint8_t subscribe_cloud_success;
 	uint8_t power_off_step;
@@ -109,7 +109,7 @@ typedef struct _WIFI_FUN{
     //uint8_t usart2_rx_flag;
 	
 	
-	uint8_t wifi_uart_counter;
+	uint8_t wifi_uart_rx_counter;
 	uint8_t tencent_cloud_command_power_on;
 	uint8_t get_rx_auto_repeat_net_enable;
 	
@@ -139,7 +139,7 @@ typedef struct _WIFI_FUN{
 	uint8_t received_data_from_tencent_cloud ;
 	//beijing time
 	uint8_t set_beijing_time_flag;
-	uint8_t beijing_time_flag ;
+	
 
 	//auto link net
 	uint8_t rx_error_codes_flag;
@@ -203,7 +203,10 @@ void wifiUpdate_SetTemperatureValue(uint8_t temp);
 
 void GetNTP_Times(void);
 
-void Wifi_Pro_Runing_Init(void);
+
+
+void link_wifi_net_handler(void);
+
 
 #endif 
 

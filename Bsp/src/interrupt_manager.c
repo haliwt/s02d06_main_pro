@@ -115,33 +115,33 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
            
 	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
-			wifi_t.wifi_data[wifi_t.wifi_uart_counter] = wifi_t.usart1_dataBuf[0];
-			wifi_t.wifi_uart_counter++;
+			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
+			wifi_t.wifi_uart_rx_counter++;
 
 			if(*wifi_t.usart1_dataBuf==0X0A) // 0x0A = "\n"
 			{
 				//wifi_t.usart2_rx_flag = 1;
 				Wifi_Rx_Link_Net_InputInfo_Handler();
-				wifi_t.wifi_uart_counter=0;
+				wifi_t.wifi_uart_rx_counter=0;
 			}
 
 	      } 
 		  else{
 
 		         if(wifi_t.get_rx_beijing_time_enable==1){
-					wifi_t.wifi_data[wifi_t.wifi_uart_counter] = wifi_t.usart1_dataBuf[0];
-					wifi_t.wifi_uart_counter++;
+					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
+					wifi_t.wifi_uart_rx_counter++;
 				}
 				else if(wifi_t.get_rx_auto_repeat_net_enable ==1){
 
-					wifi_t.wifi_data[wifi_t.wifi_uart_counter] = wifi_t.usart1_dataBuf[0];
-					wifi_t.wifi_uart_counter++;
+					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
+					wifi_t.wifi_uart_rx_counter++;
 
 					if(*wifi_t.usart1_dataBuf==0X0A) // 0x0A = "\n"
 					{
 						
 						Wifi_Rx_Auto_Link_Net_Handler();
-						wifi_t.wifi_uart_counter=0;
+						wifi_t.wifi_uart_rx_counter=0;
 					}
 
 
@@ -253,6 +253,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_run_main_fun++;
         gpro_t.gTimer_publish_tencent_dht11++;
         gpro_t.gTimer_compare_temp++;
+        gpro_t.gTimer_get_data_from_tencent_data++;
         
        
         //wifi

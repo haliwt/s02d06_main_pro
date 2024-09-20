@@ -32,7 +32,7 @@ void power_long_short_key_fun(void)
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
 			 //WIFI CONNCETOR process
-			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.link_wifi_net_login_tencent_success =0;
 			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
 			wifi_t.wifi_config_net_lable= wifi_set_restor;
 			wifi_t.power_on_login_tencent_cloud_flag=0;
@@ -423,6 +423,13 @@ void key_add_dec_set_temp_value_fun(void)
        gkey_t.set_temp_value_be_pressed ++;
 
       Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+      if(gdisp_t.disp_set_temp_value_flag == 1){
+
+          gdisp_t.disp_set_temp_value_flag++;
+
+         set_temp_value_compare_dht11_temp_value();
+
+      }
 
       if(wifi_link_net_state()==1){
         
@@ -440,6 +447,34 @@ void key_add_dec_set_temp_value_fun(void)
  
 
 
+void set_temp_value_compare_dht11_temp_value(void)
+{
+     if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+
+                gkey_t.gTimer_set_temp_value  =0;
+                gpro_t.set_temperature_value_success=1;
+                gctl_t.ptc_flag = 1;
+        
+                gpro_t.gTimer_run_main_fun=2;
+
+                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
+                
+
+            }
+            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
+                gkey_t.gTimer_set_temp_value  =0;
+                gpro_t.set_temperature_value_success=1;
+
+                 gctl_t.ptc_flag = 0;
+  
+                 gpro_t.gTimer_run_main_fun=2;
+
+                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
+
+
+            }
+}
 
 
 

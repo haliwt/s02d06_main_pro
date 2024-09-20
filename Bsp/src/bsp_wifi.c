@@ -22,18 +22,363 @@ static void auto_repeat_tencnet_net(void);
 //	*Return Ref:NO
 //	*
 //********************************************************************************/
-void WIFI_Process_Handler(void)
+void  wifi_get_beijing_time_handler(void)
 {
+    static uint8_t alternate_flag,flag_switch;
+    uint8_t real_hours ,real_minutes,real_seconds;
 
-
-   // MainBoard_Self_Inspection_PowerOn_Fun();
-    RunWifi_Command_Handler();
-
-   
     if(wifi_t.get_rx_beijing_time_enable==0){
      Tencent_Cloud_Rx_Handler();
 	 Json_Parse_Command_Fun();
     }
+
+
+     switch(gpro_t.get_beijing_step){
+
+     case 0: //WT.EDIT .2024.08.10
+
+      if(wifi_link_net_state()==1 && gpro_t.gTimer_get_data_from_tencent_data > 9){
+       
+          gpro_t.gTimer_get_data_from_tencent_data =0;
+           flag_switch++;
+
+       
+
+         if(flag_switch == 1){
+            wifi_t.get_rx_beijing_time_enable=0;
+            Subscriber_Data_FromCloud_Handler();
+            osDelay(100);//HAL_Delay(200)
+            gpro_t.get_beijing_step = 1;
+
+            
+         }
+        else if(flag_switch >  1 && gpro_t.gpower_on == power_off){
+            flag_switch=0;
+            wifi_t.get_rx_beijing_time_enable=0;
+            Update_Dht11_Totencent_Value();
+            osDelay(50);//HAL_Delay(200) //WT.EDIT 2024.08.10
+            
+             gpro_t.get_beijing_step = 1;
+
+         }
+         else{ //WT.EDIT 2024.08.10 ADD ITEM
+             if(flag_switch > 1){
+                flag_switch=0;
+                wifi_t.get_rx_beijing_time_enable=0; 
+               gpro_t.get_beijing_step = 1;
+             }
+
+         }
+       
+    }
+    else
+     gpro_t.get_beijing_step = 1;
+
+   break;
+
+
+   case 1:
+
+        if(wifi_t.gTimer_get_beijing_time > 100){
+
+         wifi_t.gTimer_get_beijing_time=0;
+        
+          if(wifi_link_net_state()==1){
+
+     
+    		    gpro_t.get_beijing_step = 2;
+           
+                alternate_flag++;
+                wifi_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+                SendWifiData_To_Data(0x1F,0x01);
+                //gpro_t.gTimer_pro_update_dht11_data =0; //disable publish to data to tencent .
+
+            }
+            else{
+              
+               SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
+               gpro_t.get_beijing_step = 10;
+               wifi_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
+             }
+	
+       }
+       else{
+
+            gpro_t.get_beijing_step = 0;
+       }
+
+      break;
+
+
+      case 2:
+
+
+	    if(gpro_t.get_beijing_time_success == 0){
+		
+
+         gpro_t.get_beijing_step = 3;
+         beijing_step =0; //WT.EDIT 2024.08.10
+	      
+		wifi_t.gTimer_auto_detected_net_state_times =0;
+	
+		wifi_t.get_rx_beijing_time_enable=0;//disenable get beijing timing
+		
+	
+       }
+	   else{
+
+          
+         if(alternate_flag == 1){
+		  
+	        wifi_t.get_rx_beijing_time_enable=0;//disenable get beijing timing
+		
+		    gpro_t.get_beijing_step = 3;
+			beijing_step =0; //WT.EDIT 2024.08.10
+
+        }
+		else{
+              alternate_flag=0;
+             
+			  gpro_t.get_beijing_step = 6;
+
+		}
+
+	   }
+
+     
+    break;
+
+
+     case 3:
+
+         switch(beijing_step){
+
+         case 0:
+            //disable publish data to tencent cloud.
+            gpro_t.gTimer_get_data_from_tencent_data=0;
+
+    		
+    		Get_BeiJing_Time_Cmd();
+    	    osDelay(100);//HAL_Delay(20); //WT.EDIT .2024.08.10//HAL_Delay(20);
+    		//wifi_t.gTimer_read_beijing_time=0;
+    
+            
+            beijing_step =1;
+
+           
+
+         break;
+
+         case 1:
+             //if(wifi_t.gTimer_read_beijing_time > 0 ){//
+    		
+                wifi_t.gTimer_read_beijing_time=0;
+                 //disable publish data to tencent cloud.
+                gpro_t.gTimer_get_data_from_tencent_data=0;
+                wifi_t.get_rx_beijing_time_enable=1;
+        		gpro_t.wifi_rx_data_counter =0;
+        		Get_Beijing_Time();
+              
+        	     osDelay(100);//HAL_Delay(20); //WT.EDIT .2024.08.10
+                
+        		wifi_t.gTimer_read_beijing_time=0;
+                beijing_step =2;
+          
+          //  }
+
+          break; 
+
+
+          case 2:
+
+            if(wifi_t.wifi_data[50] > 0x31 ){
+           
+                gpro_t.disp_works_hours_value  = (wifi_t.wifi_data[41]-0x30)*10 + wifi_t.wifi_data[42]-0x30;
+                gpro_t.disp_works_minutes_value  =(wifi_t.wifi_data[44]-0x30)*10 + wifi_t.wifi_data[45]-0x30;
+                gpro_t.gTimer_works_counter_sencods = (wifi_t.wifi_data[47]-0x30)*10 + wifi_t.wifi_data[48]-0x30;
+
+                wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
+              
+
+                gpro_t.get_beijing_time_success =1;
+
+                    SendWifiData_To_PanelTime(gpro_t.disp_works_hours,gpro_t.disp_works_minutes,gpro_t.disp_works_time_seconds);
+                    osDelay(50);
+
+                   
+                
+                }
+                else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
+
+                   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
+                   if(wifi_link_net_state()==1){
+                       gpro_t.get_beijing_step = 0;
+                       gpro_t.gTimer_get_data_from_tencent_data=0;
+                       wifi_t.gTimer_get_beijing_time = 50;
+                      
+
+                    }
+                    else 
+                       gpro_t.get_beijing_step = 0;
+            }
+            else{
+
+              gpro_t.get_beijing_step = 0;
+              
+
+            }
+            break;
+         }
+    break;
+
+
+    case 6:
+
+  
+       Wifi_Link_Tencent_Net_State();
+    
+
+       wifi_t.gTimer_auto_detected_net_state_times=0;  
+
+       gpro_t.get_beijing_step = 0;
+    
+    break;
+
+    //auto link net 
+
+    case 10:
+
+     if(wifi_t.gTimer_auto_detected_net_state_times > 100){
+
+		      wifi_t.gTimer_auto_detected_net_state_times=0;
+
+    
+
+         if(wifi_link_net_state()==0){
+            gpro_t.get_beijing_step = 11;
+            wifi_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
+            wifi_t.wifi_uart_rx_counter=0;//gpro_t.wifi_rx_data_counter=0;
+           
+      
+           
+          }
+          else{
+             wifi_t.soft_ap_config_flag =1; //WE.EIDT 
+             wifi_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+             gpro_t.get_beijing_step = 0;
+
+          }
+        
+       }
+
+     
+     if(wifi_link_net_state()==1){
+          gpro_t.get_beijing_step = 0;
+
+       }
+       
+     break;
+
+
+     case 11:
+         if(wifi_link_net_state()==0 && gpro_t.wifi_led_fast_blink_flag==0){
+
+           wifi_t.linking_tencent_cloud_doing =1;
+        
+
+            WIFI_IC_ENABLE();
+       
+    		at_send_data("AT+RST\r\n", strlen("AT+RST\r\n"));
+            HAL_Delay(1000);
+            wifi_t.gTimer_auto_link_net_time =0;
+            auto_link_net_flag=1;
+
+            gpro_t.get_beijing_step = 12;
+
+         }
+         else {
+
+             gpro_t.get_beijing_step = 10;
+
+
+         }
+        
+               
+
+     break;
+
+
+     case 12:
+
+        if(wifi_t.gTimer_auto_link_net_time > 2 && auto_link_net_flag==1){
+
+
+            wifi_t.gTimer_auto_link_net_time=0;
+            gpro_t.wifi_rx_data_counter=0;
+	        wifi_t.soft_ap_config_flag =1;
+             auto_link_net_flag =2;
+           // DISABLE_INT();
+	        HAL_UART_Transmit(&huart2, "AT+TCMQTTCONN=1,5000,240,0,1\r\n", strlen("AT+TCMQTTCONN=1,5000,240,0,1\r\n"), 0xffff);//开始连接
+            HAL_Delay(1000);
+           // HAL_Delay(1000);
+           // HAL_Delay(1000);
+           
+            //HAL_Delay(1000);
+           
+		
+	    }
+
+        if(wifi_t.gTimer_auto_link_net_time > 4 && auto_link_net_flag==2){
+
+            auto_link_net_flag=0 ;
+            gpro_t.get_beijing_step = 13;
+           
+        }
+
+
+     break;
+
+
+     case 13:
+       if(wifi_link_net_state()==1){
+       
+         
+
+        net_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+	    gpro_t.wifi_rx_data_counter=0; //clear USART2 counter is zero
+		wifi_t.soft_ap_config_flag =0; 
+	
+
+          if(gpro_t.gpower_on == power_on){
+                MqttData_Publish_Update_Data();//Publish_Data_ToTencent_Initial_Data();
+                HAL_Delay(200);
+
+            }
+            else if(gpro_t.gpower_on == power_off){
+
+               MqttData_Publish_PowerOff_Ref();
+               HAL_Delay(200);
+
+
+            }
+            Subscriber_Data_FromCloud_Handler();
+            HAL_Delay(200);
+
+            SendWifiData_To_Data(0x1F,0x01); //0x1F: wifi link net is succes 
+
+             gpro_t.get_beijing_step = 0;
+		
+         }
+         else{
+
+             gpro_t.get_beijing_step = 10;
+         }
+
+       break;
+	
+
+	
+        }
 
      
 }
@@ -45,125 +390,40 @@ void WIFI_Process_Handler(void)
 	*Return Ref: NO
 	*
 **********************************************************************/
- void MainBoard_Self_Inspection_PowerOn_Fun(void)
+ void wifi_auto_detected_link_state(void)
 {
-    static uint8_t counter, power_on_det_net;
-	if(counter < 2 && wifi_link_net_state()==0 && wifi_t.rx_error_codes_flag==0){
+   static uint8_t dc_power_on;
+	if(power_on_login_tencent_cloud_flag     <  5 && wifi_link_net_state()==0){
 		
+      net_t.linking_tencent_cloud_doing = 1;
+      gpro_t.gTimer_dc_power_on_auto_link_net = 0;
 
-		
-	InitWifiModule_Hardware();//InitWifiModule();
-      SmartPhone_TryToLink_TencentCloud();
-		
+      Auto_InitWifiModule_Hardware();//InitWifiModule();
+      Auto_SmartPhone_TryToLink_TencentCloud();
+	 
 
-		if(counter ==0){
-			counter++;
-          wifi_t.gTimer_wifi_pub_power_off =0;
-       }
+	
        
     }
-
-	if(wifi_t.gTimer_wifi_pub_power_off > 12  && wifi_link_net_state()==0 && counter==1){
-		counter++;
-		
-
-   }
-
-
-	if(wifi_link_net_state()==1 &&   power_on_det_net   < 2){
-       power_on_det_net++;
-
-        counter++;
-
-   
-       wifi_t.runCommand_order_lable=wifi_tencent_publish_init_data; //0x01
-
-       MqttData_Publish_Update_Data();
-       HAL_Delay(200);
-
-       Subscriber_Data_FromCloud_Handler();
-       HAL_Delay(200);
-       wifi_t.link_net_tencent_data_flag=1;
-
-      
-
-     
-       
-
-    }
-    else if(gkey_t.key_power == power_off && (power_on_det_net > 1 && power_on_det_net <3)){
-
-            power_on_det_net++;
-            counter++;
-
-        if(wifi_link_net_state()==1  ){
-             power_on_det_net++;
-
-            MqttData_Publish_SetOpen(0);  
-    		HAL_Delay(350);//300
-
-          MqttData_Publish_PowerOff_Ref();
-           HAL_Delay(350);
-           wifi_t.link_net_tencent_data_flag=1;
+    if(wifi_link_net_state()==1    && gpro_t.gTimer_dc_power_on_auto_link_net > 1 && dc_power_on ==0 ){
+              
+             dc_power_on ++ ;
+           //wifi_t.linking_tencent_cloud_doing = 0;
+           net_t.linking_tencent_cloud_doing  =0;
+           gpro_t.process_run_step=0;
+        
+          if(gpro_t.gpower_on == power_off){
+		     MqttData_Publish_PowerOff_Ref();
+               HAL_Delay(200);
 
           }
-        
+          
+          Subscriber_Data_FromCloud_Handler();
+          HAL_Delay(200);
 
-       wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data; //0x01
-
-
-    }
-
-  #if 0
-	if(wifi_t.rx_error_codes_flag==1 && wifi_t.rx_setup_hardware_counter< 6 && wifi_link_net_state()==0 && wifi_t.gTimer_wifi_rx_error >6){
-		wifi_t.gTimer_auto_detected_net_state_times=0;
-		wifi_t.gTimer_get_beijing_time =0;
-		wifi_t.gTimer_wifi_rx_error =0;
-        WIFI_IC_DISABLE();
-		HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
-	    HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
-    	WIFI_IC_ENABLE();
-        HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
-
-		wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
-		wifi_t.wifi_uart_counter=0;
-		wifi_t.soft_ap_config_flag =0;
-		
- 
-	
-		
-       HAL_UART_Transmit(&huart2, "AT+TCMQTTCONN=1,5000,240,0,1\r\n", strlen("AT+TCMQTTCONN=1,5000,240,0,1\r\n"), 0xffff);//开始连接
-	  
-	   
-
-	   HAL_Delay(1000);
-	   Key_Speical_Power_Fun_Handler();
-	  
-	   HAL_Delay(1000);
-	   Key_Speical_Power_Fun_Handler();
-	 
-	  
-	  wifi_t.rx_setup_hardware_counter++;
-		
-
-	}
-
-
-	if(wifi_link_net_state()==1 && wifi_t.rx_setup_hardware_counter < 8 ){
-
-            wifi_t.rx_setup_hardware_counter=9;
-			wifi_t.rx_error_codes_flag=0;
-			wifi_t.link_tencent_thefirst_times =0;
-		//	gpro_t.gTimer_pro_action_publis=0;
-		//	gpro_t.gTimer_pro_pub_set_timer = 0;
-			wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;//04
-	   	 
-
-	}
-  #endif 
+          SendWifiData_To_Cmd(0x1F,0x01); //link wifi order 1 --link wifi net is success.
+   }
+   
 	
 }
 /********************************************************************************
@@ -174,6 +434,7 @@ void WIFI_Process_Handler(void)
    *Return Ref:NO
    *
 *********************************************************************************/
+#if 0
 static void RunWifi_Command_Handler(void)
 {
   
@@ -205,7 +466,7 @@ static void RunWifi_Command_Handler(void)
 		  //auto link wifi net 
 		  	wifi_t.gTimer_linking_tencent_duration=0;
 		    gkey_t.wifi_led_fast_blink_flag=0;
-			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.link_wifi_net_login_tencent_success =0;
 			wifi_t.rx_error_codes_flag= 1;
 			wifi_t.rx_setup_hardware_counter=0;
 			wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -360,7 +621,7 @@ static void RunWifi_Command_Handler(void)
         else{
 
     
-		wifi_t.wifi_uart_counter=0; //clear USART2 counter is zero
+		wifi_t.wifi_uart_rx_counter=0; //clear USART2 counter is zero
 		if(wifi_t.auto_link_login_tencent_cloud_flag==1){ //link net is OK
 			wifi_t.get_rx_auto_repeat_net_enable=1;
 			Wifi_Link_Tencent_Net_State();
@@ -435,7 +696,7 @@ static void RunWifi_Command_Handler(void)
     if(wifi_t.set_beijing_time_flag ==1){   //&& wifi_t.gTimer_beijing_time>1){
 		wifi_t.set_beijing_time_flag ++;
 		//wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
-		//wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
+		//wifi_t.wifi_uart_rx_counter=0; //wifi receive beijing of counter must be is zero
 		Get_BeiJing_Time_Cmd();
 		osDelay(50);////WT.2024.07.14
 		wifi_t.gTimer_read_beijing_time=0;
@@ -447,12 +708,12 @@ static void RunWifi_Command_Handler(void)
 	//if(wifi_t.gTimer_read_beijing_time > 2 && wifi_t.gTimer_read_beijing_time < 4){
 	if(wifi_t.gTimer_read_beijing_time > 0 && beijing_step ==1){//
 	   // wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
-	   //wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
+	   //wifi_t.wifi_uart_rx_counter=0; //wifi receive beijing of counter must be is zero
 		
 		Get_Beijing_Time();
 		//HAL_Delay(100);
 		wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
-		wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
+		wifi_t.wifi_uart_rx_counter=0; //wifi receive beijing of counter must be is zero
 		osDelay(100);//WT.2024.07.14
 		wifi_t.gTimer_read_beijing_time=0;
         beijing_step =2;
@@ -547,7 +808,7 @@ static void RunWifi_Command_Handler(void)
   }
   
 }
- 
+#endif  
 /********************************************************************************
 	*
 	*Functin Name:static void auto_repeat_link_netware_fun(void)
@@ -573,7 +834,7 @@ static void auto_repeat_link_netware_fun(void)
 
 		  wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;//04
 		  auto_det_flag=0;
-          wifi_t.esp8266_login_cloud_success =1;
+          wifi_t.link_wifi_net_login_tencent_success =1;
 
             MqttData_Publish_Update_Data();//Publish_Data_ToTencent_Initial_Data();
             HAL_Delay(200);
@@ -598,34 +859,34 @@ void Wifi_Rx_Auto_Link_Net_Handler(void)
 
        if(strstr((const char*)wifi_t.auto_det_data,"QTTSTATE:0")){
 
-			 wifi_t.esp8266_login_cloud_success=0;
+			 wifi_t.link_wifi_net_login_tencent_success=0;
              wifi_t.gTimer_auto_detected_net_state_times=0;
 		     wifi_t.auto_link_login_tencent_cloud_flag =0;
 				  
 	    }
 		else if(strstr((const char*)wifi_t.auto_det_data,"+TCMQTTRECONNECTING")){
 
-			 wifi_t.esp8266_login_cloud_success=0;
+			 wifi_t.link_wifi_net_login_tencent_success=0;
              wifi_t.gTimer_auto_detected_net_state_times=0;
 		     wifi_t.auto_link_login_tencent_cloud_flag =0;
 				  
 	    }
 		else if(strstr((const char*)wifi_t.auto_det_data,"ONNECTING")){
 
-			 wifi_t.esp8266_login_cloud_success=0;
+			 wifi_t.link_wifi_net_login_tencent_success=0;
              wifi_t.gTimer_auto_detected_net_state_times=0;
 		     wifi_t.auto_link_login_tencent_cloud_flag =0;
 				  
 	    }
 		else if(strstr((const char*)wifi_t.auto_det_data,"QTTSTATE:1")){
 
-		   wifi_t.esp8266_login_cloud_success= 1;
+		   wifi_t.link_wifi_net_login_tencent_success= 1;
 		   wifi_t.auto_link_login_tencent_cloud_flag =1;//link NET OK.
 
 
        }
        
-         wifi_t.wifi_uart_counter=0;
+         wifi_t.wifi_uart_rx_counter=0;
 		
          wifi_t.gTimer_auto_detected_net_state_times=0;
 		
@@ -649,7 +910,7 @@ static void auto_repeat_tencnet_net(void)
 {
             wifi_t.linking_tencent_cloud_doing =1;
           
-			wifi_t.wifi_uart_counter=0;
+			wifi_t.wifi_uart_rx_counter=0;
 	        wifi_t.soft_ap_config_flag =0;
 	        HAL_UART_Transmit(&huart2, "AT+TCMQTTCONN=1,5000,240,0,1\r\n", strlen("AT+TCMQTTCONN=1,5000,240,0,1\r\n"), 5000);//开始连接
 		    HAL_Delay(1000);

@@ -1,5 +1,6 @@
 #include "bsp.h"
 
+disp_two_state gdisp_t;
 
 static void disp_power_on(void);
 static void disp_power_off(void);
@@ -193,7 +194,7 @@ void receive_data_fromm_display(uint8_t *pdata)
              //WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
 			 //WIFI CONNCETOR process
-			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.link_wifi_net_login_tencent_success =0;
 			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
 			wifi_t.wifi_config_net_lable= wifi_set_restor;
 			wifi_t.power_on_login_tencent_cloud_flag=0;
@@ -231,11 +232,10 @@ void receive_data_fromm_display(uint8_t *pdata)
       case 0x1A: //温度数据
           wake_up_backlight_on();
         if(pdata[3] == 0x0F){ //数据
-
-           gctl_t.gSet_temperature_value  = pdata[5] ;
-
-          MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-		  osDelay(20);//HAL_Delay(350);
+          gdisp_t.disp_set_temp_value_flag =1;
+          gpro_t.set_temperature_value_success=1;
+          gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
+          gctl_t.gSet_temperature_value  = pdata[5] ;
 
         }
       break;

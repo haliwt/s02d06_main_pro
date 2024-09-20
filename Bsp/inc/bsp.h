@@ -103,6 +103,10 @@ typedef struct {
    uint8_t buzzer_sound_flag;
    uint8_t uid;
    uint8_t usData[12];
+   uint8_t get_beijing_step ;
+   uint8_t link_net_step;
+   uint8_t first_link_tencent_cloud_flag;
+   uint8_t get_beijing_time_success;
 
 
      
@@ -130,6 +134,7 @@ typedef struct {
    uint8_t gTimer_compare_temp;
    uint8_t gTimer_ptc_detected;
    uint8_t gTimer_shut_off_backlight;
+   uint8_t gTimer_get_data_from_tencent_data;
 
    
  
@@ -153,10 +158,13 @@ void power_on_run_handler(void);
 
 void mainboard_active_handler(void);
 
-void Detected_Fan_Error(void);
-void Detected_Ptc_Error(void);
+
 
 void disp_works_or_timer_timing_fun(void);
+
+
+
+void link_wifi_net_handler(uint8_t link);
 
 
 

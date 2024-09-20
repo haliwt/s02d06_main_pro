@@ -57,7 +57,7 @@ void SmartPhone_TryToLink_TencentCloud(void)
   if(wifi_t.power_on_login_tencent_cloud_flag==2){
    	wifi_t.power_on_login_tencent_cloud_flag++;//3
 	wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
-    wifi_t.wifi_uart_counter=0;
+    wifi_t.wifi_uart_rx_counter=0;
 	wifi_t.soft_ap_config_flag =0;
    }
 	if(wifi_t.power_on_login_tencent_cloud_flag==3){
@@ -259,7 +259,7 @@ void Wifi_SoftAP_Config_Handler(void)
 
 		//	 
 			
-			 wifi_t.wifi_uart_counter=0;
+			 wifi_t.wifi_uart_rx_counter=0;
 			 wifi_t.wifi_config_net_lable=0xff;
 		  }
 		

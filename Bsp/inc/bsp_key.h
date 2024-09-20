@@ -101,6 +101,12 @@ void  key_mode_be_pressed_send_data_wifi(void);
 
 void smartphone_power_on_handler(void);
 
+void set_temp_value_compare_dht11_temp_value(void);
+
+
+
+
+
 
 #endif 
 

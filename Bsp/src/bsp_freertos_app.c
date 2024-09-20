@@ -365,15 +365,18 @@ static void vTaskStart(void *pvParameters)
             if(gkey_t.key_power==power_on){
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
-              Detected_Fan_Error();
-              Detected_Ptc_Error();
+             
+             
               key_add_dec_set_temp_value_fun();
-              key_mode_be_pressed_send_data_wifi();
               backlight_on_off_state();
               disp_works_or_timer_timing_fun();
               bsp_Idle();
               mainboard_active_handler();
               LCD_Timer_Colon_Flicker();
+
+              link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+
+              
 
             }
             else {
@@ -381,10 +384,13 @@ static void vTaskStart(void *pvParameters)
              power_off_run_handler();
 
             }
-            MainBoard_Self_Inspection_PowerOn_Fun();
-        
-            WIFI_Process_Handler();
-            //iwdg_feed();
+            
+           if(gkey_t.wifi_led_fast_blink_flag==0 ){
+                wifi_get_beijing_time_handler();
+                wifi_auto_detected_link_state();
+            }
+     
+      
 
            }
 

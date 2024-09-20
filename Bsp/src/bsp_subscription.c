@@ -296,7 +296,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
 //		 if(strstr((char*)wifi_t.wifi_temp_data,"+CME ERROR:208")){
 //			 other_rx_counter =0;
 //		
-//			wifi_t.esp8266_login_cloud_success =0;
+//			wifi_t.link_wifi_net_login_tencent_success =0;
 //			wifi_t.rx_error_codes_flag= 1;
 //			wifi_t.rx_setup_hardware_counter=0;
 //			wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -549,7 +549,7 @@ void Json_Parse_Command_Fun(void)
         MqttData_Publish_SetOpen(0);  
         osDelay(200);//HAL_Delay(350);//350
 
-        wifi_t.esp8266_login_cloud_success=1;
+        wifi_t.link_wifi_net_login_tencent_success=1;
       
           gkey_t.power_key_long_counter=0;
          wifi_t.smartphone_app_power_on_flag=0;
@@ -566,7 +566,7 @@ void Json_Parse_Command_Fun(void)
 		  
 	 
 	   //  gkey_t.power_key_long_counter=1;
-		wifi_t.esp8266_login_cloud_success=1;
+		wifi_t.link_wifi_net_login_tencent_success=1;
 		MqttData_Publish_SetOpen(1);  
 		osDelay(200);//HAL_Delay(350);//300
 
@@ -951,7 +951,7 @@ void Wifi_Rx_Beijing_Time_Handler(void)
                wifi_t.rx_counter=0;
               // wifi_t.UART_Flag = 0;
 			   wifi_t.data_size=0;
-               wifi_t.wifi_uart_counter=0;              
+               wifi_t.wifi_uart_rx_counter=0;              
             }
          break;
 
@@ -1141,7 +1141,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 {
     
           strcpy((char *)wifi_t.data, (const char *)wifi_t.wifi_data);
-          wifi_t.data_size = wifi_t.wifi_uart_counter;
+          wifi_t.data_size = wifi_t.wifi_uart_rx_counter;
 
 
 		   if(wifi_t.soft_ap_config_flag==1){
@@ -1153,7 +1153,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 //			        
 //					wifi_t.gTimer_auto_detected_net_state_times=0;
 //					wifi_t.repeat_login_tencent_cloud_init_ref=0; //init hardware 
-//					wifi_t.esp8266_login_cloud_success=1;
+//					wifi_t.link_wifi_net_login_tencent_success=1;
 //					wifi_t.linking_tencent_cloud_doing=0; //release this flag.
 //					wifi_t.soft_ap_config_flag=0;
                	}
@@ -1163,7 +1163,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 				  if(strstr((const char*)wifi_t.data,"+TCMQTTCONN:OK")){
 
 				     wifi_t.repeat_login_tencent_cloud_init_ref=0;
-	                 wifi_t.esp8266_login_cloud_success=1;
+	                 wifi_t.link_wifi_net_login_tencent_success=1;
 				     wifi_t.auto_link_login_tencent_cloud_flag=1;
 				  //link to tencent cloud is success .
 	              wifi_t.linking_tencent_cloud_doing=0; //release this flag. usart
@@ -1177,7 +1177,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 		   		if(strstr((char*)wifi_t.wifi_temp_data,"+CME ERROR:208")){
 						
 					   
-						   wifi_t.esp8266_login_cloud_success =0;
+						   wifi_t.link_wifi_net_login_tencent_success =0;
 						   wifi_t.rx_error_codes_flag= 1;
 						   wifi_t.rx_setup_hardware_counter=0;
 						   wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -1194,7 +1194,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 		     if(strstr((const char*)wifi_t.data,"+TCMQTTCONN:OK")){
 			 	
                  
-				  wifi_t.esp8266_login_cloud_success=1;
+				  wifi_t.link_wifi_net_login_tencent_success=1;
 			      wifi_t.repeat_login_tencent_cloud_init_ref=0;
 				
 	              wifi_t.linking_tencent_cloud_doing=0;
@@ -1207,7 +1207,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 			  if(strstr((char*)wifi_t.wifi_temp_data,"+CME ERROR:208")){
 				
 			
-				wifi_t.esp8266_login_cloud_success =0;
+				wifi_t.link_wifi_net_login_tencent_success =0;
 				wifi_t.rx_error_codes_flag= 1;
 				wifi_t.rx_setup_hardware_counter=0;
 				wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -1222,7 +1222,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 
 		  }
        
-         wifi_t.wifi_uart_counter=0;
+         wifi_t.wifi_uart_rx_counter=0;
          
         
             

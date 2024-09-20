@@ -13,6 +13,8 @@ static void interval_continuce_works_fun(void);
 
 static void interval_two_hours_stop_action(void);
 
+static void Detected_Fan_Error(void);
+static void Detected_Ptc_Error(void);
 
 
 
@@ -737,10 +739,15 @@ static void power_on_init_function(void)
 
 
 }
-
-
-
-void Detected_Fan_Error(void)
+/***************************************************************************
+    *
+    *Function Name:vvoid detected_error_handler(void)
+    *Function : 
+    *Input Ref: NO
+    *Return Ref : NO
+    *
+***************************************************************************/
+static void Detected_Fan_Error(void)
 {
     if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 				gpro_t.gTimer_run_adc=0;
@@ -756,7 +763,7 @@ void Detected_Fan_Error(void)
 
 }
 
-void Detected_Ptc_Error(void)
+static void Detected_Ptc_Error(void)
 {
 
    if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
@@ -770,4 +777,43 @@ void Detected_Ptc_Error(void)
 
 
 }
+
+/***************************************************************************
+    *
+    *Function Name:void link_wifi_net_handler(uint8_t link)
+    *Function : 
+    *Input Ref: link wifi flag :1 -> link wifi ,0-> don't link wifi
+    *Return Ref : NO
+    *
+***************************************************************************/
+void link_wifi_net_handler(uint8_t link)
+{
+    if(link == 1){
+
+         if(wifi_t.gTimer_linking_tencent_duration > 119){
+
+            gkey_t.wifi_led_fast_blink_flag =0;//gpro_t.wifi_led_fast_blink_flag =0;
+           if(wifi_link_net_state()==0){
+
+             gpro_t.get_beijing_step = 10;
+             wifi_t.gTimer_auto_detected_net_state_times = 120;
+             wifi_t.linking_tencent_cloud_doing =1;
+             wifi_t.soft_ap_config_flag =1; 
+           }
+
+        }
+        else
+        link_wifi_net_handler();
+
+    }
+    else{
+      
+       key_mode_be_pressed_send_data_wifi();
+       Detected_Fan_Error();
+       Detected_Ptc_Error();
+
+    }
+
+}
+
 
