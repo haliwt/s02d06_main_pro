@@ -122,9 +122,9 @@ static void vTaskMsgPro(void *pvParameters)
 			{
    
                      
-                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
-							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+          xTaskNotify(xHandleTaskStart, /* 目标任务 */
+						RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
+						eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 				                                    
 			}
             else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
@@ -302,10 +302,7 @@ static void vTaskStart(void *pvParameters)
 
                 }
                 
-                
-              
-
-            }
+              }
         }
         }
         else {
@@ -326,6 +323,9 @@ static void vTaskStart(void *pvParameters)
           }
           else
             power_long_short_key_fun();
+
+
+          
         
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
