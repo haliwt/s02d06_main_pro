@@ -957,7 +957,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 {
 
     if(strstr((const char*)wifi_t.wifi_data,"+TCSAP:WIFI_CONNECT_SUCCESS")){
-        _t.soft_ap_config_success=1;
+        wifi_t.soft_ap_config_success=1;
 
     }
 
