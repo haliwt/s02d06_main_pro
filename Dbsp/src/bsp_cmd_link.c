@@ -8,7 +8,42 @@ static uint8_t outputBuf[MAX_BUFFER_SIZE];
 
 volatile uint8_t transOngoingFlag;
 volatile uint8_t usart2_transOngoingFlag;
+/********************************************************************************
+	**
+	*Function Name:sendData_Real_TimeHum(uint8_t hum,uint8_t temp)
+	*Function :
+	*Input Ref: humidity value and temperature value
+	*Return Ref:NO
+	*
+*******************************************************************************/
+void sendData_setTemp_value(uint8_t temp)
+{
 
+	//crc=0x55;
+	outputBuf[0]=0x5A; //head : mainboard Board = 0x5A
+	outputBuf[1]=0x10; //main board device No: 0x10
+	outputBuf[2]=0x2A; //set temperature value 
+	outputBuf[3]=0x0F; // 0x0F : is data ,don't command data.
+	outputBuf[4]= 0x01; //data of length: 0x01 - 2 byte.
+	outputBuf[5] =temp;
+ 
+
+    outputBuf[6] = 0xFE; //frame of end flag .
+    outputBuf[7] = bcc_check(outputBuf,7);
+	
+	//for(i=3;i<6;i++) crc ^= outputBuf[i];
+	//outputBuf[i]=crc;
+	transferSize=8;
+	if(transferSize)
+	{
+		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
+		transOngoingFlag=1;
+		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
+	}
+
+
+
+}
 /********************************************************************************
 	**
 	*Function Name:sendData_Real_TimeHum(uint8_t hum,uint8_t temp)

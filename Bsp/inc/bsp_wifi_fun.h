@@ -68,6 +68,9 @@ typedef struct _WIFI_FUN{
 
     //
     uint8_t fin_speed_full_flag;
+    uint8_t rx_data_state;
+    uint8_t wifi_rx_counter;
+    uint8_t wifi_rx_data_array[150];
    
 	
 	

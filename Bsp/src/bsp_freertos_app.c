@@ -376,8 +376,6 @@ static void vTaskStart(void *pvParameters)
 
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 
-              
-
             }
             else {
             

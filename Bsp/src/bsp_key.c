@@ -236,6 +236,7 @@ void Dec_Key_Fun(uint8_t cmd)
             gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
          
             gkey_t.set_temp_value_be_pressed =1;
+            gdisp_t.disp_set_temp_value_flag=0;  //the second display board send data flag
       //      Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //compare with by read temperature of sensor value  
             if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
@@ -344,6 +345,8 @@ void Add_Key_Fun(uint8_t cmd)
 
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
+        gdisp_t.disp_set_temp_value_flag=0;  //the second display board send data flag
+
 
          //compare with by read temperature of sensor value  
          if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
@@ -428,6 +431,14 @@ void key_add_dec_set_temp_value_fun(void)
           gdisp_t.disp_set_temp_value_flag++;
 
          set_temp_value_compare_dht11_temp_value();
+
+      }
+      else if(gdisp_t.disp_set_temp_value_flag==0){
+        
+          gdisp_t.disp_set_temp_value_flag=3;
+
+           sendData_setTemp_value(gctl_t.gSet_temperature_value);
+
 
       }
 
