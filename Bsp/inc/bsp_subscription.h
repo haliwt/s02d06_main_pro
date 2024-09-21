@@ -59,11 +59,8 @@ typedef enum _subSignal{ /* enumeration for CParser signals */
 
 
 
-extern uint8_t TCMQTTRCVPUB[40];
 
-extern uint8_t rx_tencent_num[1];
 
-extern uint8_t rx_tencent_num_buffer[40] ;
 
 
 

@@ -24,113 +24,57 @@
 
 
 
-
-
-
-
-typedef enum{
-  
-   wifi_AI=0x08 ,wifi_notAI=0x18,wifi_kill=0x04,wifi_notkill=0x14,
-   wifi_heat= 0x02,wifi_notheat=0x12
-
-
-}wifi_mode_t;
-
-typedef enum _wifi_state_t{  
-	
-    
-	wifi_link_tencent_cloud=0x01, //1
-	wifi_tencent_publish_init_data, //2
-	wifi_subscriber_form_tencent_data,//3
-	wifi_publish_dht11_delay,//4
-	wifi_subscriber_form_tencent_cloud_cmd,//5
-	wifi_publish_update_tencent_cloud_data,//6
-	wifi_auto_to_link_cloud,//7
-	wifi_atuo_link_cloud_ref,//8
-	wifi_auto_repeat_link_cloud,//9
-	wifi_tencent_publish_dht11_data,//10
-	wifi_get_beijing_time,//11
-	wifi_disconnect,//12
-	wifi_null//13
-
-
-}wifi_state_t;
-
-
-/* USER CODE BEGIN Prototypes */
-typedef struct usart
-{
-    unsigned char UART_Data[150]; 
-    unsigned char UART_Flag;
-    unsigned int wifi_uart_rx_counter;
-    unsigned char wifi_inputBuf[1];
-}USART_DataBuf;
-
-
-
-
-
-
 typedef struct _WIFI_FUN{
 	
 
-    uint8_t data[150];
+   
+    uint8_t wifi_data[150]; 
 
-    uint8_t  data_size;
-    uint8_t flag;
-	uint8_t wifi_RunState;
-	uint8_t esp8266_smartphone_flag;
-	uint8_t esp8266_link_cloud_flag;
-	uint8_t soft_ap_config_success;
+
+    uint8_t soft_ap_config_success;
 	uint8_t link_wifi_net_login_tencent_success;
 
-	uint8_t subscribe_cloud_success;
-	uint8_t power_off_step;
+
+
     uint8_t rx_net_counter;
     uint8_t link_net_tencent_data_flag; //after send publish datat to tencent .
-    uint8_t tencent_rx_data_success ;
+   
     uint8_t recoder_tempearture_rx_data;
 
     //
-    uint8_t fin_speed_full_flag;
+   
     uint8_t rx_data_state;
     uint8_t wifi_rx_counter;
-    uint8_t wifi_rx_data_array[150];
+
    
 	
+
 	
-	uint8_t esp8266_dynamic_reg_flag;
-    uint8_t subscribe_flag;
-	uint8_t subscribe_rx_flag;
-    uint8_t subscribe_rxCloud_flag;
-	uint8_t esp8266_data_rx_success;
 	uint8_t rx_data_success ;
 	uint8_t  rx_counter ;
 
-	uint8_t getCloudValue_unit ;
-	uint8_t getCloudValue_decade;
-	uint8_t rx_data_len;
-	uint8_t rx_data_name_len;
+
+	
 	uint8_t linking_tencent_cloud_doing;
-    uint8_t cmp_flag;
-	uint8_t send_tencent_cloud_data_lable;
-    uint8_t subscrible_receive_data_label;
-	uint8_t link_tencent_step_counter;
-	uint8_t link_beijing_times_flag;
-	uint8_t auto_linknet_flag;
-	uint8_t three_times_link_beijing;
+  
+    
+
+
     //esp8266 up ref
 
-	uint8_t runCommand_order_lable;
+	
 	uint8_t has_been_login_flag;
+    
     uint8_t soft_ap_config_flag;
+    
     uint8_t get_rx_beijing_time_enable;
+    
 	uint8_t auto_link_login_tencent_cloud_flag;
 	uint8_t receive_beijing_time;
 	
 	//wifi
-	unsigned char wifi_data[150]; 
-	uint8_t  wifi_temp_data[150]; 
+	
+
  
 	uint8_t usart1_dataBuf[1];
   

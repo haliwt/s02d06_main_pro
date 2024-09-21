@@ -53,7 +53,7 @@
 //wifi
 #include "bsp_wifi.h"
 #include "bsp_wifi_fun.h"
-#include "bsp_esp8266.h"
+
 #include "bsp_publish.h"
 #include "bsp_subscription.h"
 #include "bsp_mqtt_iot.h"

@@ -387,6 +387,8 @@ static void vTaskStart(void *pvParameters)
                 wifi_get_beijing_time_handler();
                 wifi_auto_detected_link_state();
             }
+
+           clear_rx_copy_data();
      
       
 

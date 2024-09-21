@@ -26,7 +26,7 @@ static void  wifi_link_net_check_cmd(void);
 void  wifi_get_beijing_time_handler(void)
 {
     static uint8_t alternate_flag,flag_switch,auto_link_net_flag;
-    uint8_t real_hours ,real_minutes,real_seconds;
+  
 
     if(wifi_t.get_rx_beijing_time_enable==0){
      Tencent_Cloud_Rx_Handler();
@@ -207,8 +207,8 @@ void  wifi_get_beijing_time_handler(void)
 
                    
                 
-                }
-                else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
+            }
+            else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
 
                    wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
                    if(wifi_link_net_state()==1){

@@ -606,8 +606,8 @@ static void power_off_function(void)
             wifi_t.gTimer_linking_tencent_duration=0; //120s
 
             wifi_t.repeat_login_tencent_cloud_init_ref=0;
-    	    wifi_t.runCommand_order_lable= 0xff;
-            wifi_t.three_times_link_beijing=0;
+    	
+      
     		wifi_t.smartphone_app_power_on_flag=0;
 
             gpro_t.gTimer_run_dht11=20;
@@ -623,7 +623,7 @@ static void power_off_function(void)
 	
 		power_off_flag++;
 		MqttData_Publish_PowerOff_Ref();
-		wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
+	
 	     
 		 
 		  
@@ -637,7 +637,7 @@ static void power_off_function(void)
     }
     if(wifi_link_net_state() ==1){
        // Record_WorksTime_DonotDisp_Handler();
-       wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
+     
 
     }
 	
