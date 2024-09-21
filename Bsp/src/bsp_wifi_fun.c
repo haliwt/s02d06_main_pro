@@ -10,6 +10,26 @@ uint8_t (*wifi_link_net_state)(void); //函数指针
 
 
 static uint8_t wifi_link_default_fun(void);
+/*********************************************************
+ *
+ *pdata: pointer of data for send
+ *len:  len of data to be sent
+ *return: the len of data send success
+ * @brief hal api for at data send
+***********************************************************/
+uint8_t at_send_data(uint8_t* pdata, uint16_t len)
+{
+	if(HAL_OK == HAL_UART_Transmit(&huart2, pdata, len, 0xffff))
+	{
+		return len;
+	}
+	else
+	{
+		return 0;
+	}	
+}
+
+
 
 
 
@@ -59,7 +79,7 @@ static uint8_t wifi_link_default_fun(void)
     *Return Ref:NO
     *
 *****************************************************************************/	 	
-void link_wifi_net_handler(void)
+void link_wifi_net_state_handler(void)
 {
   
 
@@ -98,8 +118,8 @@ void link_wifi_net_handler(void)
             break;
 
             case 2:
-                 if(wifi_t.gTimer_login_tencent_times=0;  > 5){
-                    wifi_t.gTimer_login_tencent_times=0; = 0;
+                 if(wifi_t.gTimer_login_tencent_times> 5){
+                    wifi_t.gTimer_login_tencent_times = 0;
 
                          WIFI_IC_ENABLE();
             			
@@ -116,8 +136,8 @@ void link_wifi_net_handler(void)
 
             case 3:
                 
-            if(wifi_t.gTimer_login_tencent_times=0;  > 7){
-                      wifi_t.gTimer_login_tencent_times=0; = 0;
+            if(wifi_t.gTimer_login_tencent_times > 7){
+                      wifi_t.gTimer_login_tencent_times= 0;
                    gpro_t.link_net_step = 4;
             WIFI_IC_ENABLE();
 			
@@ -131,12 +151,12 @@ void link_wifi_net_handler(void)
 
 
             case 4:
-                 if(wifi_t.gTimer_login_tencent_times=0;  > 7){
-                          wifi_t.gTimer_login_tencent_times=0; = 0;
+                 if(wifi_t.gTimer_login_tencent_times> 7){
+                          wifi_t.gTimer_login_tencent_times = 0;
 
                    wifi_t.linking_tencent_cloud_doing =1;
                   wifi_t.soft_ap_config_flag =1; //WE.EIDT 
-	            sprintf((char *)device_massage, "AT+TCSAP=\"UYIJIA01-%d\"\r\n",gctl_t.randomName[0]);
+	            sprintf((char *)device_massage, "AT+TCSAP=\"UYIJIA01-%d\"\r\n",wifi_t.randomName[0]);
                  at_send_data(device_massage, strlen((const char *)device_massage));
 
 
@@ -220,7 +240,7 @@ void link_wifi_net_handler(void)
 
 
               gpro_t.get_beijing_step= 10;
-              wifi_t.gTimer_auto_detected_net_state_times = 120;
+          
               gpro_t.link_net_step = 0xff;
 
             break;

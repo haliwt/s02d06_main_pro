@@ -110,7 +110,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		HAL_UART_Receive_IT(&huart1,inputBuf,1);//UART receive data interrupt 1 byte
 		
 	 }
-     else if(huart->Instance==USART2)  //wifi usart1 --wifi 
+    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
            
 	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
@@ -132,21 +132,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
 					wifi_t.wifi_uart_rx_counter++;
 				}
-				else if(wifi_t.get_rx_auto_repeat_net_enable ==1){
-
-					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
-					wifi_t.wifi_uart_rx_counter++;
-
-					if(*wifi_t.usart1_dataBuf==0X0A) // 0x0A = "\n"
-					{
-						
-						Wifi_Rx_Auto_Link_Net_Handler();
-						wifi_t.wifi_uart_rx_counter=0;
-					}
-
-
-				}
-				else{
+			    else{
 					Subscribe_Rx_Interrupt_Handler();
 
 				}
@@ -248,28 +234,40 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_timer_Counter++;
 		gpro_t.gTimer_run_adc++ ;
 		gpro_t.gTimer_run_dht11++;
+        
         gpro_t.gTimer_run_one_mintue ++;
-        gpro_t.gTimer_pro_action_publis++;
+     
         gpro_t.gTimer_run_main_fun++;
+        
         gpro_t.gTimer_publish_tencent_dht11++;
-        gpro_t.gTimer_compare_temp++;
+    
         gpro_t.gTimer_get_data_from_tencent_data++;
         
        
         //wifi
-		wifi_t.gTimer_wifi_pub_power_off++;
-		wifi_t.gTimer_power_first_link_tencent++;
+
+	
 		wifi_t.power_on_login_tencent_cloud_flag++;
-		wifi_t.gTimer_power_first_link_tencent++;
+		
+
+        
         wifi_t.gTimer_linking_tencent_duration++;
 
         wifi_t.gTimer_login_tencent_times ++;
-		wifi_t.gTimer_publish_dht11++;
+		
+
+
+        
 		wifi_t.gTimer_get_beijing_time++;
+
+        
 		wifi_t.gTimer_auto_detected_net_state_times++;
-		wifi_t.gTimer_read_beijing_time ++;
-		wifi_t.gTimer_wifi_counter_link_beijing_times++;
-        wifi_t.gTimer_counter_repeat_link_net++;
+	
+	
+      
+        wifi_t.gTimer_auto_link_net_time++;
+
+        wifi_t.gTimer_power_first_link_tencent++;
         
 
         

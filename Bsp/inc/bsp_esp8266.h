@@ -2,7 +2,7 @@
 #define __BSP_ESP8266_H_
 #include "main.h"
 
-
+#if 0
 #define SSID                    "UYIKIA"
 #define PASSWD                  "20329263"
 
@@ -82,5 +82,5 @@ void Wifi_Reconnect_Tencent_Net(void);
 void AutoConnect_SmartPhone_TencentCloud(void);
 void ReConnect_Wifi_Net_ATReset_Hardware(void);
 
-
+#endif 
 #endif 

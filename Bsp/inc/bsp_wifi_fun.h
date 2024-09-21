@@ -3,6 +3,31 @@
 #include "main.h"
 
 
+
+#define SSID                    "UYIKIA"
+#define PASSWD                  "20329263"
+
+
+#define TOPIC                  "open"
+
+#define TOPIC_VALUE            1
+//#define SMARTCONFIG      			0
+
+
+#define PRODUCT_ID              "EHQB1P53IH" //production ID 
+//#define DEVUICE_NAME            "UYIJIA01-afcc8"      //device Name:
+#define DEVICE_SECRET           "5xdQMgx7ZHznYyQK6wvdmolc"//"5xdQMgx7ZHznYyQK6wvdmolc"  //Secret key 
+#define PRODUCT_REGION          "ap-guangzhou" //filed name 
+
+#define WIFI_IC_ENABLE()         HAL_GPIO_WritePin(WIFI_EN_GPIO_Port,WIFI_EN_Pin,GPIO_PIN_SET)
+#define WIFI_IC_DISABLE()        HAL_GPIO_WritePin(WIFI_EN_GPIO_Port,WIFI_EN_Pin,GPIO_PIN_RESET)
+
+
+
+
+
+
+
 typedef enum{
   
    wifi_AI=0x08 ,wifi_notAI=0x18,wifi_kill=0x04,wifi_notkill=0x14,
@@ -49,8 +74,8 @@ typedef struct usart
 typedef struct _WIFI_FUN{
 	
 
-    uint8_t data[512];
-	uint8_t auto_det_data[150];
+    uint8_t data[150];
+
     uint8_t  data_size;
     uint8_t flag;
 	uint8_t wifi_RunState;
@@ -81,7 +106,7 @@ typedef struct _WIFI_FUN{
 	uint8_t esp8266_data_rx_success;
 	uint8_t rx_data_success ;
 	uint8_t  rx_counter ;
-	uint8_t  rx_data_state;
+
 	uint8_t getCloudValue_unit ;
 	uint8_t getCloudValue_decade;
 	uint8_t rx_data_len;
@@ -115,6 +140,7 @@ typedef struct _WIFI_FUN{
 	uint8_t wifi_uart_rx_counter;
 	uint8_t tencent_cloud_command_power_on;
 	uint8_t get_rx_auto_repeat_net_enable;
+    uint8_t once_rx_data_done;
 	
 	//
 	uint8_t response_wifi_signal_label;
@@ -132,7 +158,7 @@ typedef struct _WIFI_FUN{
 	uint8_t set_wind_speed_value;
 
 	//config
-	uint8_t wifi_config_net_lable;
+
 
     //real time 
     uint8_t real_hours;
@@ -152,28 +178,30 @@ typedef struct _WIFI_FUN{
     uint8_t get_beijing_timing_success;
 
     //wifi gtimer
-	uint8_t gTimer_read_beijing_time;
+
 	uint8_t gTimer_linking_tencent_duration;
 	
     uint8_t gTimer_beijing_time;
 	uint8_t gTimer_reconnect_wifi;
 	uint8_t gTimer_power_off_run_times;
 	uint8_t gTimer_subscriber_send ;
-	uint8_t gTimer_publish_dht11;
+	
 	
 	uint8_t gTimer_login_tencent_times;
-	uint8_t gTimer_power_first_link_tencent ;
-	uint8_t gTimer_wifi_pub_power_off;
+	
 	uint8_t gTimer_wifi_power_on_detect ;
-	uint8_t gTimer_wifi_counter_link_beijing_times ;
+
 	uint8_t gTimer_main_gpro_times;
 	uint8_t gTimer_wifi_sub_power_off;
 	uint8_t gTimer_wifi_rx_error;
-    uint8_t gTimer_counter_repeat_link_net;
+
     uint8_t gTimer_normal_send_dat_tencent ;
+     uint8_t gTimer_auto_link_net_time;
+     uint8_t gTimer_power_first_link_tencent;
 	
     uint16_t gTimer_get_beijing_time;
 	uint16_t gTimer_auto_detected_net_state_times;
+    
 	
 
 	uint32_t randomName[1];
@@ -200,15 +228,18 @@ void wifiDisplayTemperature_Humidity(void);
 
 void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void));
 
-void wifiUpdate_SetTimeValue(uint8_t tv);
-void wifiUpdate_SetTemperatureValue(uint8_t temp);
-
-
-void GetNTP_Times(void);
 
 
 
-void link_wifi_net_handler(void);
+
+
+
+
+void link_wifi_net_state_handler(void);
+
+
+uint8_t at_send_data(uint8_t* pdata, uint16_t len);
+
 
 
 #endif 

@@ -196,7 +196,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 			 //WIFI CONNCETOR process
 			wifi_t.link_wifi_net_login_tencent_success =0;
 			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
-			wifi_t.wifi_config_net_lable= wifi_set_restor;
+		
 			wifi_t.power_on_login_tencent_cloud_flag=0;
 			wifi_t.link_tencent_step_counter=0;
 			wifi_t.gTimer_linking_tencent_duration=0; //120s ->

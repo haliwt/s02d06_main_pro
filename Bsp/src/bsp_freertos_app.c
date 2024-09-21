@@ -329,7 +329,7 @@ static void vTaskStart(void *pvParameters)
         
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
-          if(gkey_t.key_power==power_on){
+          if(wifi_t.wifi_uart_rx_counter){
                 
                  mode_long_short_key_fun();
 
