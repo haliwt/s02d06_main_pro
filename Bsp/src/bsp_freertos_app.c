@@ -360,9 +360,9 @@ static void vTaskStart(void *pvParameters)
                  }
 
            }
-            }   
+         }   
 
-            if(gkey_t.key_power==power_on){
+         if(gkey_t.key_power==power_on){
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
              
@@ -377,7 +377,7 @@ static void vTaskStart(void *pvParameters)
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 
             }
-            else {
+            else{
             
              power_off_run_handler();
 
@@ -390,9 +390,7 @@ static void vTaskStart(void *pvParameters)
 
            clear_rx_copy_data();
      
-      
-
-           }
+       }
 
     }
 

@@ -136,13 +136,8 @@ typedef struct {
    uint8_t gTimer_ptc_detected;
    uint8_t gTimer_shut_off_backlight;
    uint8_t gTimer_get_data_from_tencent_data;
-    uint8_t gTimer_run_main_fun;
+   uint8_t gTimer_run_main_fun;
   
-
-   
- 
-
-
 }BSP_process_t;
 
 extern BSP_process_t gpro_t;

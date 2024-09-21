@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "bsp.h"
 
-uint8_t  rx_tencent_num_buffer[40];
+//uint8_t  rx_tencent_num_buffer[40];
 uint8_t wind_total_value;
 
 static void smartphone_app_timer_power_on_handler(void);
@@ -280,12 +280,7 @@ void Tencent_Cloud_Rx_Handler(void)
     if(wifi_t.rx_data_success==1){
         
        wifi_t.rx_data_success=0;
-
-
-  
-   
-		
-		 wifi_t.gTimer_auto_detected_net_state_times=0;
+       wifi_t.gTimer_auto_detected_net_state_times=0;
 	
      if(wifi_t.received_data_from_tencent_cloud > 22){ //36
 	    wifi_t.received_data_from_tencent_cloud=0;
@@ -466,7 +461,7 @@ void Json_Parse_Command_Fun(void)
          wifi_t.smartphone_app_power_on_flag=0;
         gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
          gpro_t.power_off_flag =1;
-       
+        SendWifiData_To_Cmd(0x01, 0x00); //power off command
         wifi_t.gTimer_auto_detected_net_state_times=0; //don't need check wifi if has or not
         wifi_t.response_wifi_signal_label = 0xff;
         
@@ -482,7 +477,9 @@ void Json_Parse_Command_Fun(void)
 		osDelay(200);//HAL_Delay(350);//300
 
         // gkey_t.key_power = power_on;
+        SendWifiData_To_Cmd(0x01, 0x01); //power on command
         smartphone_turn_on_handler();
+      
 
 		gctl_t.ptc_warning =0;
 		gctl_t.fan_warning =0;
@@ -502,6 +499,9 @@ void Json_Parse_Command_Fun(void)
              MqttData_Publish_SetPtc(0x01);
              osDelay(200);//HAL_Delay(350);//350ms
              buzzer_sound()	;
+             SendWifiData_To_Cmd(0x02, 0x01); //ptc turn on command
+
+             
 		
 	     }
 		
@@ -524,6 +524,9 @@ void Json_Parse_Command_Fun(void)
 		 gctl_t.ptc_flag=0;
          Disp_Dry_Icon();
          buzzer_sound()	;
+
+         
+        SendWifiData_To_Cmd(0x02, 0x0); //ptc turn off command
 	
 	    
 
@@ -545,6 +548,9 @@ void Json_Parse_Command_Fun(void)
 			HAL_Delay(200);
            gctl_t.plasma_flag=0;
            Disp_Kill_Icon();
+
+           
+            SendWifiData_To_Cmd(0x03, 0x00); //plasma turn off command
            	buzzer_sound();
            
 		  
@@ -564,6 +570,8 @@ void Json_Parse_Command_Fun(void)
 		    HAL_Delay(200);
            gctl_t.plasma_flag=1;
             Disp_Kill_Icon();
+
+            SendWifiData_To_Cmd(0x03, 0x01); //plasma turn on command
             buzzer_sound();
 		   
 			}
@@ -581,6 +589,8 @@ void Json_Parse_Command_Fun(void)
 			HAL_Delay(200);
             gctl_t.ultrasonic_flag=0;
              Disp_Ultrsonic_Icon();
+
+            SendWifiData_To_Cmd(0x04, 0x00); //ultrasonic turn off command
             buzzer_sound();
             
 		}
@@ -600,6 +610,8 @@ void Json_Parse_Command_Fun(void)
           
             gctl_t.ultrasonic_flag=1;
             Disp_Ultrsonic_Icon();
+
+           SendWifiData_To_Cmd(0x04, 0x01); //ultrasonic turn on  command
              buzzer_sound();
             //send data to the second display board
            
@@ -627,7 +639,7 @@ void Json_Parse_Command_Fun(void)
             MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
 			HAL_Delay(200);
             //do someting disp timer timing value 
-
+           //  SendWifiData_To_Cmd(0x27, 0x02); //AI turn off command
             //send data to the second display board
             
 		
@@ -657,6 +669,8 @@ void Json_Parse_Command_Fun(void)
             MqttData_Publish_SetState(1); //beijing timing = 1
 			HAL_Delay(200);
 
+           //  SendWifiData_To_Cmd(0x27, 0x01); //AI turn on command
+
             //send data to the second display board
 			
           
@@ -674,8 +688,8 @@ void Json_Parse_Command_Fun(void)
 
            
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
-             temp_decade=rx_tencent_num_buffer[13]-0x30; //
-             temp_unit=rx_tencent_num_buffer[14]-0x30;
+             temp_decade=wifi_t.wifi_data[14]-0x30; //
+             temp_unit=wifi_t.wifi_data[15]-0x30;
             gctl_t.gSet_temperature_value = temp_decade*10 +  temp_unit;
             if(gctl_t.gSet_temperature_value > 40)   gctl_t.gSet_temperature_value=40;
             if(gctl_t.gSet_temperature_value <20 )   gctl_t.gSet_temperature_value=20;
@@ -693,8 +707,10 @@ void Json_Parse_Command_Fun(void)
            gpro_t.gTimer_run_dht11=0; 
            wifi_t.gTimer_auto_detected_net_state_times=0;
          
-            Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //send data to the second display board
+
+           sendData_setTemp_value(gctl_t.gSet_temperature_value); //smart phone set temperature value .
             
 			
 			if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
@@ -709,6 +725,7 @@ void Json_Parse_Command_Fun(void)
 
                      gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
                       //send data to the second display board
+                     SendWifiData_To_Cmd(0x02, 0x1); //ptc turn on command
 		    	
 
 			}
@@ -723,6 +740,7 @@ void Json_Parse_Command_Fun(void)
 
                      gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
                       //send data to the second display board
+                      SendWifiData_To_Cmd(0x02, 0x0); //ptc turn off command
 			   		
 				
 			}
@@ -747,83 +765,54 @@ void Json_Parse_Command_Fun(void)
 
 		     if(gctl_t.fan_warning ==0){
                  
-           		      wind_hundred =rx_tencent_num_buffer[6]-0x30;
+           		     wind_hundred =wifi_t.wifi_data[7]-0x30;
                  
-                     wind_decade=rx_tencent_num_buffer[7]-0x30;
-                     wind_unit = rx_tencent_num_buffer[8]-0x30;
-                     wind_total_value= 100;;
-
-              }
-              else{
-                    wind_hundred =rx_tencent_num_buffer[5] =0;
-                    wind_decade=rx_tencent_num_buffer[6]-0x30;
-                    wind_unit = rx_tencent_num_buffer[7]-0x30;
-
-                   wind_total_value =wind_decade*10 + wind_unit   ;
+                     wind_decade=wifi_t.wifi_data[8]-0x30;
+                     wind_unit = wifi_t.wifi_data[9]-0x30;
+                     
                    
-                  
+                   if(wind_hundred ==1 && wind_decade==0 && wind_unit==0) wind_total_value=100;
+                   else
+                      wind_total_value = wind_hundred*10 + wind_decade;
 
+                  MqttData_Publis_SetFan(wind_total_value);
+                   osDelay(100);//HAL_Delay(50);//
 
-
-                 
-
-                if(wind_hundred ==1 && wind_decade==0 && wind_unit==0){
-                    
-                    wifi_t.set_wind_speed_value=0;
-                    
-
-                 }
-                else{
-                     
-                     
-                     if(wind_total_value < 34 ){
+                    if(wind_total_value < 34 ){
 
                          wifi_t.set_wind_speed_value=2;
-                          //send data to the second display board
+                        
 
                      }
-                     else if(wind_total_value > 33 && wind_total_value < 67){
+                     else if(wind_total_value> 33 && wind_total_value < 67){
                          wifi_t.set_wind_speed_value=1;
-                          //send data to the second display board
-
+                         
 
                      }
                      else{
 
                         wifi_t.set_wind_speed_value=0;
-                         //send data to the second display board
+                        
 
                      }
-                     
-                 
+                }
+                else{
 
-                
-			     MqttData_Publis_SetFan(wind_total_value);
-        	     HAL_Delay(350);//
-    	   
-          
-		       
-			  
-				 wifi_t.set_wind_speed_value=0;
-
-			    MqttData_Publis_SetFan(wifi_t.set_wind_speed_value);
-				HAL_Delay(350);
-				//do seomthing 
-
-
-			    
-                 }
+                  wifi_t.set_wind_speed_value=0;
+   
+                  MqttData_Publis_SetFan(wifi_t.set_wind_speed_value);
+                  osDelay(100);//HAL_Delay(50);
+                  //do seomthing 
+                   
+                }
               
                
-            
-		}
-    }
+           }
+   
         
-	   wifi_t.gTimer_auto_detected_net_state_times=0;
-	    wifi_t.response_wifi_signal_label = 0xff;
-	
-		 	
-			 wifi_t.linking_tencent_cloud_doing =0;
+	      wifi_t.gTimer_auto_detected_net_state_times=0;
+	      wifi_t.response_wifi_signal_label = 0xff;
+         wifi_t.linking_tencent_cloud_doing =0;
 	  	break;
 
 	  case APP_TIMER_POWER_ON_REF :
@@ -850,9 +839,10 @@ void Json_Parse_Command_Fun(void)
         wifi_t.response_wifi_signal_label=0xf0;
       
 
-		for(i=0;i<15;i++){
-		   rx_tencent_num_buffer[i]=0;
-		}
+//		for(i=0;i<15;i++){
+//		   rx_tencent_num_buffer[i]=0;
+//		}
+        memset(wifi_t.wifi_data,'\0',15);
     }
 }
 }
@@ -876,7 +866,7 @@ static void smartphone_app_timer_power_on_handler(void)
 
 		app_step=1;
 		if(strstr((char *)wifi_t.wifi_data,"open\":1")){
-		wifi_t.smartphone_app_power_on_flag=1;
+		    wifi_t.smartphone_app_power_on_flag=1;
 		}
 
 		if(wifi_t.smartphone_app_power_on_flag==1){
@@ -936,10 +926,15 @@ static void smartphone_app_timer_power_on_handler(void)
 		
 		if(gctl_t.ptc_flag ==0)gpro_t.app_ptc_flag = 1;
 
+        SendData_Set_Command(0x21, 0x01); //smart phone power on command .
+
         MqttData_Publis_App_PowerOn_Ref();
   
 		
 		HAL_Delay(200);//
+
+        
+        
 		app_step=0;
 
 	
