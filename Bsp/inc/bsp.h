@@ -86,14 +86,11 @@ typedef struct {
   
     uint8_t gTimer_power_off_run_times;
    //WIFI
-   uint8_t run_process_step;
-   uint8_t disp_dht11_value;
-  
-   uint8_t disp_works_hours_value;
-   uint8_t disp_works_minutes_value;
+
+
   
    uint8_t set_temperature_value_success;
-   uint8_t first_disp_work_time;
+ 
    uint8_t disp_timer_switch_time_flag;
 
    uint8_t app_ptc_flag;
@@ -107,6 +104,10 @@ typedef struct {
    uint8_t link_net_step;
    uint8_t first_link_tencent_cloud_flag;
    uint8_t get_beijing_time_success;
+
+
+   uint8_t disp_works_minutes_value;
+   uint8_t  disp_works_hours_value;
 
 
      

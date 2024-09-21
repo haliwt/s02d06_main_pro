@@ -105,21 +105,17 @@ typedef struct _WIFI_FUN{
 
 
     //real time 
-    uint8_t real_hours;
-	uint8_t real_minutes;
-	uint8_t real_seconds;
-	uint8_t restart_link_tencent_cloud ;
+
+
 	uint8_t received_data_from_tencent_cloud ;
 	//beijing time
-	uint8_t set_beijing_time_flag;
+
 	
 
 	//auto link net
-	uint8_t rx_error_codes_flag;
-	uint8_t link_tencent_thefirst_times;
-	uint8_t rx_setup_hardware_counter;
-    uint8_t tencent_rx_data_flag;
-    uint8_t get_beijing_timing_success;
+
+
+
 
     //wifi gtimer
 
@@ -128,7 +124,7 @@ typedef struct _WIFI_FUN{
     uint8_t gTimer_beijing_time;
 	uint8_t gTimer_reconnect_wifi;
 	uint8_t gTimer_power_off_run_times;
-	uint8_t gTimer_subscriber_send ;
+	
 	
 	
 	uint8_t gTimer_login_tencent_times;
@@ -171,10 +167,6 @@ void PowerOff_Host(void (*poweroffHandler)(void));
 void wifiDisplayTemperature_Humidity(void);
 
 void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void));
-
-
-
-
 
 
 

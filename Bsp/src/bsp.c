@@ -110,7 +110,7 @@ void power_on_run_handler(void)
 		   gpro_t.set_timer_timing_minutes=0;
 
         
-           gpro_t.first_disp_work_time=0;
+
             
 		    gctl_t.step_process = 1;
 
@@ -601,7 +601,7 @@ static void power_off_function(void)
 
             //wifi set ref
     	
-    		wifi_t.link_tencent_thefirst_times=0;
+   
   
             wifi_t.gTimer_linking_tencent_duration=0; //120s
 
@@ -689,13 +689,13 @@ static void power_on_init_function(void)
     gpro_t.set_timer_timing_hours =0 ;
     gpro_t.set_timer_timing_minutes =0;
 
-     if(wifi_t.get_beijing_timing_success ==0 || wifi_link_net_state()==0){
-          gpro_t.disp_works_minutes_value=0;
-          gpro_t.disp_works_hours_value =0;
+     if(  gpro_t.get_beijing_time_success==0 || wifi_link_net_state()==0){
+     
           gpro_t.gTimer_works_counter_sencods =0;
 
      }
-
+     gpro_t.disp_works_minutes_value=0;
+          gpro_t.disp_works_hours_value =0;
    
     if(wifi_t.smartphone_app_power_on_flag==0){
         main_fun_init();

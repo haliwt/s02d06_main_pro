@@ -283,7 +283,7 @@ void Tencent_Cloud_Rx_Handler(void)
 
 
   
-         wifi_t.set_beijing_time_flag =0; //WT.EDIT 2023.06.12
+   
 		
 		 wifi_t.gTimer_auto_detected_net_state_times=0;
 	
@@ -829,7 +829,7 @@ void Json_Parse_Command_Fun(void)
 	  case APP_TIMER_POWER_ON_REF :
 
 		//   gpro_t.gTimer_gpro_temp_delay =0;
-		   wifi_t.set_beijing_time_flag=0;
+		
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
           
 		   smartphone_app_timer_power_on_handler();
@@ -926,9 +926,9 @@ static void smartphone_app_timer_power_on_handler(void)
 		if(gkey_t.key_power == power_off ){
 			//gkey_t.key_power = power_on;   
 		
-		//	gpro_t.run_process_step=0;
+	
 			wifi_t.smartphone_app_power_on_flag=1;
-            wifi_t.link_tencent_thefirst_times=0;
+  
             wifi_t.set_wind_speed_value=0;
             smartphone_turn_on_handler();
 		}
