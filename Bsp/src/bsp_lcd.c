@@ -150,7 +150,7 @@ static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 
 
 
-static void LCD_Number_ThreeFour_Temperature(void);
+
 
 
 static uint8_t Detecting_Fault_Code(void);
@@ -884,25 +884,6 @@ void Lcd_Display_Off(void)
 
 }
 
-/*************************************************************************************
-	*
-	*Function Name: void Lcd_Display_Off(void)
-	*Function : don't display any one
-	*Input Ref:NO
-	*Return Ref:NO
-	*
-*************************************************************************************/
-void Disp_HumidityTemp_Value(void)
-{
-
-//   if( gpro_t.set_temperature_value_success == 0){  // || gpro_t.set_temp_confirm == 1){
-//      
-//       LCD_Number_ThreeFour_Temperature();
-//
-//    }
-    LCD_Number_ThreeFour_Temperature();
-    LCD_Number_Ai_OneTwo_Humidity();
-}
 
 
 void Disp_HumidityTemp_Init(void)

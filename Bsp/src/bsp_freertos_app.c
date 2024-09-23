@@ -329,10 +329,13 @@ static void vTaskStart(void *pvParameters)
           
         
         
-          if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
+          if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200 ){
       
                 
                  mode_long_short_key_fun();
+           }
+          
+           if(add_flag==1 ||dec_flag ==1){
 
                 if(add_flag ==1){
                      add_flag ++;

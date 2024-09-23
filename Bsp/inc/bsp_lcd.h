@@ -136,7 +136,8 @@ void Lcd_Display_Off(void);
 void Lcd_Display_Off(void);
 void LCD_Timer_Colon_Flicker(void);
 
-void Disp_HumidityTemp_Value(void);
+void LCD_Number_ThreeFour_Temperature(void);
+
 
 
 

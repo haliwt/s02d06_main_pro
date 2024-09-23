@@ -375,16 +375,9 @@ void  wifi_get_beijing_time_handler(void)
          }
 
        break;
-	
+	}
 
-	
-        }
-
-     
 }
-
-
-
 /**********************************************************************
 	*
 	*Functin Name: void wifi_auto_detected_link_state(void)

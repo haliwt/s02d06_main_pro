@@ -117,7 +117,7 @@ void SendWifiData_To_PanelTime(uint8_t hours,uint8_t minutes,uint8_t seconds)
  * Function:send temperature value 
  * 
 *********************************************************/
-void SendData_Set_Command(uint8_t cmd,uint8_t data)
+void SendData_Set_Command(uint8_t cmd,uint8_t data)  //  SendData_Set_Command(0x21, 0x01); //smart phone power on command .
 {
     outputBuf[0]=0x5A; //display board head = 0xA5
 	outputBuf[1]= 0x10; //display device Number:is 0x01
