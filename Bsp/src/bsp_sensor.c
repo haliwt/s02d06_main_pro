@@ -1,7 +1,7 @@
 #include "bsp_sensor.h"
 #include "bsp.h"
 
-
+#if 0
 
 /**
  * @brief       复位DHT11
@@ -190,7 +190,7 @@ void Update_Dht11_Totencent_Value(void)
 }
 
 
-
+#endif 
 
 
 
