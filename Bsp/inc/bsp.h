@@ -45,10 +45,13 @@
 #include "bsp_usart.h"
 #include "bsp_lcd_app.h"
 #include "bsp_freertos_app.h"
+
+
 //double display board
 
 #include "bsp_cmd_link.h"
 #include "bsp_decoder.h"
+#include "bsp_second_disp.h"
 
 //wifi
 #include "bsp_wifi.h"

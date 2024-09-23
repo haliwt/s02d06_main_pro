@@ -328,7 +328,7 @@ static void vTaskStart(void *pvParameters)
         }
         else {
             
-              
+        //DC the first power on run prcess once times.      
         if(power_sound_flag==0){
           power_sound_flag++;
           
@@ -338,6 +338,9 @@ static void vTaskStart(void *pvParameters)
           buzzer_sound();
 
         }
+
+
+        
          if(smart_phone_sound == 1){
             smart_phone_sound++;
            smartphone_power_on_handler();

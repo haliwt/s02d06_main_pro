@@ -1,48 +1,5 @@
 #include "bsp.h"
 
-disp_two_state gdisp_t;
-
-static void disp_power_on(void);
-static void disp_power_off(void);
-
-
-/**********************************************************************
-    *
-    *Function Name:static void disp_power_on(void);
-    *Function: 
-    *Input Ref:NO
-    *Return Ref:NO
-    *
-***********************************************************************/
-static void disp_power_on(void)
-{
-
-    gkey_t.key_power=power_on;
-    gkey_t.key_mode = disp_timer_timing;
-    gctl_t.ai_flag = 1;
-    gctl_t.ptc_warning =0;
-    gctl_t.fan_warning =0;
-
-    gctl_t.step_process=0;
-    gpro_t.power_off_flag =1;
-
-
-
-}
-static void disp_power_off(void)
-{
-
-   gkey_t.key_power=power_off;
-    gctl_t.step_process=0;
-
-           
-    Buzzer_KeySound();
-
-
-
-}
-
-
 
 
 
@@ -70,16 +27,16 @@ void receive_data_fromm_display(uint8_t *pdata)
 
         if(pdata[3] == 0x01 ){ //open
              buzzer_sound();
-             disp_power_on();
-          
+             
+            second_disp_power_on_fun();
+
 
         }
         else if(pdata[3] == 0x0){
            buzzer_sound();
+           second_disp_power_off_fun();
 
-           disp_power_off();
-
-
+          
         }
        
 
@@ -137,6 +94,11 @@ void receive_data_fromm_display(uint8_t *pdata)
            gctl_t.plasma_flag  = 1;
            Plasma_On();
            Disp_Kill_Icon();
+
+          if(wifi_link_net_state()==1){
+              MqttData_Publish_SetPlasma(0x01);
+	  	      osDelay(100);//HAL_Delay(350);
+          }
           
          
 
@@ -147,6 +109,11 @@ void receive_data_fromm_display(uint8_t *pdata)
            gctl_t.plasma_flag  = 0;
            Plasma_Off();
            Disp_Kill_Icon();
+
+          if(wifi_link_net_state()==1){
+              MqttData_Publish_SetPlasma(0x0);
+	  	      osDelay(100);//HAL_Delay(350);
+          }
          
 
         }
@@ -169,6 +136,11 @@ void receive_data_fromm_display(uint8_t *pdata)
             Ultrasonic_Pwm_Output();
              Disp_Ultrsonic_Icon();
 
+             if(wifi_link_net_state()==1){
+              MqttData_Publish_SetUltrasonic(0x01);
+	  	      osDelay(100);//HAL_Delay(350);
+             }
+
 
 
           }
@@ -179,6 +151,11 @@ void receive_data_fromm_display(uint8_t *pdata)
              gctl_t.ultrasonic_flag =0;
             Ultrasonic_Pwm_Stop();
              Disp_Ultrsonic_Icon();
+
+              if(wifi_link_net_state()==1){
+              MqttData_Publish_SetUltrasonic(0x0);
+	  	      osDelay(100);//HAL_Delay(350);
+             }
 
         }
 
@@ -191,17 +168,9 @@ void receive_data_fromm_display(uint8_t *pdata)
 
        if(pdata[3] == 0x01){  // link wifi 
 
-             //WIFI CONNCETOR process
-			 gkey_t.wifi_led_fast_blink_flag=1;
-			 //WIFI CONNCETOR process
-			wifi_t.link_wifi_net_login_tencent_success =0;
-			
-		
-			wifi_t.power_on_login_tencent_cloud_flag=0;
-		
-			wifi_t.gTimer_linking_tencent_duration=0; //120s ->
-         
-          //  Buzzer_KeySound();
+        second_disp_set_link_wifi_fun();
+
+           
             
 
         }
@@ -232,7 +201,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       case 0x1A: //温度数据
           wake_up_backlight_on();
         if(pdata[3] == 0x0F){ //数据
-          gdisp_t.disp_set_temp_value_flag =1;
+          g_tDisp.disp_set_temp_value_flag =1;
           gpro_t.set_temperature_value_success=1;
           gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
           gctl_t.gSet_temperature_value  = pdata[5] ;
