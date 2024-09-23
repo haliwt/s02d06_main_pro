@@ -122,7 +122,7 @@ static void vTaskMsgPro(void *pvParameters)
 			{
    
                      
-          xTaskNotify(xHandleTaskStart, /* 目标任务 */
+                xTaskNotify(xHandleTaskStart, /* 目标任务 */
 						RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
 						eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 				                                    
@@ -239,6 +239,7 @@ static void vTaskStart(void *pvParameters)
 
                   }
                   else{
+                    
                      gkey_t.key_mode_long_counter=1;
                      gpro_t.gTimer_shut_off_backlight =0;
 
@@ -303,7 +304,7 @@ static void vTaskStart(void *pvParameters)
                 }
                 
               }
-        }
+            }
         }
         else {
             
@@ -329,7 +330,7 @@ static void vTaskStart(void *pvParameters)
         
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
-          if(wifi_t.wifi_uart_rx_counter){
+      
                 
                  mode_long_short_key_fun();
 
@@ -359,7 +360,7 @@ static void vTaskStart(void *pvParameters)
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
                  }
 
-           }
+         
          }   
 
          if(gkey_t.key_power==power_on){
