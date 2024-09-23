@@ -87,6 +87,9 @@ typedef struct {
 
    uint8_t power_off_flag;
    uint8_t shut_Off_backlight_flag;
+   uint8_t send_data_power_on_flag;
+
+  
   
     uint8_t gTimer_power_off_run_times;
    //WIFI
@@ -139,6 +142,7 @@ typedef struct {
    uint8_t gTimer_shut_off_backlight;
    uint8_t gTimer_get_data_from_tencent_data;
    uint8_t gTimer_run_main_fun;
+   
   
 }BSP_process_t;
 
@@ -166,6 +170,7 @@ void disp_works_or_timer_timing_fun(void);
 
 void link_wifi_net_handler(uint8_t link);
 
+void read_senson_dht11_data(void);
 
 
 #endif 

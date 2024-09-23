@@ -82,6 +82,9 @@ void power_off_run_handler(void)
 
     }
 
+  
+  
+
    power_off_function();
 		
    Breath_Led();
@@ -108,7 +111,7 @@ void power_on_run_handler(void)
            gpro_t.gTimer_timer_Counter =0;
 		   gpro_t.set_timer_timing_hours=0;
 		   gpro_t.set_timer_timing_minutes=0;
-
+           gpro_t.gTimer_run_dht11=100;
         
 
             
@@ -121,23 +124,25 @@ void power_on_run_handler(void)
        
           case 1:   //run dht11 display 
 
-             if(gpro_t.gTimer_run_dht11 > 12  || power_on_run_dht11_times < 10){
-                gpro_t.gTimer_run_dht11=0;
-                power_on_run_dht11_times++;
-                  Update_DHT11_Value();
-                 
-                  sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
-                  osDelay(30);
-                  Disp_HumidityTemp_Value();
-
-                  if(gctl_t.interval_stop_run_flag==0){
-                     SetTemp_Compare_SensoTemp();
-
-                  }
-
-                    
-
-              }
+//             if(gpro_t.gTimer_run_dht11 > 12){
+//                gpro_t.gTimer_run_dht11=0;
+//                power_on_run_dht11_times++;
+//                  Update_DHT11_Value();
+//                  if(gpro_t.key_be_pressed_flag ==0){
+//                    sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
+//                    osDelay(30);
+//
+//                  }
+//                  Disp_HumidityTemp_Value();
+//
+//                  if(gctl_t.interval_stop_run_flag==0){
+//                     SetTemp_Compare_SensoTemp();
+//
+//                  }
+//
+//                    
+//
+//              }
 
 
 
@@ -618,6 +623,8 @@ static void power_off_function(void)
            
     	    //stop main board function ref.
     	    PowerOff_Off_Led();
+            SendData_Set_Command(0X01,0X00);
+            osDelay(30);
     	  
 		
 	  }
@@ -819,4 +826,29 @@ void link_wifi_net_handler(uint8_t link)
 
 }
 
+
+void read_senson_dht11_data(void)
+{
+
+  if(gpro_t.gTimer_run_dht11 > 12){
+        gpro_t.gTimer_run_dht11=0;
+
+        Update_DHT11_Value();
+
+        
+
+
+        Disp_HumidityTemp_Value();
+
+        if(gctl_t.interval_stop_run_flag==0){
+            SetTemp_Compare_SensoTemp();
+
+        }
+
+
+        sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
+        osDelay(10);
+    }
+
+}
 

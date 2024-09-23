@@ -245,7 +245,8 @@ static void vTaskStart(void *pvParameters)
                     gkey_t.power_key_long_counter =1;
                     gpro_t.gTimer_shut_off_backlight =0;
                 }
-               
+            
+                gpro_t.gTimer_run_dht11=0;
             }
             else if((ulValue & RUN_MODE_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
                if(gkey_t.key_power == power_on ){
@@ -266,7 +267,8 @@ static void vTaskStart(void *pvParameters)
 
                 }
                
-              
+             
+                 gpro_t.gTimer_run_dht11=0;
                 
             }
             else if((ulValue & PHONE_POWER_ON_9 ) != 0){
@@ -283,6 +285,8 @@ static void vTaskStart(void *pvParameters)
                 
 
                 }
+            
+                  gpro_t.gTimer_run_dht11=0;
                
             }
             else if((ulValue & RUN_DEC_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
@@ -302,7 +306,8 @@ static void vTaskStart(void *pvParameters)
 
                    }
                   }
-              
+                
+                  gpro_t.gTimer_run_dht11=0;
 
             }
             else if((ulValue & RUN_ADD_7 ) != 0){   /* 接收到消息，检测那个位被按下 */
@@ -323,6 +328,8 @@ static void vTaskStart(void *pvParameters)
                 }
                 
               }
+                
+                gpro_t.gTimer_run_dht11=0;
             }
             
         }
@@ -349,14 +356,31 @@ static void vTaskStart(void *pvParameters)
             power_long_short_key_fun();
 
 
+          if(gpro_t.send_data_power_on_flag == power_on){
+
+               gpro_t.send_data_power_on_flag =0xff;
+
+               SendData_Set_Command(0X01,0X01);
+               osDelay(30);
+
+
+          }
+          else if(gpro_t.send_data_power_on_flag == power_off){
+
+              gpro_t.send_data_power_on_flag =0xff;
           
+               SendData_Set_Command(0X01,0X00);
+               osDelay(30);
+
+
+          }
         
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200 ){
       
-                
-                 mode_long_short_key_fun();
+               mode_long_short_key_fun();
            }
+          
           
            if(add_flag==1 ||dec_flag ==1){
 
@@ -390,8 +414,11 @@ static void vTaskStart(void *pvParameters)
          }   
 
          if(gkey_t.key_power==power_on){
+            
               power_on_run_handler();
+              read_senson_dht11_data();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+         
              
              
               key_add_dec_set_temp_value_fun();
@@ -402,6 +429,8 @@ static void vTaskStart(void *pvParameters)
               LCD_Timer_Colon_Flicker();
 
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+
+              
 
             }
             else{
@@ -465,7 +494,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(KEY_POWER_VALUE()==KEY_DOWN){
 
      
-
+      
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
         eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -483,6 +512,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    case KEY_MODE_Pin:
      // DISABLE_INT();
       if(KEY_MODE_VALUE() == KEY_DOWN){
+        
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -501,6 +531,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    case KEY_UP_Pin:
       // DISABLE_INT();
        if(KEY_ADD_VALUE() == KEY_DOWN){
+       
          xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 ADD_KEY_3,     /* 设置目标任务事件标志位bit0  */
                 eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -515,6 +546,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    case KEY_DOWN_Pin:
       ///   DISABLE_INT();
         if(KEY_DEC_VALUE() == KEY_DOWN){
+             
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 DEC_KEY_2,     /* 设置目标任务事件标志位bit0  */
                 eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
