@@ -623,17 +623,17 @@ void Set_Timer_Timing_Lcd_Blink(void)
 void Disp_HumidityTemp_Value(void)
 {
 
-    glcd_t.number1_high = gctl_t.dht11_temp_value / 10;
-    glcd_t.number1_low = gctl_t.dht11_temp_value / 10;
+    glcd_t.number1_high = gctl_t.dht11_humidity_value / 10;//gctl_t.dht11_temp_value / 10;
+    glcd_t.number1_low =  glcd_t.number1_high;///gctl_t.dht11_temp_value / 10;
     
-    glcd_t.number2_high = gctl_t.dht11_temp_value % 10;
-    glcd_t.number2_low = gctl_t.dht11_temp_value % 10;
+    glcd_t.number2_high = gctl_t.dht11_humidity_value % 10;//gctl_t.dht11_temp_value % 10;
+    glcd_t.number2_low = glcd_t.number2_high;//gctl_t.dht11_temp_value % 10;
 
-    glcd_t.number3_high = gctl_t.dht11_humidity_value / 10;
-    glcd_t.number3_low = gctl_t.dht11_humidity_value / 10;
+    glcd_t.number3_high = gctl_t.dht11_temp_value / 10;//gctl_t.dht11_humidity_value / 10;
+    glcd_t.number3_low = glcd_t.number3_high;///gctl_t.dht11_humidity_value / 10;
 
-    glcd_t.number4_high = gctl_t.dht11_humidity_value % 10;
-    glcd_t.number4_low = gctl_t.dht11_humidity_value % 10;
+    glcd_t.number4_high = gctl_t.dht11_temp_value % 10;//gctl_t.dht11_humidity_value % 10;
+    glcd_t.number4_low =  glcd_t.number4_high ;//gctl_t.dht11_humidity_value % 10;
     
     LCD_Number_ThreeFour_Temperature();
     LCD_Number_Ai_OneTwo_Humidity();
