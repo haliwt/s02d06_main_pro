@@ -58,6 +58,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 	  	      osDelay(100);//HAL_Delay(350);
            }
        }
+       }
        else if(pdata[3] == 0x0){
         
           buzzer_sound();
@@ -73,7 +74,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 	  	      osDelay(100);//HAL_Delay(350);
           }
         }
-       }
+     
       
      break;
 
@@ -167,6 +168,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           wake_up_backlight_on();
 
        if(pdata[3] == 0x01){  // link wifi 
+         buzzer_sound();
 
         second_disp_set_link_wifi_fun();
 
@@ -183,9 +185,9 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x06: //buzzer sound done
          wake_up_backlight_on();
-        if(pdata[3] == 0x01){  //buzzer sound 
+        if(pdata[3] == 0x01){  //
             buzzer_sound();
-           // gpro_t.buzzer_sound_flag = 1;
+           
 
         }
         else if(pdata[3] == 0x0){ // don't buzzer sound .
@@ -197,8 +199,27 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      break;
 
+     case 0x07: // AI mode -> timer and beijing time
 
-      case 0x1A: //温度数据
+        wake_up_backlight_on();
+        if(pdata[3] == 0x01){  // AI 
+            second_disp_ai_time_fun();
+            
+            
+        }
+        else if(pdata[3] == 0x0){ // don't buzzer sound .
+
+           second_disp_ai_timer_fun();
+
+
+        }
+
+
+
+     break;
+
+
+      case 0x1A: //读取传感的温度数据
           wake_up_backlight_on();
         if(pdata[3] == 0x0F){ //数据
           g_tDisp.disp_set_temp_value_flag =1;
@@ -207,6 +228,20 @@ void receive_data_fromm_display(uint8_t *pdata)
           gctl_t.gSet_temperature_value  = pdata[5] ;
 
         }
+      break;
+
+      case 0x02A:   //按键设置的温度值
+
+         wake_up_backlight_on();
+        if(pdata[3] == 0x0F){ //数据
+          g_tDisp.disp_set_temp_value_flag =1;
+          gpro_t.set_temperature_value_success=1;
+          gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
+          gctl_t.gSet_temperature_value  = pdata[5] ;
+
+        }
+
+
       break;
 
       case 0x1B: //湿度数据
@@ -236,6 +271,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
         }
       break;
+
 
      case 0x22: //PTC打开关闭指令,没有蜂鸣器声音。
 
@@ -271,23 +307,28 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x27: //AI mode 
 
-      if(pdata[3] == 0x02){
+      if(pdata[3] == 0x01){ //AI mode 
        
-        // gctl_t.gModel=2;
-         MqttData_Publish_SetState(2);
-	     osDelay(100);//HAL_Delay(350);
-        
-        
-          
-       }
-       else if(pdata[3] == 0x01){ //AI mode 
-       
-        // gctl_t.gModel=1;
+         second_disp_ai_time_fun();
+         
+
+        if(wifi_link_net_state()==1){
          MqttData_Publish_SetState(1);
-	     osDelay(100);//HAL_Delay(350);
+	     osDelay(10);//HAL_Delay(350);
+        }
        }
+       else if(pdata[3] == 0x02){
+       
+        second_disp_ai_time_fun();
+            
 
+        if(wifi_link_net_state()==1){
+         MqttData_Publish_SetState(2);
+	     osDelay(10);//HAL_Delay(350);
 
+         }
+        }
+        
      break;
         
      

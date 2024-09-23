@@ -22,13 +22,19 @@ typedef struct{
 
 extern second_disp_ref  g_tDisp;
 
+void second_disp_power_on_fun(void);
+void second_disp_power_off_fun(void);
+
+void second_disp_set_link_wifi_fun(void);
 
 
 
 
 
+void second_disp_ai_time_fun(void);
 
 
+void second_disp_ai_timer_fun(void);
 
 
 

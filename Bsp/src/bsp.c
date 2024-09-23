@@ -125,8 +125,10 @@ void power_on_run_handler(void)
                 gpro_t.gTimer_run_dht11=0;
                 power_on_run_dht11_times++;
                   Update_DHT11_Value();
-                  Disp_HumidityTemp_Value();
                  
+                  sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
+                  osDelay(30);
+                  Disp_HumidityTemp_Value();
 
                   if(gctl_t.interval_stop_run_flag==0){
                      SetTemp_Compare_SensoTemp();
@@ -715,7 +717,8 @@ static void power_on_init_function(void)
 
     Update_DHT11_Value();
     
-
+     
+    sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
 
 
     LCD_Wind_Run_Icon(0);
