@@ -126,6 +126,7 @@ void power_on_run_handler(void)
                 power_on_run_dht11_times++;
                   Update_DHT11_Value();
                   Disp_HumidityTemp_Value();
+                 
 
                   if(gctl_t.interval_stop_run_flag==0){
                      SetTemp_Compare_SensoTemp();

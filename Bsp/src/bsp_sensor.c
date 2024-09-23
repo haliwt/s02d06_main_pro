@@ -171,7 +171,7 @@ void Update_DHT11_Value(void)
    dht11_read_data(&gctl_t.dht11_temp_value,&gctl_t.dht11_humidity_value);
 	
 
-   sendData_Real_TimeHum(gctl_t.dht11_temp_value ,gctl_t.dht11_humidity_value);
+   sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
 
 }
 

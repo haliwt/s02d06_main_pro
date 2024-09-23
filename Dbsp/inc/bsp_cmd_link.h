@@ -2,7 +2,7 @@
 #define __BSP_CMD_LINK_H
 #include "main.h"
 
-//extern uint8_t inputBuf[4];
+//extern uint8_t disp_inputBuf[4];
 
 void sendData_setTemp_value(uint8_t temp);
 

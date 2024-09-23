@@ -96,10 +96,8 @@ typedef struct {
    uint8_t app_ptc_flag;
    //display board
    uint8_t disp_rx_cmd_done_flag;
-   uint8_t bcc_check_code;
    uint8_t buzzer_sound_flag;
-   uint8_t uid;
-   uint8_t usData[12];
+ 
    uint8_t get_beijing_step ;
    uint8_t link_net_step;
    uint8_t first_link_tencent_cloud_flag;
@@ -145,7 +143,7 @@ extern BSP_process_t gpro_t;
 void bsp_Idle(void);
 
 
-extern uint8_t inputBuf[1];
+extern uint8_t disp_inputBuf[1];
 
 
 

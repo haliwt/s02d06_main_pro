@@ -10,7 +10,7 @@ volatile uint8_t transOngoingFlag;
 volatile uint8_t usart2_transOngoingFlag;
 /********************************************************************************
 	**
-	*Function Name:sendData_Real_TimeHum(uint8_t hum,uint8_t temp)
+	*Function Name:
 	*Function :
 	*Input Ref: humidity value and temperature value
 	*Return Ref:NO

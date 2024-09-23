@@ -1,7 +1,7 @@
 #include "interrupt_manager.h"
 #include "bsp.h"
 
-uint8_t inputBuf[1];
+uint8_t disp_inputBuf[1];
 
 
 //typedef struct Msg
@@ -13,151 +13,10 @@ uint8_t inputBuf[1];
 //
 //MSG_T   gl_tMsg; /* 定义丢�个结构体用于消息队列 */
 
-uint8_t rx_data_counter,rx_end_flag;
-
-uint8_t  rx_end_counter,uid;
 
 
 
-/********************************************************************************
-	**
-	*Function Name:void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-	*Function :UART callback function  for UART interrupt for receive data
-	*Input Ref: structure UART_HandleTypeDef pointer
-	*Return Ref:NO
-	*
-*******************************************************************************/
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  
-     static uint8_t state;
-    // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    if(huart->Instance==USART1)//if(huart==&huart1) // Motor Board receive data (filter)
-	{
-      // DISABLE_INT();
-		switch(state)
-		{
-		case 0:  //#0
-			if(inputBuf[0] == 0xA5){  // 0xA5 --didplay command head
-               rx_data_counter=0;
-               gpro_t.usData[rx_data_counter] = inputBuf[0];
-			   state=1; //=1
-
-             }
-            else
-                state=0;
-		break;
-
-       
-		case 1: //#1
-
-            if(gpro_t.disp_rx_cmd_done_flag ==0){
-              /* 初始化结构体指针 */
-               rx_data_counter++;
-		     
-	         gpro_t.usData[rx_data_counter] = inputBuf[0];
-              
-
-              if(rx_end_flag == 1){
-
-                state = 0;
-            
-                gpro_t.uid = rx_data_counter;
-                rx_end_flag=0;
-
-                rx_data_counter =0;
-
-                gpro_t.disp_rx_cmd_done_flag = 1 ;
-
-                state=0;
-
-                 gpro_t.bcc_check_code=inputBuf[0];
-
-                display_board_commnunication_handler();
-                 
-
-                #if 0
-
-                xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
-                DECODER_BIT_10,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-                &xHigherPriorityTaskWoken);
-
-                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-                portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-                #endif 
-                  
-              }
-
-              }
-
-              if(gpro_t.usData[rx_data_counter] ==0xFE && rx_end_flag == 0 &&  rx_data_counter > 4){
-                     
-                       rx_end_flag = 1 ;
-                          
-                        
-               }
-
-        break;
-
-
-			
-		}
-
-      //  ENABLE_INT();
-	    __HAL_UART_CLEAR_OREFLAG(&huart1);
-		HAL_UART_Receive_IT(&huart1,inputBuf,1);//UART receive data interrupt 1 byte
-		
-	 }
-    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
-    {
-           
-	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
-
-			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
-			wifi_t.wifi_uart_rx_counter++;
-
-			if(*wifi_t.usart1_dataBuf==0X0A) // 0x0A = "\n"
-			{
-				//wifi_t.usart2_rx_flag = 1;
-				Wifi_Rx_Link_Net_InputInfo_Handler();
-				wifi_t.wifi_uart_rx_counter=0;
-			}
-
-	      } 
-		  else{
-
-		         if(wifi_t.get_rx_beijing_time_enable==1){
-					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
-					wifi_t.wifi_uart_rx_counter++;
-				}
-			    else{
-					Subscribe_Rx_Interrupt_Handler();
-
-				}
-	      }
-	 
-	  
-//	__HAL_UART_CLEAR_NEFLAG(&huart2);
-	//__HAL_UART_CLEAR_FEFLAG(&huart2);
-	__HAL_UART_CLEAR_OREFLAG(&huart2);
-	//__HAL_UART_CLEAR_IDLEFLAG(&huart2);
-	//__HAL_UART_CLEAR_TXFECF(&huart2);
-	 HAL_UART_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
-     
-	}
-
-
- }
-
-  
- 
-
-//	__HAL_UART_CLEAR_NEFLAG(&huart2);
-//	__HAL_UART_CLEAR_FEFLAG(&huart2);
-//	__HAL_UART_CLEAR_OREFLAG(&huart2);
-//	__HAL_UART_CLEAR_TXFECF(&huart2);
 
 
 /*******************************************************************************

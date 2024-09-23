@@ -27,6 +27,25 @@ uint8_t check_code;
 
 #define PHONE_POWER_ON_RX_8       (1<<8)
 #define PHONE_POWER_ON_9         (1<<9)
+#define DECODER_BIT_10            (1<<10)
+
+
+
+typedef struct Msg
+{
+	uint8_t  ucMessageID;
+    uint8_t  uid;
+    uint8_t  bcc_check_code;
+	uint8_t usData[12];
+	
+}MSG_T;
+
+MSG_T   gl_tMsg; /* 定义丢�个结构体用于消息队列 */
+
+
+uint8_t rx_data_counter,rx_end_flag;
+
+uint8_t  rx_end_counter,uid;
 
 
 
@@ -167,11 +186,11 @@ static void vTaskMsgPro(void *pvParameters)
             gpro_t.disp_rx_cmd_done_flag = 0;
 
 
-            check_code =  bcc_check(gpro_t.usData,gpro_t.uid);
+            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
 
-           if(check_code == gpro_t.bcc_check_code ){
+           if(check_code == gl_tMsg.bcc_check_code ){
            
-              receive_data_fromm_display(gpro_t.usData);
+              receive_data_fromm_display(gl_tMsg.usData);
               if(gpro_t.buzzer_sound_flag == 1){
                   gpro_t.buzzer_sound_flag++ ;
                   buzzer_sound();
@@ -211,8 +230,8 @@ static void vTaskStart(void *pvParameters)
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
 						          xMaxBlockTime);  /* 最大允许延迟时间 */
         if( xResult == pdPASS ){
-		    
-            /* 接收到消息，检测那个位被按下 */
+
+           /* 接收到消息，检测那个位被按下 */
             if((ulValue & RUN_POWER_4 ) != 0)
             {
                 if(gpro_t.shut_Off_backlight_flag == turn_off){
@@ -305,6 +324,7 @@ static void vTaskStart(void *pvParameters)
                 
               }
             }
+            
         }
         else {
             
@@ -504,6 +524,149 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    break;
     }
 }
+
+
+
+/********************************************************************************
+	**
+	*Function Name:void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+	*Function :UART callback function  for UART interrupt for receive data
+	*Input Ref: structure UART_HandleTypeDef pointer
+	*Return Ref:NO
+	*
+*******************************************************************************/
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  
+     static uint8_t state;
+     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    if(huart->Instance==USART1)//if(huart==&huart1) // Motor Board receive data (filter)
+	{
+      // DISABLE_INT();
+		switch(state)
+		{
+		case 0:  //#0
+			if(disp_inputBuf[0] == 0xA5){  // 0xA5 --didplay command head
+               rx_data_counter=0;
+               gl_tMsg.usData[rx_data_counter] = disp_inputBuf[0];
+			   state=1; //=1
+
+             }
+            else
+                state=0;
+		break;
+
+       
+		case 1: //#1
+
+            if(gpro_t.disp_rx_cmd_done_flag ==0){
+              /* 初始化结构体指针 */
+               rx_data_counter++;
+		     
+	         gl_tMsg.usData[rx_data_counter] = disp_inputBuf[0];
+              
+
+              if(rx_end_flag == 1){
+
+                state = 0;
+            
+                gl_tMsg.uid = rx_data_counter;
+                rx_end_flag=0;
+
+                rx_data_counter =0;
+
+                gpro_t.disp_rx_cmd_done_flag = 1 ;
+
+                state=0;
+
+                 gl_tMsg.bcc_check_code=disp_inputBuf[0];
+
+               // display_board_commnunication_handler();
+                 
+
+                #if 1
+
+                xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
+                DECODER_BIT_10,     /* 设置目标任务事件标志位bit0  */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                &xHigherPriorityTaskWoken);
+
+                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+                portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+                #endif 
+                  
+              }
+
+              }
+
+              if(gl_tMsg.usData[rx_data_counter] ==0xFE && rx_end_flag == 0 &&  rx_data_counter > 4){
+                     
+                       rx_end_flag = 1 ;
+                          
+                        
+               }
+
+        break;
+
+
+			
+		}
+
+      //  ENABLE_INT();
+	    __HAL_UART_CLEAR_OREFLAG(&huart1);
+		HAL_UART_Receive_IT(&huart1,disp_inputBuf,1);//UART receive data interrupt 1 byte
+		
+	 }
+    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
+    {
+           
+	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
+
+			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
+			wifi_t.wifi_uart_rx_counter++;
+
+			if(*wifi_t.usart1_dataBuf==0X0A) // 0x0A = "\n"
+			{
+				//wifi_t.usart2_rx_flag = 1;
+				Wifi_Rx_Link_Net_InputInfo_Handler();
+				wifi_t.wifi_uart_rx_counter=0;
+			}
+
+	      } 
+		  else{
+
+		         if(wifi_t.get_rx_beijing_time_enable==1){
+					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart1_dataBuf[0];
+					wifi_t.wifi_uart_rx_counter++;
+				}
+			    else{
+					Subscribe_Rx_Interrupt_Handler();
+
+				}
+	      }
+	 
+	  
+//	__HAL_UART_CLEAR_NEFLAG(&huart2);
+	//__HAL_UART_CLEAR_FEFLAG(&huart2);
+	__HAL_UART_CLEAR_OREFLAG(&huart2);
+	//__HAL_UART_CLEAR_IDLEFLAG(&huart2);
+	//__HAL_UART_CLEAR_TXFECF(&huart2);
+	 HAL_UART_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
+     
+	}
+
+
+ }
+
+  
+ 
+
+//	__HAL_UART_CLEAR_NEFLAG(&huart2);
+//	__HAL_UART_CLEAR_FEFLAG(&huart2);
+//	__HAL_UART_CLEAR_OREFLAG(&huart2);
+//	__HAL_UART_CLEAR_TXFECF(&huart2);
+
 
 /*********************************************************************
 *
