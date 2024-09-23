@@ -47,7 +47,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, PLASMA_Pin|FAN_COMM_Pin|FAN_OUT_Pin|WIFI_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, RELAY_Pin|TEMP_Pin|LED_CTL_Pin|LCD_LIGHT_Pin
+  HAL_GPIO_WritePin(GPIOB, RELAY_Pin|LED_CTL_Pin|LCD_LIGHT_Pin
                           |TM1723_DIO_Pin|TM1723_SCLK_Pin|TM1723_STB_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -62,7 +62,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin
                            PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = RELAY_Pin|TEMP_Pin|LED_CTL_Pin|LCD_LIGHT_Pin
+  GPIO_InitStruct.Pin = RELAY_Pin|LED_CTL_Pin|LCD_LIGHT_Pin
                           |TM1723_DIO_Pin|TM1723_SCLK_Pin|TM1723_STB_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

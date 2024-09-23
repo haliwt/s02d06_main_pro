@@ -21,6 +21,14 @@
 /* �������� ------------------------------------------------------------------*/
 //void DHT11_Init( void );
 //uint8_t DHT11_Read_TempAndHumidity(DHT11_Data_TypeDef * DHT11_Data);
+
+uint8_t dht11_init(void);   /* 初始化DHT11 */
+uint8_t dht11_check(void);  /* 检测是否存在DHT11 */
+uint8_t dht11_read_data(uint8_t *temp,uint8_t *humi);   /* 读取温湿度 */
+
+
+
+
 void Update_DHT11_Value(void);
 
 

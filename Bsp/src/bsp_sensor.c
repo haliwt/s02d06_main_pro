@@ -159,6 +159,7 @@ uint8_t dht11_init(void)
     /* DHT11_DQ引脚模式设置,开漏输出,上拉, 这样就不用再设置IO方向了, 开漏输出的时候(=1), 也可以读取外部信号的高低电平 */
 
     dht11_reset();
+    
     return dht11_check();
 }
 

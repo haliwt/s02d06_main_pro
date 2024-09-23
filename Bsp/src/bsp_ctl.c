@@ -37,6 +37,8 @@ static void wake_up_backlight_on_fun(void);
 void bsp_ctl_init(void)
 {
 
+   
+   dht11_init();
    gctl_t.fan_warning =0;
    gctl_t.ptc_warning = 0;
    gctl_t.ptc_flag=1;
