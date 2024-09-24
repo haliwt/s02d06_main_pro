@@ -434,9 +434,7 @@ void key_add_dec_set_temp_value_fun(void)
     if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 3){
 
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
-        osDelay(200);
-        lcd_donot_disp_number_34_temperature();
-        osDelay(200);
+     
     }
     else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
       
