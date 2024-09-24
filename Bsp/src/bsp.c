@@ -249,6 +249,7 @@ void mainboard_active_handler(void)
     if(gpro_t.gTimer_run_main_fun > 0){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
+            Backlight_On();
         Process_Dynamical_Action();
         }
         else{
@@ -433,7 +434,7 @@ static void Process_Dynamical_Action(void)
 
      }
 
-   if(ptc_state() ==1){
+   if(ptc_state() ==1 && gctl_t.manual_turn_off_ptc_flag == 0){
 
 
        Ptc_On();

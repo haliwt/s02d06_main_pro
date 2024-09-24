@@ -148,7 +148,7 @@ void mode_long_short_key_fun(void)
             LCD_Disp_Timer_Timing_Init();
              disp_ai_iocn();
              buzzer_sound();
-          
+             SendData_Set_Command(0x27,0x02); //timer timing.
              HAL_Delay(10);
              
             
@@ -167,7 +167,7 @@ void mode_long_short_key_fun(void)
             LCD_Disp_Works_Timing_Init();
              disp_ai_iocn();
              buzzer_sound();
-           
+             SendData_Set_Command(0x27,0x01); //works time .
              HAL_Delay(10);
             
            
@@ -431,12 +431,12 @@ void Add_Key_Fun(uint8_t cmd)
 void key_add_dec_set_temp_value_fun(void)
 {
 
-    if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 3){
+    if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 2){
 
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
      
     }
-    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
+    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 1){
       
       if(gkey_t.set_temp_value_be_pressed ==1){
 
@@ -444,10 +444,11 @@ void key_add_dec_set_temp_value_fun(void)
            lcd_donot_disp_number_34_temperature();
             osDelay(200);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            
             gpro_t.set_temperature_value_success =1;
 
            
-            sendData_setTemp_value(gctl_t.gSet_temperature_value);
+           
 
         }
        else if(g_tDisp.disp_set_temp_value_flag == 1){

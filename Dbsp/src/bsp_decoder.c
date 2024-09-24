@@ -204,18 +204,17 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x07: // AI mode -> timer and beijing time
 
-        wake_up_backlight_on();
-        if(pdata[3] == 0x01){  // AI 
-            second_disp_ai_time_fun();
-            
-            
-        }
-        else if(pdata[3] == 0x0){ // don't buzzer sound .
-
-           second_disp_ai_timer_fun();
-
-
-        }
+//        wake_up_backlight_on();
+//        if(pdata[3] == 0x01){  // AI 
+//            //second_disp_ai_time_fun();
+//            
+//            
+//        }
+//        else if(pdata[3] == 0x0){ // don't buzzer sound .
+//
+//          
+//
+//        }
 
 
 
@@ -322,7 +321,7 @@ void receive_data_fromm_display(uint8_t *pdata)
        }
        else if(pdata[3] == 0x02){
         buzzer_sound();
-        second_disp_ai_time_fun();
+        second_disp_not_ai_timer_fun();
             
 
         if(wifi_link_net_state()==1){

@@ -34,7 +34,8 @@ void second_disp_set_link_wifi_fun(void);
 void second_disp_ai_time_fun(void);
 
 
-void second_disp_ai_timer_fun(void);
+void second_disp_not_ai_timer_fun(void);
+
 
 
 
