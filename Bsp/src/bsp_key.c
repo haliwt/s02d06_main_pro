@@ -102,11 +102,7 @@ void smartphone_power_on_handler(void)
           
     //   Buzzer_KeySound();
 
-      
-       
-      
 }
-
 /*********************************************************************************
 *
 *	函 数 名:static void mode_long_short_key_fun(void)
@@ -289,23 +285,23 @@ void Dec_Key_Fun(uint8_t cmd)
             
 
              //display hours
-                  glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
-                  glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
+                //   glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
+                //   glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
 
-                  glcd_t.number6_low  = gpro_t.set_timer_timing_hours % 10; //
-                  glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
-                   //dispaly minutes 
-                  glcd_t.number7_low =  0;
-                  glcd_t.number7_high =   0;
+                //   glcd_t.number6_low  = gpro_t.set_timer_timing_hours % 10; //
+                //   glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
+                //    //dispaly minutes 
+                //   glcd_t.number7_low =  0;
+                //   glcd_t.number7_high =   0;
 
-                  glcd_t.number8_low = 0;
-                  glcd_t.number8_high =   0;
+                //   glcd_t.number8_low = 0;
+                //   glcd_t.number8_high =   0;
 
                 
 
          // LCD_Disp_Timer_Timing();
          Set_Timer_Timing_Lcd_Blink();
-       
+         SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
 
          break;
  
@@ -401,22 +397,24 @@ void Add_Key_Fun(uint8_t cmd)
 		                
              }
 	//display hours
-        glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
-        glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
+        // glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
+        // glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
 
-        glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
-        glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
-        //dispaly minutes 
-        glcd_t.number7_low =  0;
-        glcd_t.number7_high = 0;
+        // glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
+        // glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
+        // //dispaly minutes 
+        // glcd_t.number7_low =  0;
+        // glcd_t.number7_high = 0;
 
-        glcd_t.number8_low = 0;
-        glcd_t.number8_high =  0;
-
-       // gkey_t.gTimer_disp_set_timer_blink =0;
+        // glcd_t.number8_low = 0;
+        // glcd_t.number8_high =  0;
+   
+     
         
         //LCD_Disp_Timer_Timing();
         Set_Timer_Timing_Lcd_Blink();
+
+        SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
         
      break;
         

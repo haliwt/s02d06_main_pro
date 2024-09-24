@@ -273,7 +273,7 @@ void mainboard_active_handler(void)
 void disp_works_or_timer_timing_fun(void)
 {
 
-   Display_WorksTimingr_Handler(gkey_t.key_mode);
+  
 
 }
 /**********************************************************************************************************
@@ -831,14 +831,11 @@ void read_senson_dht11_data(void)
 {
 
     static uint8_t power_on_run_dht11_times ;
-  if(gpro_t.gTimer_run_dht11 > 12  ||  power_on_run_dht11_times < 20){
+  if(gpro_t.gTimer_run_dht11 > 4  ||  power_on_run_dht11_times < 20){
         gpro_t.gTimer_run_dht11=0;
         power_on_run_dht11_times ++;
 
         Update_DHT11_Value();
-
-        
-
 
         Disp_HumidityTemp_Value();
 

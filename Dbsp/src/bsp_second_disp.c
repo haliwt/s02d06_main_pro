@@ -78,7 +78,7 @@ void second_disp_ai_time_fun(void)
             
              LCD_Disp_Timer_Timing_Init();
              disp_ai_iocn();
-             buzzer_sound();
+           //  buzzer_sound();
           
            
         gkey_t.key_mode_be_pressed = 2;
@@ -94,9 +94,9 @@ void second_disp_ai_time_fun(void)
            
             LCD_Disp_Works_Timing_Init();
              disp_ai_iocn();
-             buzzer_sound();
+            // buzzer_sound();
            
-             HAL_Delay(10);
+            // HAL_Delay(10);
             
            
             gkey_t.key_mode_be_pressed = 1;

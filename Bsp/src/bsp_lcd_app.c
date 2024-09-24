@@ -326,11 +326,6 @@ void LCD_Disp_Timer_Timing_Init(void)
     LCD_Disp_Timer_Timing();
 
 }
-
-
-
-
-
 /*********************************************************************************
 *
 *	函 数 名:static void mode_long_short_key_fun(void)
@@ -440,6 +435,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
                     HAL_Delay(200);
                 }
+                SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
                
             }
         }

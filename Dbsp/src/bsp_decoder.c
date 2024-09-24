@@ -233,7 +233,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       case 0x2A:   //按键设置的温度值
 
          wake_up_backlight_on();
-        if(pdata[3] == 0x0F){ //数据
+        if(pdata[4] == 0x01){ //数据
           g_tDisp.disp_set_temp_value_flag =1;
           gpro_t.set_temperature_value_success=1;
           gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
@@ -308,7 +308,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      case 0x27: //AI mode 
 
       if(pdata[3] == 0x01){ //AI mode 
-       
+          buzzer_sound();
          second_disp_ai_time_fun();
          
 
@@ -318,7 +318,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
        }
        else if(pdata[3] == 0x02){
-       
+        buzzer_sound();
         second_disp_ai_time_fun();
             
 
@@ -336,7 +336,11 @@ void receive_data_fromm_display(uint8_t *pdata)
 
          if(pdata[4]==0x01){
 
-
+            gkey_t.key_mode = mode_set_timer;
+            gkey_t.gTimer_disp_set_timer = 0; 
+            gpro_t.set_timer_timing_minutes =0;
+            gpro_t.set_timer_timing_hours = pdata[5];
+            Set_Timer_Timing_Lcd_Blink();
          }
 
 

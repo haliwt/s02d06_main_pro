@@ -9,6 +9,7 @@ void sendData_setTemp_value(uint8_t temp);
 
 void sendData_Real_TimeHum(uint8_t hum,uint8_t temp);
 
+void SendData_Tx_Data(uint8_t dcmd,uint8_t ddata);
 
 void SendWifiData_To_PanelWindSpeed(uint8_t dat1);
 
