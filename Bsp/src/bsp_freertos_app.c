@@ -419,7 +419,7 @@ static void vTaskStart(void *pvParameters)
             
               power_on_run_handler();
               read_senson_dht11_data();
-              Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+              record_time_or_time_handler();
          
              key_add_dec_set_temp_value_fun();
               backlight_on_off_state();

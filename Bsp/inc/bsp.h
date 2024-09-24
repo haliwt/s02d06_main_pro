@@ -172,6 +172,9 @@ void link_wifi_net_handler(uint8_t link);
 
 void read_senson_dht11_data(void);
 
+void record_time_or_time_handler(void);
+
+
 
 #endif 
 

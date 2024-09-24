@@ -851,3 +851,65 @@ void read_senson_dht11_data(void)
 
 }
 
+void record_time_or_time_handler(void)
+{
+    if(gkey_t.key_mode == disp_timer_timing ){
+    if(gpro_t.gTimer_works_counter_sencods > 59 ){
+    
+          gpro_t.gTimer_works_counter_sencods=0;
+    
+          gpro_t.disp_works_minutes_value++;
+    
+        if( gpro_t.disp_works_minutes_value > 59){ //1 hours
+            gpro_t.disp_works_minutes_value=0;
+    
+             gpro_t.disp_works_hours_value++;
+    
+    
+            if(gpro_t.disp_works_hours_value > 99){
+                gpro_t.disp_works_hours_value=0;
+    
+    
+            }
+            
+        }
+        }
+     }
+     else if(gkey_t.key_mode == disp_works_timing){
+
+     if( gkey_t.set_timer_timing_success == 1){
+     if(gpro_t.gTimer_timer_Counter > 59){
+	    gpro_t.gTimer_timer_Counter =0;
+		
+		gpro_t.set_timer_timing_minutes -- ;
+    
+	
+	    if(gpro_t.set_timer_timing_minutes <  0 ){
+			 
+		   gpro_t.set_timer_timing_hours -- ;
+		   gpro_t.set_timer_timing_minutes =59;
+         }
+
+		
+		
+		 if(gpro_t.set_timer_timing_hours < 0 ){
+		 
+			
+			gpro_t.set_timer_timing_hours=0;
+    		gpro_t.set_timer_timing_minutes=0;
+    		gkey_t.key_power = power_off;
+            gpro_t.power_off_flag = 1;
+    			//gkey_t.gTimer_power_off_run_times=0;
+           
+            
+			
+	      }
+
+        }
+        }
+
+    }
+
+}
+
+

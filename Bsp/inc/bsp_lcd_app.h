@@ -43,7 +43,7 @@ void Set_Timer_Timing_Lcd_Blink(void );
 void Mainboard_Action_Fun(void);
 
 
-void Record_WorksOr_Timer_Timing_DonotDisp_Handler(void);
+
 
 
 void Disp_HumidityTemp_Value(void);
