@@ -97,7 +97,7 @@ void power_off_run_handler(void)
 void power_on_run_handler(void)
 {
 
-   static uint8_t power_on_run_dht11_times ;
+
      switch(gctl_t.step_process){
 
 
@@ -245,18 +245,18 @@ void power_on_run_handler(void)
 void mainboard_active_handler(void)
 {
 
-   
+
     if(gpro_t.gTimer_run_main_fun > 0){
-                    gpro_t.gTimer_run_main_fun =0;
-                  if(gctl_t.interval_stop_run_flag  ==0){
-                       Process_Dynamical_Action();
-                  }
-                  else{
-                      interval_two_hours_stop_action();
-                   
-    
-                  }
-               }
+        gpro_t.gTimer_run_main_fun =0;
+        if(gctl_t.interval_stop_run_flag  ==0){
+        Process_Dynamical_Action();
+        }
+        else{
+        interval_two_hours_stop_action();
+
+
+        }
+    }
     
 
 }
@@ -830,8 +830,10 @@ void link_wifi_net_handler(uint8_t link)
 void read_senson_dht11_data(void)
 {
 
-  if(gpro_t.gTimer_run_dht11 > 12){
+    static uint8_t power_on_run_dht11_times ;
+  if(gpro_t.gTimer_run_dht11 > 12  ||  power_on_run_dht11_times < 20){
         gpro_t.gTimer_run_dht11=0;
+        power_on_run_dht11_times ++;
 
         Update_DHT11_Value();
 

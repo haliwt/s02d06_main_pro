@@ -198,6 +198,8 @@ static void vTaskMsgPro(void *pvParameters)
 
               }
            }
+
+           gl_tMsg.usData[0]=0;
             
          }
        }
@@ -430,7 +432,7 @@ static void vTaskStart(void *pvParameters)
 
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 
-              
+               LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
 
             }
             else{
