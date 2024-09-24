@@ -317,19 +317,31 @@ void LCD_Number_Ai_OneTwo_Humidity(void)
 void Disip_Wifi_Icon_State(void)
 {
 
+
+   static uint8_t alternate_wifi_flag;
+
    if(gkey_t.wifi_led_fast_blink_flag==0){
    if(wifi_link_net_state() ==0){
 
       if(gctl_t.gTimer_wifi_blink < 1  ){
+          if(alternate_wifi_flag == 0){
+             alternate_wifi_flag ++;
           TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+
+            }
       }
       else if(gctl_t.gTimer_wifi_blink  > 0 && gctl_t.gTimer_wifi_blink  < 2){
+
+          if(alternate_wifi_flag ==1){
+             alternate_wifi_flag =0;
            TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
 
-      }
+            }
+     }
       else if(gctl_t.gTimer_wifi_blink  > 1){
 
         gctl_t.gTimer_wifi_blink =0;
+        alternate_wifi_flag =0;
          TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
 
       }
@@ -346,15 +358,26 @@ void Disip_Wifi_Icon_State(void)
     if(wifi_link_net_state() ==0){
     
           if(gctl_t.gTimer_wifi_fast_blink < 19  ){ //9 * 10ms
+
+             if(alternate_wifi_flag == 0){
+                alternate_wifi_flag ++;
+              
               TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
-          }
+
+              }
+            }
           else if(gctl_t.gTimer_wifi_fast_blink  > 18 && gctl_t.gTimer_wifi_fast_blink < 28){
-               TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
-    
+
+                  if(alternate_wifi_flag == 1){
+                       alternate_wifi_flag =0;
+
+                      TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+                  }
           }
           else if(gctl_t.gTimer_wifi_fast_blink > 27){
     
            gctl_t.gTimer_wifi_fast_blink =0;
+           alternate_wifi_flag =0;
             TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
     
           }
@@ -859,17 +882,29 @@ void Display_Wind_Icon_Inint(void)
 *****************************************************************************/
 void LCD_Timer_Colon_Flicker(void)
 {
+
+   static uint8_t alternate_time_flag;
+
    if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
 
         
         if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
-        if(gkey_t.key_mode != mode_set_timer){
-           TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-          }
+            if(gkey_t.key_mode != mode_set_timer){
+
+               if(alternate_time_flag==0){
+                    alternate_time_flag ++;
+               TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+
+               }
+            }
 
         }
         else{
-          TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + COLON_SYMBOL) & 0xffff); 
+
+             if(alternate_time_flag==1){
+                 alternate_time_flag =0;
+                 TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + COLON_SYMBOL) & 0xffff); 
+              }
 
         }
           
@@ -880,12 +915,17 @@ void LCD_Timer_Colon_Flicker(void)
     
        if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
           if(gkey_t.key_mode != mode_set_timer){
-            TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
+             if(alternate_time_flag==0){
+                    alternate_time_flag ++;
+                TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+             }
           }
       }
       else{
+           if(alternate_time_flag==1){
+               alternate_time_flag =0;
           TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + COLON_SYMBOL) & 0xffff); 
+          }
 
       }
      
@@ -893,6 +933,7 @@ void LCD_Timer_Colon_Flicker(void)
    else if(glcd_t.gTimer_colon_blink > 8){
 
       glcd_t.gTimer_colon_blink =0;
+         alternate_time_flag =0;
 
    }
    
