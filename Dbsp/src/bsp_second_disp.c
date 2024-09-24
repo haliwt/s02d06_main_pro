@@ -76,7 +76,7 @@ void second_disp_ai_time_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
             
-            LCD_Disp_Timer_Timing_Init();
+             LCD_Disp_Timer_Timing_Init();
              disp_ai_iocn();
              buzzer_sound();
           

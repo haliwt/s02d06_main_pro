@@ -103,7 +103,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为200ms */
 	uint32_t ulValue;
    
    
@@ -217,7 +217,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为30ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为30ms */
  
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
@@ -421,18 +421,16 @@ static void vTaskStart(void *pvParameters)
               read_senson_dht11_data();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
          
-             
-             
-              key_add_dec_set_temp_value_fun();
+             key_add_dec_set_temp_value_fun();
               backlight_on_off_state();
               disp_works_or_timer_timing_fun();
-              bsp_Idle();
               mainboard_active_handler();
               LCD_Timer_Colon_Flicker();
 
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 
                LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+               Disip_Wifi_Icon_State();
 
             }
             else{

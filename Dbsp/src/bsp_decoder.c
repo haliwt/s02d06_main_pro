@@ -230,7 +230,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
       break;
 
-      case 0x02A:   //按键设置的温度值
+      case 0x2A:   //按键设置的温度值
 
          wake_up_backlight_on();
         if(pdata[3] == 0x0F){ //数据
@@ -329,6 +329,17 @@ void receive_data_fromm_display(uint8_t *pdata)
          }
         }
         
+     break;
+
+
+     case 0x4C: //display #1 or display #2 set temperature value .
+
+         if(pdata[4]==0x01){
+
+
+         }
+
+
      break;
         
      
