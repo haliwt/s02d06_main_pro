@@ -49,7 +49,9 @@ void receive_data_fromm_display(uint8_t *pdata)
         buzzer_sound();
         wake_up_backlight_on();
         if(gctl_t.interval_stop_run_flag  ==0){
+          gctl_t.manual_turn_off_ptc_flag = 0;
           gctl_t.ptc_flag = 1;
+          
           Ptc_On();
           Disp_Dry_Icon();
           
@@ -63,7 +65,8 @@ void receive_data_fromm_display(uint8_t *pdata)
         
           buzzer_sound();
           wake_up_backlight_on();
-          
+
+          gctl_t.manual_turn_off_ptc_flag = 1;
        
           gctl_t.ptc_flag = 0;
           Ptc_Off();
@@ -222,7 +225,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       case 0x1A: //读取传感的温度数据
           wake_up_backlight_on();
         if(pdata[3] == 0x0F){ //数据
-          g_tDisp.disp_set_temp_value_flag =1;
+          
           gpro_t.set_temperature_value_success=1;
           gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
           gctl_t.gSet_temperature_value  = pdata[5] ;
@@ -234,9 +237,9 @@ void receive_data_fromm_display(uint8_t *pdata)
 
          wake_up_backlight_on();
         if(pdata[4] == 0x01){ //数据
+           gpro_t.gTimer_set_temp_temp=0;
           g_tDisp.disp_set_temp_value_flag =1;
-          gpro_t.set_temperature_value_success=1;
-          gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
+        //  gpro_t.set_temperature_value_success=1;
           gctl_t.gSet_temperature_value  = pdata[5] ;
 
         }

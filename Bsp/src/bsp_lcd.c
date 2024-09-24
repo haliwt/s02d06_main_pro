@@ -413,6 +413,16 @@ void LCD_Number_ThreeFour_Temperature(void)
 
 
 }
+
+void lcd_donot_disp_number_34_temperature(void)
+{
+  //number '3' 
+  TM1723_Write_Display_Data(0xC2,(0x01+lcdNumber3_High[0x0A] + lcdNumber3_Low[0X0A]  ) & 0xffff); //numbers : '3' addr: 0xC2
+
+ //number '4' 
+ TM1723_Write_Display_Data(0xC3,(0x01+lcdNumber4_High[0x0A] + lcdNumber4_Low[0x0A]) & 0xffff); //numb
+
+}
 /*****************************************************************************
  * 
  * Function Name:  void LCD_Number_FiveSix_Hours(void)

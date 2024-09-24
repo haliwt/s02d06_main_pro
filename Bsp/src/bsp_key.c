@@ -238,8 +238,10 @@ void Dec_Key_Fun(uint8_t cmd)
             gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
          
             gkey_t.set_temp_value_be_pressed =1;
-            g_tDisp.disp_set_temp_value_flag=0;  //the second display board send data flag
+           
       //      Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
+
+          #if 0
             //compare with by read temperature of sensor value  
             if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -265,6 +267,8 @@ void Dec_Key_Fun(uint8_t cmd)
 
 
             }
+          #endif 
+            gpro_t.gTimer_set_temp_temp=0;
            gpro_t.app_ptc_flag = 0;
          break;
 
@@ -347,9 +351,9 @@ void Add_Key_Fun(uint8_t cmd)
 
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
-        g_tDisp.disp_set_temp_value_flag=0;  //the second display board send data flag
+       
 
-
+        #if 0
          //compare with by read temperature of sensor value  
          if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -376,8 +380,9 @@ void Add_Key_Fun(uint8_t cmd)
 
 
             }
+         #endif 
 
-       
+       gpro_t.gTimer_set_temp_temp=0;
        gpro_t.app_ptc_flag = 0;
     break;
 
@@ -426,27 +431,41 @@ void Add_Key_Fun(uint8_t cmd)
 void key_add_dec_set_temp_value_fun(void)
 {
 
-    if(gkey_t.set_temp_value_be_pressed == 1){
-       gkey_t.set_temp_value_be_pressed ++;
+    if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 3){
 
-      Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
-      if(g_tDisp.disp_set_temp_value_flag == 1){
+        Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+        osDelay(200);
+        lcd_donot_disp_number_34_temperature();
+        osDelay(200);
+    }
+    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
+      
+      if(gkey_t.set_temp_value_be_pressed ==1){
+
+          gkey_t.set_temp_value_be_pressed ++;
+           lcd_donot_disp_number_34_temperature();
+            osDelay(200);
+            Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            gpro_t.set_temperature_value_success =1;
+
+           
+            sendData_setTemp_value(gctl_t.gSet_temperature_value);
+
+        }
+       else if(g_tDisp.disp_set_temp_value_flag == 1){
 
           g_tDisp.disp_set_temp_value_flag++;
 
-         set_temp_value_compare_dht11_temp_value();
+           lcd_donot_disp_number_34_temperature();
+            osDelay(200);
+            Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            gpro_t.set_temperature_value_success =1;
 
+           
       }
-      else if(g_tDisp.disp_set_temp_value_flag==0){
-        
-          g_tDisp.disp_set_temp_value_flag=3;
+       set_temp_value_compare_dht11_temp_value();
 
-           sendData_setTemp_value(gctl_t.gSet_temperature_value);
-
-
-      }
-
-      if(wifi_link_net_state()==1){
+     if(wifi_link_net_state()==1){
         
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
         osDelay(20);
@@ -454,9 +473,9 @@ void key_add_dec_set_temp_value_fun(void)
         MqttData_Publish_SetPtc(gctl_t.ptc_flag);
         osDelay(20);
         
-   }
+        }
 
-}
+    }
 }
     
  

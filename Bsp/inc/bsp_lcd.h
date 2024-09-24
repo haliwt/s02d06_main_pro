@@ -168,6 +168,7 @@ void disp_ai_symbol(void);
 
 void donot_disp_ai_symbol(void);
 
+void lcd_donot_disp_number_34_temperature(void);
 
 #endif 
 

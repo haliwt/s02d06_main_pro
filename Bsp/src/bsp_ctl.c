@@ -296,6 +296,8 @@ void SetTemp_Compare_SensoTemp(void)
       if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
                 gkey_t.gTimer_set_temp_value  =0;
+
+               if(gctl_t.manual_turn_off_ptc_flag ==0){
               
                 gctl_t.ptc_flag = 1;
                 Ptc_On();
@@ -316,6 +318,8 @@ void SetTemp_Compare_SensoTemp(void)
             	  }
 
                   }
+
+                }
                 
 
             }
@@ -375,6 +379,9 @@ void SetTemp_Compare_SensoTemp(void)
          }
          else if(gctl_t.dht11_temp_value < 39){ // gctl_t.dht11_temp_value
 
+
+             if(gctl_t.manual_turn_off_ptc_flag ==0){
+
               if(gpro_t.app_ptc_flag == 0){
                 ptc_counter_on ++;
 
@@ -396,6 +403,8 @@ void SetTemp_Compare_SensoTemp(void)
                  }
 
               }
+
+             }
 
 
          }
