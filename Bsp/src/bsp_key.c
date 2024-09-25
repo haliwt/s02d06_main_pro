@@ -9,6 +9,9 @@
 
 key_fun_t gkey_t;
 
+static void  key_mode_be_pressed_send_data_wifi(void);
+
+
 /*********************************************************************************
 *
 *	函 数 名:static void mode_long_short_key_fun(void)
@@ -31,6 +34,7 @@ void power_long_short_key_fun(void)
           
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
+             gpro_t.link_net_step=0;
 			 //WIFI CONNCETOR process
 			wifi_t.link_wifi_net_login_tencent_success =0;
 			
@@ -177,10 +181,12 @@ void mode_long_short_key_fun(void)
 
      }
 
+    key_mode_be_pressed_send_data_wifi();
+
  }
 
 
-void  key_mode_be_pressed_send_data_wifi(void)
+static void  key_mode_be_pressed_send_data_wifi(void)
 {
    
    if(gkey_t.key_mode_be_pressed == 1 && wifi_link_net_state()==1){

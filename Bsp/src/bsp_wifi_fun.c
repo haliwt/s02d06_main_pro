@@ -188,7 +188,7 @@ void link_wifi_net_state_handler(void)
 
             case 6:
 
-            if( wifi_t.gTimer_login_tencent_times  > 6){
+            if( wifi_t.gTimer_login_tencent_times  > 1){
 
              if(wifi_t.link_wifi_net_login_tencent_success==1){
 			
@@ -238,10 +238,15 @@ void link_wifi_net_state_handler(void)
 
             case 8:
 
-
+              if(wifi_t.link_wifi_net_login_tencent_success==1){
+                  
+                   gpro_t.link_net_step = 7;
+              }
+              else{
               gpro_t.get_beijing_step= 10;
           
               gpro_t.link_net_step = 0xff;
+              }
 
             break;
 

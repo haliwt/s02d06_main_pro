@@ -779,6 +779,9 @@ static void Detected_Ptc_Error(void)
 ***************************************************************************/
 void link_wifi_net_handler(uint8_t link)
 {
+
+   static uint8_t link_net_flag;
+
     if(link == 1){
 
          if(wifi_t.gTimer_linking_tencent_duration > 119){
@@ -791,7 +794,7 @@ void link_wifi_net_handler(uint8_t link)
              wifi_t.linking_tencent_cloud_doing =1;
              wifi_t.soft_ap_config_flag =1; 
            }
-
+          link_net_flag = 1;
         }
         else
         link_wifi_net_state_handler();
@@ -799,7 +802,25 @@ void link_wifi_net_handler(uint8_t link)
     }
     else{
       
-       key_mode_be_pressed_send_data_wifi();
+        if(link_net_flag == 1 && wifi_link_net_state()==1){
+
+              link_net_flag ++;
+			 
+				 MqttData_Publish_SetOpen(0x01);
+		         HAL_Delay(20);
+		        // osDelay(100);
+		         Publish_Data_ToTencent_Initial_Data();
+				 HAL_Delay(20);
+                  //osDelay(100);
+
+				Subscriber_Data_FromCloud_Handler();
+				HAL_Delay(20);
+	             //osDelay(100);
+
+			 
+
+                   
+         }
        Detected_Fan_Error();
        Detected_Ptc_Error();
 

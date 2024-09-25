@@ -900,12 +900,9 @@ void LCD_Timer_Colon_Flicker(void)
         
         if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
            
+          TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
-             
-               TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-               
-            }
+         }
 
         
    }
@@ -915,7 +912,7 @@ void LCD_Timer_Colon_Flicker(void)
        if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
        
             
-                TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+           TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
              
           }
       }

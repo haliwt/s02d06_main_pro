@@ -43,7 +43,7 @@ typedef struct _WIFI_FUN{
 
     //
    
-    uint8_t rx_data_state;
+    volatile uint8_t rx_data_state;
     uint8_t wifi_rx_counter;
 
    
@@ -76,7 +76,7 @@ typedef struct _WIFI_FUN{
 	
 
  
-	uint8_t usart1_dataBuf[1];
+	uint8_t usart2_dataBuf[1];
   
     //uint8_t usart2_rx_flag;
 	
