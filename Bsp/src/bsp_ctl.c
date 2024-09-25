@@ -23,8 +23,8 @@ void (*wake_up_backlight_on)(void);
 
 static uint8_t ai_mode_default(void);
 
-//uint8_t (*wifi_link_net_state)(void);
-//static uint8_t wifi_link_net_default(void);
+
+
 
 static uint8_t power_on_default(void);
 static void local_read_latency_ten_minutes(void);

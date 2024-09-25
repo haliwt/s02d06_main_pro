@@ -83,6 +83,7 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 	    Ptc_Off(); //turn off
 
         gctl_t.ptc_warning = 1;
+        gkey_t.key_mode = disp_error_number;
         
         Buzzer_Ptc_Error_Sound();
 
@@ -100,28 +101,6 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
    }
 }
 
-
-/*****************************************************************
-	*
-	*Function Name: void Judge_PTC_Temperature_Value(void)
-	*Function: PTC adc read voltage
-	*Input Ref: NO
-	*Return Ref: No
-	*
-	*
-*****************************************************************/
-//void Judge_PTC_Temperature_Value(void)
-//{
-//  
-//  if(run_t.ptc_temp_voltage < 373 || run_t.ptc_temp_voltage ==373){ //87 degree
-//  
-//	    gctl_t.plasma_flag = 0; //turn off
-//	    PTC_SetLow(); //turn off
-//        Buzzer_Ptc_Error_Sound();
-//   	      
-//   }
-//   
-//}
 
 /*****************************************************************
 	*
@@ -157,7 +136,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
     #else
 
-	if(fan_detect_voltage >300 &&  fan_detect_voltage < 1400){
+	if(fan_detect_voltage >300 ){
            detect_error_times=0;
 		   #ifdef DEBUG
              printf("adc= %d",run_t.fan_detect_voltage);
@@ -170,8 +149,8 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 	          
 		if(detect_error_times >0){
 			detect_error_times=0;
-		 gctl_t.fan_warning = 1;
-
+		  gctl_t.fan_warning = 1;
+          gkey_t.key_mode = disp_error_number;
 		  Buzzer_Fan_Error_Sound();
 
            wifi_t.set_wind_speed_value = 2;

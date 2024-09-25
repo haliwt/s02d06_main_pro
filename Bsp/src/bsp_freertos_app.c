@@ -446,7 +446,7 @@ static void vTaskStart(void *pvParameters)
                 wifi_auto_detected_link_state();
             }
 
-           clear_rx_copy_data();
+          // clear_rx_copy_data();
      
        }
 

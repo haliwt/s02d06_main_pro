@@ -32,7 +32,7 @@ typedef struct _WIFI_FUN{
 
 
     uint8_t soft_ap_config_success;
-	uint8_t link_wifi_net_login_tencent_success;
+	volatile uint8_t link_wifi_net_login_tencent_success;
 
 
 
@@ -41,9 +41,8 @@ typedef struct _WIFI_FUN{
    
     uint8_t recoder_tempearture_rx_data;
 
-    //
+    
    
-    volatile uint8_t rx_data_state;
     uint8_t wifi_rx_counter;
 
    

@@ -151,7 +151,7 @@ void link_wifi_net_state_handler(void)
 
 
             case 4:
-                 if(wifi_t.gTimer_login_tencent_times> 7){
+                 if(wifi_t.gTimer_login_tencent_times> 9){
                           wifi_t.gTimer_login_tencent_times = 0;
 
                    wifi_t.linking_tencent_cloud_doing =1;
@@ -188,7 +188,7 @@ void link_wifi_net_state_handler(void)
 
             case 6:
 
-            if( wifi_t.gTimer_login_tencent_times  > 1){
+            if( wifi_t.gTimer_login_tencent_times  > 3){
 
              if(wifi_t.link_wifi_net_login_tencent_success==1){
 			
