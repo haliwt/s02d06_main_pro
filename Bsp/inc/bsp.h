@@ -143,6 +143,7 @@ typedef struct {
    uint8_t gTimer_get_data_from_tencent_data;
    uint8_t gTimer_run_main_fun;
    uint8_t gTimer_set_temp_temp ;
+   uint8_t gTimer_disp_short_time;
    
   
 }BSP_process_t;

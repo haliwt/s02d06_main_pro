@@ -81,6 +81,41 @@ void receive_data_fromm_display(uint8_t *pdata)
       
      break;
 
+     case 0x22: //compare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
+
+      if(pdata[3] == 0x01){
+
+          wake_up_backlight_on();
+        
+        if(gctl_t.interval_stop_run_flag  ==0){
+
+         if(gctl_t.manual_turn_off_ptc_flag ==0){
+            
+          gctl_t.ptc_flag = 1;
+          Ptc_On();
+          Disp_Dry_Icon();
+         if(wifi_link_net_state()==1){
+              MqttData_Publish_SetPtc(0x01);
+	  	      osDelay(100);//HAL_Delay(350);
+           }
+          
+         }
+         }
+       }
+       else if(pdata[3] == 0x0){
+        
+          gctl_t.ptc_flag = 0;
+          Ptc_Off();
+          Disp_Dry_Icon();
+          if(wifi_link_net_state()==1){
+              MqttData_Publish_SetPtc(0x0);
+	  	      osDelay(100);//HAL_Delay(350);
+           }
+
+       }
+
+     break;
+
      case 0x03: //PLASMA 打开关闭指令
 
      
@@ -275,42 +310,12 @@ void receive_data_fromm_display(uint8_t *pdata)
       break;
 
 
-     case 0x22: //PTC打开关闭指令,没有蜂鸣器声音。
-
-      if(pdata[3] == 0x01){
-
-          wake_up_backlight_on();
-        
-        if(gctl_t.interval_stop_run_flag  ==0){
-            
-          gctl_t.ptc_flag = 1;
-          Ptc_On();
-          Disp_Dry_Icon();
-         if(wifi_link_net_state()==1){
-              MqttData_Publish_SetPtc(0x01);
-	  	      osDelay(100);//HAL_Delay(350);
-           }
-          
-         }
-       }
-       else if(pdata[3] == 0x0){
-        
-          gctl_t.ptc_flag = 0;
-          Ptc_Off();
-          Disp_Dry_Icon();
-          if(wifi_link_net_state()==1){
-              MqttData_Publish_SetPtc(0x0);
-	  	      osDelay(100);//HAL_Delay(350);
-           }
-
-       }
-
-     break;
+     
 
      case 0x27: //AI mode 
 
-      if(pdata[3] == 0x01){ //AI mode 
-          buzzer_sound();
+      if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
+        //  buzzer_sound();
          second_disp_ai_time_fun();
          
 
@@ -320,7 +325,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
        }
        else if(pdata[3] == 0x02){
-        buzzer_sound();
+       /// buzzer_sound();
         second_disp_not_ai_timer_fun();
             
 

@@ -124,27 +124,7 @@ void power_on_run_handler(void)
        
           case 1:   //run dht11 display 
 
-//             if(gpro_t.gTimer_run_dht11 > 12){
-//                gpro_t.gTimer_run_dht11=0;
-//                power_on_run_dht11_times++;
-//                  Update_DHT11_Value();
-//                  if(gpro_t.key_be_pressed_flag ==0){
-//                    sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
-//                    osDelay(30);
-//
-//                  }
-//                  Disp_HumidityTemp_Value();
-//
-//                  if(gctl_t.interval_stop_run_flag==0){
-//                     SetTemp_Compare_SensoTemp();
-//
-//                  }
-//
-//                    
-//
-//              }
-
-
+            read_senson_dht11_data();
 
           gctl_t.step_process=3;
 		  
@@ -841,7 +821,7 @@ void read_senson_dht11_data(void)
         Disp_HumidityTemp_Value();
 
         if(gctl_t.interval_stop_run_flag==0){
-            SetTemp_Compare_SensoTemp();
+            set_temp_value_compare_dht11_temp_value();//SetTemp_Compare_SensoTemp();
 
         }
 

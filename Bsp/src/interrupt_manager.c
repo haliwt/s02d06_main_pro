@@ -102,6 +102,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     
         gpro_t.gTimer_get_data_from_tencent_data++;
         gpro_t.gTimer_set_temp_temp ++;
+        gpro_t.gTimer_disp_short_time++ ;
    
         
        

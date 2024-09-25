@@ -417,19 +417,20 @@ static void vTaskStart(void *pvParameters)
 
          if(gkey_t.key_power==power_on){
             
+             backlight_on_off_state();
               power_on_run_handler();
-              read_senson_dht11_data();
+              
               record_time_or_time_handler();
          
              key_add_dec_set_temp_value_fun();
-              backlight_on_off_state();
+             
         
               Display_WorksTimingr_Handler(gkey_t.key_mode);
               mainboard_active_handler();
-              LCD_Timer_Colon_Flicker();
+             
 
               link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
-
+              LCD_Timer_Colon_Flicker();
               LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
               Disip_Wifi_Icon_State();
 

@@ -42,7 +42,8 @@ typedef enum mode_key_t{
    set_timer_confirm,
    counter_up,
    counter_down,
-   key_sound
+   key_sound,
+   disp_error_number
    
 }mode_state;
 

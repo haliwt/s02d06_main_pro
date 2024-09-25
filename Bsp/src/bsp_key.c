@@ -151,10 +151,8 @@ void mode_long_short_key_fun(void)
              SendData_Set_Command(0x27,0x02); //timer timing.
              HAL_Delay(10);
              
-            
-            
             gkey_t.key_mode_be_pressed = 2;
-
+            gpro_t.gTimer_disp_short_time=0;
            
 
         }
@@ -172,6 +170,7 @@ void mode_long_short_key_fun(void)
             
            
             gkey_t.key_mode_be_pressed = 1;
+            gpro_t.gTimer_disp_short_time=0;
              
          }
 
@@ -447,8 +446,6 @@ void key_add_dec_set_temp_value_fun(void)
             
             gpro_t.set_temperature_value_success =1;
 
-           
-           
 
         }
        else if(g_tDisp.disp_set_temp_value_flag == 1){
@@ -467,10 +464,10 @@ void key_add_dec_set_temp_value_fun(void)
      if(wifi_link_net_state()==1){
         
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-        osDelay(20);
+        osDelay(50);
 
         MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-        osDelay(20);
+        osDelay(50);
         
         }
 
@@ -482,31 +479,131 @@ void key_add_dec_set_temp_value_fun(void)
 
 void set_temp_value_compare_dht11_temp_value(void)
 {
-     if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
-                gkey_t.gTimer_set_temp_value  =0;
-                gpro_t.set_temperature_value_success=1;
+   static uint8_t first_turn_off_flag;
+   static uint8_t  send_1_off =0xff,send_1_on=0xff,send_2_on=0xff,send_2_off=0xff;
+   static uint8_t send_2_on_flag,send_2_off_flag,send_1_on_flag,send_1_off_flag;
+    switch(gpro_t.set_temperature_value_success){
+
+    case 1:
+
+        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+
+            if(gctl_t.manual_turn_off_ptc_flag ==0){
                 gctl_t.ptc_flag = 1;
-        
-                gpro_t.gTimer_run_main_fun=2;
 
-                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
+                Ptc_On();
+                Disp_Dry_Icon();
+
+                gpro_t.gTimer_run_dht11=2;  //at once display sensor of temperature value 
+
                 
-
+                  if(send_1_on !=send_1_on_flag){
+                       send_1_on = send_1_on_flag;
+                       send_1_off_flag ++;
+                    if(wifi_link_net_state()==1){
+                       MqttData_Publish_SetPtc(0x01);
+                       osDelay(10);
+                     }
+                  }
             }
-            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
-
-                gkey_t.gTimer_set_temp_value  =0;
-                gpro_t.set_temperature_value_success=1;
-
-                 gctl_t.ptc_flag = 0;
-  
-                 gpro_t.gTimer_run_main_fun=2;
-
-                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
 
 
+        }
+        else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
+            gctl_t.ptc_flag = 0;
+            Ptc_Off();
+            Disp_Dry_Icon();
+             if(send_1_off !=send_1_off_flag ){
+                 send_1_off = send_1_off_flag;
+                 send_1_on_flag ++;
+                 if(wifi_link_net_state()==1){
+                     MqttData_Publish_SetPtc(0x0);
+                     osDelay(10);
+                   }
+                  
+
+              }
+            gpro_t.gTimer_run_dht11=2;  //at once display sensor of temperature value 
+
+
+        }
+    break;
+
+
+    case 0: //default of compare real temperature value 
+
+
+    if(gctl_t.dht11_temp_value > 39){
+
+          first_turn_off_flag=1;
+          gctl_t.ptc_flag = 0;
+          Ptc_Off();
+          Disp_Dry_Icon();
+
+          if(send_2_off !=send_2_off_flag ){
+             send_2_off = send_2_off_flag;
+             send_2_on_flag ++;
+    	     if(wifi_link_net_state()==1){
+               MqttData_Publish_SetPtc(0x0);
+               osDelay(10);
+
+               }
+          }
+
+
+    }
+    else if(gctl_t.dht11_temp_value < 38 && first_turn_off_flag==1){
+
+        if(gctl_t.manual_turn_off_ptc_flag ==0){
+         gctl_t.ptc_flag = 1;
+
+         Ptc_On();
+         Disp_Dry_Icon();
+
+         if(send_2_on !=send_2_on_flag ){
+             send_2_on = send_2_on_flag;
+             send_2_off_flag ++;
+    	     if(wifi_link_net_state()==1){
+               MqttData_Publish_SetPtc(0x01);
+               osDelay(10);
+               }
+          }
+
+         gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
+        }
+
+
+    }
+    else if(gctl_t.dht11_temp_value < 40 && first_turn_off_flag==0){
+
+          if(gctl_t.manual_turn_off_ptc_flag ==0){
+             gctl_t.ptc_flag = 1;
+    
+             Ptc_On();
+             Disp_Dry_Icon();
+
+            if(send_2_on !=send_2_on_flag ){
+                 send_2_on = send_2_on_flag;
+                 send_2_off_flag ++;
+        	     if(wifi_link_net_state()==1){
+                   MqttData_Publish_SetPtc(0x01);
+                   osDelay(10);
+                  }
+              }
+    
+             gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
             }
+
+
+
+    }
+
+
+    break;
+
+    }
 }
 
 
