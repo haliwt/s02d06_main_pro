@@ -38,7 +38,7 @@ void  wifi_get_beijing_time_handler(void)
 
      case 0: //WT.EDIT .2024.08.10
 
-      if(wifi_t.link_wifi_net_login_tencent_success==1 && gpro_t.gTimer_get_data_from_tencent_data > 9){
+      if(gpro_t.tencent_link_success==1 && gpro_t.gTimer_get_data_from_tencent_data > 9){
        
           gpro_t.gTimer_get_data_from_tencent_data =0;
            flag_switch++;
@@ -84,7 +84,7 @@ void  wifi_get_beijing_time_handler(void)
 
          wifi_t.gTimer_get_beijing_time=0;
         
-          if(wifi_t.link_wifi_net_login_tencent_success==1){
+          if(gpro_t.tencent_link_success==1){
 
      
     		    gpro_t.get_beijing_step = 2;
@@ -199,20 +199,23 @@ void  wifi_get_beijing_time_handler(void)
 
                 gpro_t.get_beijing_time_success =1;
 
+                gpro_t.get_beijing_step = 0;
+
                  SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
                   osDelay(10);
 
-                   
+                 memset(wifi_t.wifi_data,'\0',60);
                 
             }
             else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
 
                    wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
-                   if(wifi_t.link_wifi_net_login_tencent_success==1){
+                   if(gpro_t.tencent_link_success==1){
                        gpro_t.get_beijing_step = 0;
                        gpro_t.gTimer_get_data_from_tencent_data=0;
                        wifi_t.gTimer_get_beijing_time = 50;
-                      
+                       memset(wifi_t.wifi_data,'\0',60);
+                       
 
                     }
                     else 
@@ -251,7 +254,7 @@ void  wifi_get_beijing_time_handler(void)
 
     
 
-         if(wifi_t.link_wifi_net_login_tencent_success !=1){
+         if(gpro_t.tencent_link_success ==0){
             gpro_t.get_beijing_step = 11;
             wifi_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
             wifi_t.wifi_uart_rx_counter=0;//gpro_t.wifi_rx_data_counter=0;
@@ -269,7 +272,7 @@ void  wifi_get_beijing_time_handler(void)
        }
 
      
-     if(wifi_t.link_wifi_net_login_tencent_success==1){
+     if(gpro_t.tencent_link_success==1){
           gpro_t.get_beijing_step = 0;
 
        }
@@ -278,7 +281,7 @@ void  wifi_get_beijing_time_handler(void)
 
 
      case 11:
-         if(wifi_t.link_wifi_net_login_tencent_success  ==0 && gkey_t.wifi_led_fast_blink_flag==0){
+         if(gpro_t.tencent_link_success  ==0 && gkey_t.wifi_led_fast_blink_flag==0){
 
            wifi_t.linking_tencent_cloud_doing =1;
         
@@ -337,7 +340,7 @@ void  wifi_get_beijing_time_handler(void)
 
 
      case 13:
-       if(wifi_t.link_wifi_net_login_tencent_success==1){
+       if(gpro_t.tencent_link_success==1){
        
          
 
@@ -386,7 +389,7 @@ void  wifi_get_beijing_time_handler(void)
 void wifi_auto_detected_link_state(void)
 {
     static uint8_t power_on_dc_power;
-	if(auto_link_tencent_step!=0xff && wifi_t.link_wifi_net_login_tencent_success==0 && power_on_dc_power ==0){
+	if(auto_link_tencent_step!=0xff && gpro_t.tencent_link_success==0 && power_on_dc_power ==0){
 	
        gpro_t.gTimer_get_data_from_tencent_data=0;
        wifi_t.linking_tencent_cloud_doing = 1;
@@ -394,7 +397,7 @@ void wifi_auto_detected_link_state(void)
       auto_link_tencent_cloud_fun();
      
     }
-    if(wifi_t.link_wifi_net_login_tencent_success==1   && power_on_dc_power ==0){
+    if(gpro_t.tencent_link_success==1   && power_on_dc_power ==0){
               power_on_dc_power++;
    
            gpro_t.gTimer_get_data_from_tencent_data=0; //don't send dato to tencent .waiting .
@@ -492,7 +495,7 @@ static void auto_link_tencent_cloud_fun(void)
 		  auto_link_tencent_step=0xff; //5
 	
 
-		if(wifi_t.link_wifi_net_login_tencent_success==1){
+		if(gpro_t.tencent_link_success==1){
 			wifi_t.linking_tencent_cloud_doing =0;
 	    }
 

@@ -32,7 +32,7 @@ typedef struct _WIFI_FUN{
 
 
     uint8_t soft_ap_config_success;
-	volatile uint8_t link_wifi_net_login_tencent_success;
+	//uint8_t tencent_link_success;
 
 
 
@@ -152,7 +152,7 @@ typedef struct _WIFI_FUN{
 
 extern WIFI_FUN   wifi_t;
 
-extern uint8_t (*wifi_link_net_state)(void); //函数指针
+//extern uint8_t (*wifi_link_net_state)(void); //函数指针
 
 
 void Wifi_Init(void);
@@ -165,7 +165,7 @@ void PowerOff_Host(void (*poweroffHandler)(void));
 
 void wifiDisplayTemperature_Humidity(void);
 
-void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void));
+//void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void));
 
 
 

@@ -404,7 +404,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                 
                 LCD_Disp_Timer_Timing_Init();
 
-                if(wifi_t.link_wifi_net_login_tencent_success==1){
+                if(gpro_t.tencent_link_success==1){
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
                     HAL_Delay(200);
                 }

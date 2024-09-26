@@ -6,10 +6,10 @@
 WIFI_FUN   wifi_t;
 
 
-uint8_t (*wifi_link_net_state)(void); //函数指针
+//uint8_t (*wifi_link_net_state)(void); //函数指针
 
 
-static uint8_t wifi_link_default_fun(void);
+//static uint8_t wifi_link_default_fun(void);
 /*********************************************************
  *
  *pdata: pointer of data for send
@@ -43,7 +43,7 @@ uint8_t at_send_data(uint8_t* pdata, uint16_t len)
 ****************************************************************/
 void Wifi_Init(void)
 {
-  Wifi_Link_Net_Handler(wifi_link_default_fun);
+  //Wifi_Link_Net_Handler(wifi_link_default_fun);
 
 
 }
@@ -56,20 +56,20 @@ void Wifi_Init(void)
      * Return Ref:NO
      * 
 ***************************************************************************************/
-void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void))
-{
-    wifi_link_net_state = wifi_link_handler;
-}
+//void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void))
+//{
+//    wifi_link_net_state = wifi_link_handler;
+//}
 
 
-static uint8_t wifi_link_default_fun(void)
-{
-
-    if(wifi_t.link_wifi_net_login_tencent_success ==1)return 1;
-	else return 0;
-
-
-}
+//static uint8_t wifi_link_default_fun(void)
+//{
+//
+//    if(gpro_t.tencent_link_success ==1)return 1;
+//	else return 0;
+//
+//
+//}
 
 /*****************************************************************************
     *
@@ -86,9 +86,7 @@ void link_wifi_net_state_handler(void)
     uint8_t  device_massage[100];
   // device_massage = (uint8_t *)malloc(128);
 
-      
-
-        switch( gpro_t.link_net_step){
+      switch( gpro_t.link_net_step){
 
             case 0: //one step
 
@@ -190,7 +188,7 @@ void link_wifi_net_state_handler(void)
 
             if( wifi_t.gTimer_login_tencent_times  > 3){
 
-             if(wifi_t.link_wifi_net_login_tencent_success==1){
+             if(gpro_t.tencent_link_success==1){
 			
 			
 				gpro_t.first_link_tencent_cloud_flag =1;
@@ -238,7 +236,7 @@ void link_wifi_net_state_handler(void)
 
             case 8:
 
-              if(wifi_t.link_wifi_net_login_tencent_success==1){
+              if(gpro_t.tencent_link_success==1){
                   
                    gpro_t.link_net_step = 7;
               }

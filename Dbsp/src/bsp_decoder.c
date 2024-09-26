@@ -55,7 +55,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           Ptc_On();
           Disp_Dry_Icon();
           
-          if(wifi_link_net_state()==1){
+          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
            }
@@ -72,7 +72,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           Ptc_Off();
           Disp_Dry_Icon();
           
-         if(wifi_link_net_state()==1){
+         if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x0);
 	  	      osDelay(100);//HAL_Delay(350);
           }
@@ -94,7 +94,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           gctl_t.ptc_flag = 1;
           Ptc_On();
           Disp_Dry_Icon();
-         if(wifi_link_net_state()==1){
+         if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
            }
@@ -107,7 +107,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           gctl_t.ptc_flag = 0;
           Ptc_Off();
           Disp_Dry_Icon();
-          if(wifi_link_net_state()==1){
+          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x0);
 	  	      osDelay(100);//HAL_Delay(350);
            }
@@ -134,7 +134,7 @@ void receive_data_fromm_display(uint8_t *pdata)
            Plasma_On();
            Disp_Kill_Icon();
 
-          if(wifi_link_net_state()==1){
+          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPlasma(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
           }
@@ -149,7 +149,7 @@ void receive_data_fromm_display(uint8_t *pdata)
            Plasma_Off();
            Disp_Kill_Icon();
 
-          if(wifi_link_net_state()==1){
+          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPlasma(0x0);
 	  	      osDelay(100);//HAL_Delay(350);
           }
@@ -175,7 +175,7 @@ void receive_data_fromm_display(uint8_t *pdata)
             Ultrasonic_Pwm_Output();
              Disp_Ultrsonic_Icon();
 
-             if(wifi_link_net_state()==1){
+             if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetUltrasonic(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
              }
@@ -191,7 +191,7 @@ void receive_data_fromm_display(uint8_t *pdata)
             Ultrasonic_Pwm_Stop();
              Disp_Ultrsonic_Icon();
 
-              if(wifi_link_net_state()==1){
+              if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetUltrasonic(0x0);
 	  	      osDelay(100);//HAL_Delay(350);
              }
@@ -319,7 +319,7 @@ void receive_data_fromm_display(uint8_t *pdata)
          second_disp_ai_time_fun();
          
 
-        if(wifi_link_net_state()==1){
+        if(gpro_t.tencent_link_success==1){
          MqttData_Publish_SetState(1);
 	     osDelay(10);//HAL_Delay(350);
         }
@@ -329,7 +329,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         second_disp_not_ai_timer_fun();
             
 
-        if(wifi_link_net_state()==1){
+        if(gpro_t.tencent_link_success==1){
          MqttData_Publish_SetState(2);
 	     osDelay(10);//HAL_Delay(350);
 

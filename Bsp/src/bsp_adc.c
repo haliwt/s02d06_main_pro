@@ -87,7 +87,7 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
         
         Buzzer_Ptc_Error_Sound();
 
-        if(wifi_link_net_state() ==1){
+        if(gpro_t.tencent_link_success==1){
 
         Publish_Data_Warning(ptc_temp_warning,warning);
 	     HAL_Delay(200);//osDelay(300);//HAL_Delay(350);
@@ -156,7 +156,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
            wifi_t.set_wind_speed_value = 2;
           
        
-          if(wifi_link_net_state() ==1){
+          if(gpro_t.tencent_link_success ==1){
            Publish_Data_Warning(fan_warning,warning);
 	       HAL_Delay(100);//osDelay(350);//HAL_Delay(350);
 

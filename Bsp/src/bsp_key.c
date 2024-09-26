@@ -36,7 +36,7 @@ void power_long_short_key_fun(void)
 			 gkey_t.wifi_led_fast_blink_flag=1;
              gpro_t.link_net_step=0;
 			 //WIFI CONNCETOR process
-			wifi_t.link_wifi_net_login_tencent_success =0;
+			gpro_t.tencent_link_success =0;
 			
 			
 			wifi_t.power_on_login_tencent_cloud_flag=0;
@@ -189,14 +189,14 @@ void mode_long_short_key_fun(void)
 static void  key_mode_be_pressed_send_data_wifi(void)
 {
    
-   if(gkey_t.key_mode_be_pressed == 1 && wifi_t.link_wifi_net_login_tencent_success==1){
+   if(gkey_t.key_mode_be_pressed == 1 && gpro_t.tencent_link_success==1){
 
          gkey_t.key_mode_be_pressed= 0xff;
     
         MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
         osDelay(20);
      }
-     else if(gkey_t.key_mode_be_pressed == 2  && wifi_t.link_wifi_net_login_tencent_success==1){
+     else if(gkey_t.key_mode_be_pressed == 2  && gpro_t.tencent_link_success==1){
             gkey_t.key_mode_be_pressed= 0xff;
 
           MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
@@ -467,7 +467,7 @@ void key_add_dec_set_temp_value_fun(void)
       }
        set_temp_value_compare_dht11_temp_value();
 
-     if(wifi_t.link_wifi_net_login_tencent_success==1){
+     if(gpro_t.tencent_link_success==1){
         
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
         osDelay(50);
@@ -507,7 +507,7 @@ void set_temp_value_compare_dht11_temp_value(void)
                   if(send_1_on !=send_1_on_flag){
                        send_1_on = send_1_on_flag;
                        send_1_off_flag ++;
-                    if(wifi_t.link_wifi_net_login_tencent_success==1){
+                    if(gpro_t.tencent_link_success==1){
                        MqttData_Publish_SetPtc(0x01);
                        osDelay(10);
                      }
@@ -524,7 +524,7 @@ void set_temp_value_compare_dht11_temp_value(void)
              if(send_1_off !=send_1_off_flag ){
                  send_1_off = send_1_off_flag;
                  send_1_on_flag ++;
-                 if(wifi_t.link_wifi_net_login_tencent_success==1){
+                 if(gpro_t.tencent_link_success==1){
                      MqttData_Publish_SetPtc(0x0);
                      osDelay(10);
                    }
@@ -551,7 +551,7 @@ void set_temp_value_compare_dht11_temp_value(void)
           if(send_2_off !=send_2_off_flag ){
              send_2_off = send_2_off_flag;
              send_2_on_flag ++;
-    	     if(wifi_t.link_wifi_net_login_tencent_success==1){
+    	     if(gpro_t.tencent_link_success==1){
                MqttData_Publish_SetPtc(0x0);
                osDelay(10);
 
@@ -571,7 +571,7 @@ void set_temp_value_compare_dht11_temp_value(void)
          if(send_2_on !=send_2_on_flag ){
              send_2_on = send_2_on_flag;
              send_2_off_flag ++;
-    	     if(wifi_t.link_wifi_net_login_tencent_success==1){
+    	     if(gpro_t.tencent_link_success==1){
                MqttData_Publish_SetPtc(0x01);
                osDelay(10);
                }
@@ -593,7 +593,7 @@ void set_temp_value_compare_dht11_temp_value(void)
             if(send_2_on !=send_2_on_flag ){
                  send_2_on = send_2_on_flag;
                  send_2_off_flag ++;
-        	     if(wifi_t.link_wifi_net_login_tencent_success==1){
+        	     if(gpro_t.tencent_link_success==1){
                    MqttData_Publish_SetPtc(0x01);
                    osDelay(10);
                   }
