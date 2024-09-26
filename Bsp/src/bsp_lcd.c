@@ -321,7 +321,7 @@ void Disip_Wifi_Icon_State(void)
    static uint8_t alternate_wifi_flag;
 
    if(gkey_t.wifi_led_fast_blink_flag==0){
-   if(wifi_t.link_wifi_net_login_tencent_success==0){
+   if(wifi_t.link_wifi_net_login_tencent_success !=1){
 
       if(gctl_t.gTimer_wifi_blink < 1  ){
           if(alternate_wifi_flag == 0){
@@ -348,14 +348,14 @@ void Disip_Wifi_Icon_State(void)
       
 
      }
-      else if(wifi_t.link_wifi_net_login_tencent_success ==1){
+     else if(wifi_t.link_wifi_net_login_tencent_success ==1){
 
          TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
          TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
       }
   }
   else{
-    if(wifi_t.link_wifi_net_login_tencent_success ==0){
+    if(wifi_t.link_wifi_net_login_tencent_success !=1){
     
           if(gctl_t.gTimer_wifi_fast_blink < 19  ){ //9 * 10ms
 
