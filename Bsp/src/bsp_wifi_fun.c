@@ -109,15 +109,15 @@ void link_wifi_net_state_handler(void)
                 HAL_UART_Transmit(&huart2, "AT+CWMODE=3\r\n", strlen("AT+CWMODE=3\r\n"), 5000);
 
                 wifi_t.randomName[0]=HAL_GetUIDw0();
-                wifi_t.gTimer_login_tencent_times=0; //gpro_t.gTimer_link_net_timer_time = 0;
+                gpro_t.gTimer_login_tencent_times=0; //gpro_t.gTimer_link_net_timer_time = 0;
 
                 gpro_t.link_net_step = 2;
 
             break;
 
             case 2:
-                 if(wifi_t.gTimer_login_tencent_times> 5){
-                    wifi_t.gTimer_login_tencent_times = 0;
+                 if(gpro_t.gTimer_login_tencent_times> 5){
+                    gpro_t.gTimer_login_tencent_times = 0;
 
                          WIFI_IC_ENABLE();
             			
@@ -134,8 +134,8 @@ void link_wifi_net_state_handler(void)
 
             case 3:
                 
-            if(wifi_t.gTimer_login_tencent_times > 7){
-                      wifi_t.gTimer_login_tencent_times= 0;
+            if(gpro_t.gTimer_login_tencent_times > 7){
+                      gpro_t.gTimer_login_tencent_times= 0;
                    gpro_t.link_net_step = 4;
             WIFI_IC_ENABLE();
 			
@@ -149,8 +149,8 @@ void link_wifi_net_state_handler(void)
 
 
             case 4:
-                 if(wifi_t.gTimer_login_tencent_times> 9){
-                          wifi_t.gTimer_login_tencent_times = 0;
+                 if(gpro_t.gTimer_login_tencent_times> 9){
+                          gpro_t.gTimer_login_tencent_times = 0;
 
                    gpro_t.linking_tencent_cloud_doing =1;
                   wifi_t.soft_ap_config_flag =1; //WE.EIDT 
@@ -178,7 +178,7 @@ void link_wifi_net_state_handler(void)
             ///HAL_Delay(1000);
 
             gpro_t.link_net_step = 6;
-            wifi_t.gTimer_login_tencent_times=0;//gpro_t.gTimer_link_net_timer_time = 0;
+            gpro_t.gTimer_login_tencent_times=0;//gpro_t.gTimer_link_net_timer_time = 0;
             }
 
                    
@@ -186,7 +186,7 @@ void link_wifi_net_state_handler(void)
 
             case 6:
 
-            if( wifi_t.gTimer_login_tencent_times  > 3){
+            if( gpro_t.gTimer_login_tencent_times  > 3){
 
              if(gpro_t.tencent_link_success==1){
 			

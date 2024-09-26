@@ -793,13 +793,15 @@ void link_wifi_net_handler(uint8_t link)
            }
    
          link_net_flag = 1;
-
+         gpro_t.disp_set_wifi_link_cmd=0;
+         gpro_t.disp_link_wifi_comd_flag =0;
+         gpro_t.link_net_step=0;
          
         }
         else{
           link_wifi_net_state_handler();
 
-           if(gpro_t.disp_link_wifi_comd_flag == 1){
+           if(gpro_t.disp_link_wifi_comd_flag == 1 && gpro_t.disp_set_wifi_link_cmd==0){
 
                gpro_t.disp_link_wifi_comd_flag ++;
 
@@ -819,6 +821,8 @@ void link_wifi_net_handler(uint8_t link)
 
               link_net_flag ++;
              gpro_t.disp_link_wifi_comd_flag = 0;
+             gpro_t.disp_set_wifi_link_cmd=0;
+             gpro_t.link_net_step=0;
 			 
 				 MqttData_Publish_SetOpen(0x01);
 		         HAL_Delay(20);
@@ -842,7 +846,8 @@ void link_wifi_net_handler(uint8_t link)
 
              link_net_flag ++;
              gpro_t.disp_link_wifi_comd_flag = 0;
-            
+              gpro_t.disp_set_wifi_link_cmd=0;
+              gpro_t.link_net_step=0;
              gpro_t.get_beijing_step = 11;
               SendData_Set_Command(0x1F,0x0);
             

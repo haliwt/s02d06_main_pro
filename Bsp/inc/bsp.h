@@ -118,6 +118,10 @@ typedef struct {
    uint8_t disp_works_minutes_value;
    uint8_t  disp_works_hours_value;
 
+   //the second display ref 
+
+   uint8_t disp_set_wifi_link_cmd;
+
 
      
 
@@ -148,6 +152,7 @@ typedef struct {
    uint8_t gTimer_run_main_fun;
    uint8_t gTimer_set_temp_temp ;
    uint8_t gTimer_disp_short_time;
+   uint8_t gTimer_login_tencent_times;
    
   
 }BSP_process_t;

@@ -46,12 +46,13 @@ void second_disp_power_off_fun(void)
 void second_disp_set_link_wifi_fun(void)
 {
 
+         gpro_t.disp_set_wifi_link_cmd =1;
      	//WIFI CONNCETOR process
 	    gkey_t.wifi_led_fast_blink_flag=1;
 			 //WIFI CONNCETOR process
 		gpro_t.tencent_link_success =0;
 	
-		
+		gpro_t.link_net_step =0;
 		wifi_t.gTimer_linking_tencent_duration=0; //120s
          
        

@@ -95,13 +95,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_get_data_from_tencent_data++;
         gpro_t.gTimer_set_temp_temp ++;
         gpro_t.gTimer_disp_short_time++ ;
+
+        gpro_t.gTimer_login_tencent_times ++;
    
         
         //wifi
 
         wifi_t.gTimer_linking_tencent_duration++;
 
-        wifi_t.gTimer_login_tencent_times ++;
+      
 		wifi_t.gTimer_get_beijing_time++;
         wifi_t.gTimer_auto_detected_net_state_times++;
         wifi_t.gTimer_auto_link_net_time++;

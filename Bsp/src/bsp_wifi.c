@@ -204,7 +204,7 @@ void  wifi_get_beijing_time_handler(void)
                  SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
                   osDelay(10);
 
-                 memset(wifi_t.wifi_data,'\0',60);
+                 wifi_t.wifi_data[50] =0;//memset(wifi_t.wifi_data,'\0',60);
                 
             }
             else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
@@ -214,7 +214,7 @@ void  wifi_get_beijing_time_handler(void)
                        gpro_t.get_beijing_step = 0;
                        gpro_t.gTimer_get_data_from_tencent_data=0;
                        wifi_t.gTimer_get_beijing_time = 50;
-                       memset(wifi_t.wifi_data,'\0',60);
+                       wifi_t.wifi_data[50] =0;
                        
 
                     }

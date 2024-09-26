@@ -57,7 +57,7 @@ typedef struct _WIFI_FUN{
     //timer
     uint8_t gTimer_linking_tencent_duration;
 	
-    uint8_t gTimer_login_tencent_times;
+  
 	
 	uint8_t gTimer_wifi_rx_error;
 
