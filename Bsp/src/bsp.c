@@ -789,7 +789,7 @@ void link_wifi_net_handler(uint8_t link)
 
              gpro_t.get_beijing_step = 10;
              wifi_t.gTimer_auto_detected_net_state_times = 120;
-             wifi_t.linking_tencent_cloud_doing =1;
+             gpro_t.linking_tencent_cloud_doing =1;
              wifi_t.soft_ap_config_flag =1; 
            }
           if(send_flag ==0){

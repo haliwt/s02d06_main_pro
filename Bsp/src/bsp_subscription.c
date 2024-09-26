@@ -533,7 +533,7 @@ void Json_Parse_Command_Fun(void)
 
 		wifi_t.response_wifi_signal_label = 0xff;
 		wifi_t.gTimer_auto_detected_net_state_times=0;
-		wifi_t.linking_tencent_cloud_doing =0;
+		gpro_t.linking_tencent_cloud_doing =0;
 
 
 	  	}
@@ -557,7 +557,7 @@ void Json_Parse_Command_Fun(void)
 		  
 		}
         wifi_t.gTimer_auto_detected_net_state_times=0;
-		wifi_t.linking_tencent_cloud_doing =0;
+		gpro_t.linking_tencent_cloud_doing =0;
        wifi_t.response_wifi_signal_label = 0xff;
 		
 	   break;
@@ -577,7 +577,7 @@ void Json_Parse_Command_Fun(void)
 		   
 			}
         wifi_t.gTimer_auto_detected_net_state_times=0;
-       wifi_t.linking_tencent_cloud_doing =0;
+       gpro_t.linking_tencent_cloud_doing =0;
 	   wifi_t.response_wifi_signal_label=0xff;
 	    break;
 
@@ -598,7 +598,7 @@ void Json_Parse_Command_Fun(void)
         wifi_t.gTimer_auto_detected_net_state_times=0;
 	     wifi_t.response_wifi_signal_label=0xff;
 		
-		 wifi_t.linking_tencent_cloud_doing =0;
+		 gpro_t.linking_tencent_cloud_doing =0;
 	  	break;
 
 	  case SONIC_ON_ITEM://ultransonic on
@@ -620,7 +620,7 @@ void Json_Parse_Command_Fun(void)
        wifi_t.gTimer_auto_detected_net_state_times=0;
 	   wifi_t.response_wifi_signal_label=0xff;
 	  
-        wifi_t.linking_tencent_cloud_doing =0;
+        gpro_t.linking_tencent_cloud_doing =0;
 	  	break;
 
 	  case STATE_TIMER_MODEL_ITEM: //display timer timing of value  
@@ -674,7 +674,7 @@ void Json_Parse_Command_Fun(void)
 	   wifi_t.response_wifi_signal_label = 0xff;
 		
 		  
-			 wifi_t.linking_tencent_cloud_doing =0;
+			 gpro_t.linking_tencent_cloud_doing =0;
 	  	break;
 
 	  case TEMPERATURE_ITEM:
@@ -749,7 +749,7 @@ void Json_Parse_Command_Fun(void)
       wifi_t.response_wifi_signal_label = 0xff;
 	 
 	  wifi_t.gTimer_auto_detected_net_state_times=0;	
-	  wifi_t.linking_tencent_cloud_doing =0;
+	  gpro_t.linking_tencent_cloud_doing =0;
 	  break;
 
 	  case FAN_ITEM:
@@ -805,7 +805,7 @@ void Json_Parse_Command_Fun(void)
         
 	      wifi_t.gTimer_auto_detected_net_state_times=0;
 	      wifi_t.response_wifi_signal_label = 0xff;
-         wifi_t.linking_tencent_cloud_doing =0;
+         gpro_t.linking_tencent_cloud_doing =0;
 	  	break;
 
 	  case APP_TIMER_POWER_ON_REF :
@@ -819,7 +819,7 @@ void Json_Parse_Command_Fun(void)
 	      wifi_t.response_wifi_signal_label=0xff;
 	
 		 wifi_t.gTimer_auto_detected_net_state_times=0;
-		  wifi_t.linking_tencent_cloud_doing =0;
+		  gpro_t.linking_tencent_cloud_doing =0;
 
 	  break;
 
@@ -956,7 +956,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
     
     if(strstr((const char*)wifi_t.wifi_data,"+TCMQTTCONN:OK")){
         gpro_t.tencent_link_success =1;
-        wifi_t.linking_tencent_cloud_doing=0;
+        gpro_t.linking_tencent_cloud_doing=0;
         gkey_t.wifi_led_fast_blink_flag =0;
 
         wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -964,7 +964,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
     }
     else if(strstr((char*)wifi_t.wifi_data,"+CME ERROR:208")){
 
-        wifi_t.linking_tencent_cloud_doing=0; //release this flag. usart
+        gpro_t.linking_tencent_cloud_doing=0; //release this flag. usart
         //wifi_t.esp8266_login_cloud_success =0;
         gpro_t.tencent_link_success=0;
 
@@ -985,14 +985,14 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
         gpro_t.tencent_link_success=0;
    
 
-        //wifi_t.linking_tencent_cloud_doing=1; //release this flag. usart
-        wifi_t.linking_tencent_cloud_doing=0;
+        //gpro_t.linking_tencent_cloud_doing=1; //release this flag. usart
+        gpro_t.linking_tencent_cloud_doing=0;
         wifi_t.get_rx_beijing_time_enable=0;
         gkey_t.wifi_led_fast_blink_flag =0;
     }
     else if(strstr((const char*)wifi_t.wifi_data,"+TCMQTTCONN:OK")){
             gpro_t.tencent_link_success=1;
-            wifi_t.linking_tencent_cloud_doing=0;
+            gpro_t.linking_tencent_cloud_doing=0;
             wifi_t.gTimer_auto_detected_net_state_times=0;
             gkey_t.wifi_led_fast_blink_flag =0;
 
@@ -1002,7 +1002,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 
 
         gpro_t.tencent_link_success=0;//wifi_t.esp8266_login_cloud_success =0;
-        wifi_t.linking_tencent_cloud_doing=1;//wifi_t.linking_tencent_cloud_doing=1; //release this flag. usart
+        gpro_t.linking_tencent_cloud_doing=1;//gpro_t.linking_tencent_cloud_doing=1; //release this flag. usart
         wifi_t.get_rx_beijing_time_enable=0;
         gkey_t.wifi_led_fast_blink_flag =0;
 
@@ -1012,7 +1012,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
         gpro_t.tencent_link_success=0; //wifi_t.esp8266_login_cloud_success =0;
 
 
-        wifi_t.linking_tencent_cloud_doing=1;//wifi_t.linking_tencent_cloud_doing=1; //release this flag. usart
+        gpro_t.linking_tencent_cloud_doing=1;//gpro_t.linking_tencent_cloud_doing=1; //release this flag. usart
 
         wifi_t.get_rx_beijing_time_enable=0;
         gkey_t.wifi_led_fast_blink_flag =0;
@@ -1021,14 +1021,14 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
 
         gpro_t.tencent_link_success=0;//wifi_t.esp8266_login_cloud_success =0;
         wifi_t.get_rx_beijing_time_enable=0;
-        wifi_t.linking_tencent_cloud_doing=1;//wifi_t.linking_tencent_cloud_doing=1; //release this flag. usart
+        gpro_t.linking_tencent_cloud_doing=1;//gpro_t.linking_tencent_cloud_doing=1; //release this flag. usart
         gkey_t.wifi_led_fast_blink_flag =0;
     }
     else if(strstr((char*)wifi_t.wifi_data,"+TCSAP:WIFI_CONNECT_FAILED")){
 
             gpro_t.tencent_link_success=0;//wifi_t.esp8266_login_cloud_success =0;
             wifi_t.get_rx_beijing_time_enable=0;
-            wifi_t.linking_tencent_cloud_doing=1;//wifi_t.linking_tencent_cloud_doing=1; //release this flag. usart
+            gpro_t.linking_tencent_cloud_doing=1;//gpro_t.linking_tencent_cloud_doing=1; //release this flag. usart
             gkey_t.wifi_led_fast_blink_flag =0;
 
 

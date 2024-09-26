@@ -90,7 +90,7 @@ void  wifi_get_beijing_time_handler(void)
     		    gpro_t.get_beijing_step = 2;
            
                 alternate_flag++;
-                wifi_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+                gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
                 SendWifiData_To_Data(0x1F,0x01);
                 //gpro_t.gTimer_pro_update_dht11_data =0; //disable publish to data to tencent .
 
@@ -99,7 +99,7 @@ void  wifi_get_beijing_time_handler(void)
               
                SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
                gpro_t.get_beijing_step = 10;
-               wifi_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
+               gpro_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
              }
 	
        }
@@ -256,7 +256,7 @@ void  wifi_get_beijing_time_handler(void)
 
          if(gpro_t.tencent_link_success ==0){
             gpro_t.get_beijing_step = 11;
-            wifi_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
+            gpro_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
             wifi_t.wifi_uart_rx_counter=0;//gpro_t.wifi_rx_data_counter=0;
            
       
@@ -264,7 +264,7 @@ void  wifi_get_beijing_time_handler(void)
           }
           else{
              wifi_t.soft_ap_config_flag =1; //WE.EIDT 
-             wifi_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+             gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
              gpro_t.get_beijing_step = 0;
 
           }
@@ -283,7 +283,7 @@ void  wifi_get_beijing_time_handler(void)
      case 11:
          if(gpro_t.tencent_link_success  ==0 && gkey_t.wifi_led_fast_blink_flag==0){
 
-           wifi_t.linking_tencent_cloud_doing =1;
+           gpro_t.linking_tencent_cloud_doing =1;
         
 
             WIFI_IC_ENABLE();
@@ -344,7 +344,7 @@ void  wifi_get_beijing_time_handler(void)
        
          
 
-        wifi_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+        gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
 	    wifi_t.wifi_uart_rx_counter=0; //clear USART2 counter is zero
 		wifi_t.soft_ap_config_flag =0; 
 	
@@ -392,7 +392,7 @@ void wifi_auto_detected_link_state(void)
 	if(auto_link_tencent_step!=0xff && gpro_t.tencent_link_success==0 && power_on_dc_power ==0){
 	
        gpro_t.gTimer_get_data_from_tencent_data=0;
-       wifi_t.linking_tencent_cloud_doing = 1;
+       gpro_t.linking_tencent_cloud_doing = 1;
 
       auto_link_tencent_cloud_fun();
      
@@ -403,7 +403,7 @@ void wifi_auto_detected_link_state(void)
            gpro_t.gTimer_get_data_from_tencent_data=0; //don't send dato to tencent .waiting .
        
              
-           wifi_t.linking_tencent_cloud_doing = 0;
+           gpro_t.linking_tencent_cloud_doing = 0;
 
            auto_link_tencent_step =0;
            wifi_t.link_net_tencent_data_flag=1;
@@ -471,7 +471,7 @@ static void auto_link_tencent_cloud_fun(void)
     
     case 2:
 
-    wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
+    gpro_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
     wifi_t.wifi_uart_rx_counter=0;
 	wifi_t.soft_ap_config_flag =0;
   
@@ -496,7 +496,7 @@ static void auto_link_tencent_cloud_fun(void)
 	
 
 		if(gpro_t.tencent_link_success==1){
-			wifi_t.linking_tencent_cloud_doing =0;
+			gpro_t.linking_tencent_cloud_doing =0;
 	    }
 
 	}

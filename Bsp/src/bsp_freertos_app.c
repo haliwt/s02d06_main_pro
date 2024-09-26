@@ -651,7 +651,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
            
-	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
+	  if(gpro_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
 			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart2_dataBuf[0];
 			wifi_t.wifi_uart_rx_counter++;

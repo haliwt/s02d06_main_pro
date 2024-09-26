@@ -152,7 +152,7 @@ void link_wifi_net_state_handler(void)
                  if(wifi_t.gTimer_login_tencent_times> 9){
                           wifi_t.gTimer_login_tencent_times = 0;
 
-                   wifi_t.linking_tencent_cloud_doing =1;
+                   gpro_t.linking_tencent_cloud_doing =1;
                   wifi_t.soft_ap_config_flag =1; //WE.EIDT 
 	            sprintf((char *)device_massage, "AT+TCSAP=\"UYIJIA01-%d\"\r\n",wifi_t.randomName[0]);
                  at_send_data(device_massage, strlen((const char *)device_massage));

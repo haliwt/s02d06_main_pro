@@ -38,7 +38,7 @@ typedef struct _WIFI_FUN{
    
     uint8_t wifi_rx_counter;
     uint8_t rx_data_success ;
-	uint8_t linking_tencent_cloud_doing;
+	
     uint8_t soft_ap_config_flag;
     
     uint8_t get_rx_beijing_time_enable;
