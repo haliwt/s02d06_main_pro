@@ -73,20 +73,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
           //control timer
         gctl_t.gTimer_wifi_blink++;
     
-    
-  
-	   
-       //key timer
+         //key timer
 	
          gkey_t.gTimer_power_off_run_times++;
         gkey_t.gTimer_set_temp_value++;
         gkey_t.gTimer_disp_set_timer++;
     
-       
-
-        //lcd timer
-     
-
         //process gtimer
         gpro_t.gTimer_ptc_detected++;
         gpro_t.gTimer_works_counter_sencods ++;
@@ -105,30 +97,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_disp_short_time++ ;
    
         
-       
         //wifi
 
-	
-	
-		
-
-        
         wifi_t.gTimer_linking_tencent_duration++;
 
         wifi_t.gTimer_login_tencent_times ++;
-		
-
-
-        
 		wifi_t.gTimer_get_beijing_time++;
-
-        
-		wifi_t.gTimer_auto_detected_net_state_times++;
-	
-	
-      
+        wifi_t.gTimer_auto_detected_net_state_times++;
         wifi_t.gTimer_auto_link_net_time++;
-
         wifi_t.gTimer_power_first_link_tencent++;
         
 
