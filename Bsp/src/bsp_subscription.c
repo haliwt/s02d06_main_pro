@@ -617,7 +617,7 @@ void Json_Parse_Command_Fun(void)
             //send data to the second display board
            
 		}
-      wifi_t.gTimer_auto_detected_net_state_times=0;
+       wifi_t.gTimer_auto_detected_net_state_times=0;
 	   wifi_t.response_wifi_signal_label=0xff;
 	  
         wifi_t.linking_tencent_cloud_doing =0;
@@ -630,18 +630,14 @@ void Json_Parse_Command_Fun(void)
 	        gkey_t.key_mode=disp_timer_timing;
             gctl_t.ai_flag = 0 ; //timer model
 
-            //gkey_t.key_mode_switch_flag = 1;
-          //  gkey_t.key_add_dec_mode = set_temp_value_item;
+
             LCD_Disp_Timer_Timing_Init();
 
-            
-       
-         
-            MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+           MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
 			HAL_Delay(200);
             //do someting disp timer timing value 
-           //  SendWifiData_To_Cmd(0x27, 0x02); //AI turn off command
-            //send data to the second display board
+            SendWifiData_To_Cmd(0x27, 0x02); //AI turn off command
+           
             
 		
 			
@@ -658,9 +654,6 @@ void Json_Parse_Command_Fun(void)
 		    gkey_t.key_mode=disp_works_timing;
             gctl_t.ai_flag = 1;//AI mode
 
-          //   gkey_t.key_mode_switch_flag = 1;
-           
-         //   gkey_t.key_add_dec_mode = set_temp_value_item;
          
             LCD_Disp_Works_Timing_Init();
 
@@ -670,9 +663,9 @@ void Json_Parse_Command_Fun(void)
             MqttData_Publish_SetState(1); //beijing timing = 1
 			HAL_Delay(200);
 
-           //  SendWifiData_To_Cmd(0x27, 0x01); //AI turn on command
+            SendWifiData_To_Cmd(0x27, 0x01); //AI turn on command
 
-            //send data to the second display board
+           
 			
           
         }
@@ -691,7 +684,9 @@ void Json_Parse_Command_Fun(void)
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
              temp_decade=wifi_t.wifi_data[14]-0x30; //
              temp_unit=wifi_t.wifi_data[15]-0x30;
+             
             gctl_t.gSet_temperature_value = temp_decade*10 +  temp_unit;
+            
             if(gctl_t.gSet_temperature_value > 40)   gctl_t.gSet_temperature_value=40;
             if(gctl_t.gSet_temperature_value <20 )   gctl_t.gSet_temperature_value=20;
             
@@ -702,18 +697,20 @@ void Json_Parse_Command_Fun(void)
 
            
             gkey_t.key_add_dec_mode = set_temp_value_item; //set_temp_value_item;
-            gkey_t.gTimer_set_temp_value  = 0;
+           
             gpro_t.set_temperature_value_success =1;
         
            gpro_t.gTimer_run_dht11=0; 
            wifi_t.gTimer_auto_detected_net_state_times=0;
+           gpro_t.gTimer_set_temp_temp = 5;
          
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //send data to the second display board
+            gkey_t.set_temp_value_be_pressed = 1 ;
 
            sendData_setTemp_value(gctl_t.gSet_temperature_value); //smart phone set temperature value .
-            
-			
+           gpro_t.gTimer_run_dht11=0; 
+			#if 0
 			if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
 		    	
@@ -745,13 +742,8 @@ void Json_Parse_Command_Fun(void)
 			   		
 				
 			}
-
-//          for(i=0;i< recoder_tx_net_data_counter;i++){
-//
-//            rx_tencent_num_buffer[i]=0;
-//
-//
-//          }
+           #endif 
+         
 		    buzzer_sound();
 		}
       wifi_t.response_wifi_signal_label = 0xff;

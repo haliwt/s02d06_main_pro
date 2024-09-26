@@ -105,17 +105,17 @@ void power_on_run_handler(void)
 
             power_on_init_function();
 
-             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-             gkey_t.key_mode  = disp_works_timing;
+            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+            gkey_t.key_mode  = disp_works_timing;
 
-           gpro_t.gTimer_timer_Counter =0;
-		   gpro_t.set_timer_timing_hours=0;
-		   gpro_t.set_timer_timing_minutes=0;
-           gpro_t.gTimer_run_dht11=100;
-        
+            gpro_t.gTimer_timer_Counter =0;
+            gpro_t.set_timer_timing_hours=0;
+            gpro_t.set_timer_timing_minutes=0;
+            gpro_t.gTimer_run_dht11=100;
 
-            
-		    gctl_t.step_process = 1;
+
+
+            gctl_t.step_process = 1;
 
 
 		  break;
@@ -846,7 +846,12 @@ void link_wifi_net_handler(uint8_t link)
 
 }
 
-
+/********************************************************
+ * 
+ * Function Name:void read_senson_dht11_data(void)
+ * 
+ * 
+ *******************************************************/
 void read_senson_dht11_data(void)
 {
 

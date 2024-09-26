@@ -244,35 +244,7 @@ void Dec_Key_Fun(uint8_t cmd)
          
             gkey_t.set_temp_value_be_pressed =1;
            
-      //      Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
-
-          #if 0
-            //compare with by read temperature of sensor value  
-            if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
-
-                gkey_t.gTimer_set_temp_value  =0;
-                gpro_t.set_temperature_value_success=1;
-                gctl_t.ptc_flag = 1;
-              
-                 gpro_t.gTimer_run_main_fun=2;
-
-               gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
-
-            }
-            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
-
-
-                 gkey_t.gTimer_set_temp_value  =0;
-                 gpro_t.set_temperature_value_success=1;
-                 gctl_t.ptc_flag = 0;
-             
-                gpro_t.gTimer_run_main_fun=2;
-
-                  gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
-
-
-            }
-          #endif 
+     
             gpro_t.gTimer_set_temp_temp=0;
            gpro_t.app_ptc_flag = 0;
          break;
@@ -293,22 +265,7 @@ void Dec_Key_Fun(uint8_t cmd)
 				}
             
 
-             //display hours
-                //   glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
-                //   glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
-
-                //   glcd_t.number6_low  = gpro_t.set_timer_timing_hours % 10; //
-                //   glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
-                //    //dispaly minutes 
-                //   glcd_t.number7_low =  0;
-                //   glcd_t.number7_high =   0;
-
-                //   glcd_t.number8_low = 0;
-                //   glcd_t.number8_high =   0;
-
-                
-
-         // LCD_Disp_Timer_Timing();
+         
          Set_Timer_Timing_Lcd_Blink();
          SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
 
@@ -348,7 +305,7 @@ void Add_Key_Fun(uint8_t cmd)
         glcd_t.number4_high = gctl_t.gSet_temperature_value  % 10; //
 
      
-        gkey_t.gTimer_set_temp_value=0;
+    
       
         gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
     
@@ -357,35 +314,6 @@ void Add_Key_Fun(uint8_t cmd)
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
        
-
-        #if 0
-         //compare with by read temperature of sensor value  
-         if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
-
-                gkey_t.gTimer_set_temp_value  =0;
-                gpro_t.set_temperature_value_success=1;
-                gctl_t.ptc_flag = 1;
-        
-                gpro_t.gTimer_run_main_fun=2;
-
-                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
-                
-
-            }
-            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
-
-                gkey_t.gTimer_set_temp_value  =0;
-                gpro_t.set_temperature_value_success=1;
-
-                 gctl_t.ptc_flag = 0;
-  
-                 gpro_t.gTimer_run_main_fun=2;
-
-                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
-
-
-            }
-         #endif 
 
        gpro_t.gTimer_set_temp_temp=0;
        gpro_t.app_ptc_flag = 0;
@@ -406,22 +334,7 @@ void Add_Key_Fun(uint8_t cmd)
 		          gpro_t.set_timer_timing_hours=0;//run_t.dispTime_hours =0;
 		                
              }
-	//display hours
-        // glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
-        // glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
-
-        // glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
-        // glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
-        // //dispaly minutes 
-        // glcd_t.number7_low =  0;
-        // glcd_t.number7_high = 0;
-
-        // glcd_t.number8_low = 0;
-        // glcd_t.number8_high =  0;
-   
-     
-        
-        //LCD_Disp_Timer_Timing();
+	
         Set_Timer_Timing_Lcd_Blink();
 
         SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
@@ -438,11 +351,13 @@ void key_add_dec_set_temp_value_fun(void)
 
     if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 2){
 
+        gpro_t.gTimer_run_dht11=0; 
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
      
     }
     else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 1){
       
+       gpro_t.gTimer_run_dht11=0; 
       if(gkey_t.set_temp_value_be_pressed ==1){
 
           gkey_t.set_temp_value_be_pressed ++;
@@ -481,8 +396,13 @@ void key_add_dec_set_temp_value_fun(void)
 }
     
  
-
-
+/********************************************************************
+ * 
+ * Function Name:void set_temp_value_compare_dht11_temp_value(void)
+ * 
+ * 
+ * 
+ ********************************************************************/
 void set_temp_value_compare_dht11_temp_value(void)
 {
 
