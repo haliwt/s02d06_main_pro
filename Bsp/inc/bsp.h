@@ -91,6 +91,7 @@ typedef struct {
 
    uint8_t tencent_link_success;
    uint8_t linking_tencent_cloud_doing ;
+   uint8_t disp_link_wifi_comd_flag;
 
   
   

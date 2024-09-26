@@ -778,7 +778,7 @@ static void Detected_Ptc_Error(void)
 void link_wifi_net_handler(uint8_t link)
 {
 
-   static uint8_t link_net_flag,send_data_disp_flag = 1;;
+   static uint8_t link_net_flag;
     if(link == 1){
 
          if(wifi_t.gTimer_linking_tencent_duration > 119){
@@ -791,21 +791,26 @@ void link_wifi_net_handler(uint8_t link)
              gpro_t.linking_tencent_cloud_doing =1;
              wifi_t.soft_ap_config_flag =1; 
            }
-          if(send_data_disp_flag !=2)
-             send_data_disp_flag = 1;
-          link_net_flag = 1;
+   
+         link_net_flag = 1;
+
+         
         }
-        else
-        link_wifi_net_state_handler();
+        else{
+          link_wifi_net_state_handler();
 
-        if(send_data_disp_flag == 1){
+           if(gpro_t.disp_link_wifi_comd_flag == 1){
 
-           send_data_disp_flag ++;
+               gpro_t.disp_link_wifi_comd_flag ++;
 
             SendData_Set_Command(0x05,0x01);// link wifi net .
             osDelay(10);
 
+         }
+
         }
+
+       
 
     }
     else{
@@ -813,7 +818,7 @@ void link_wifi_net_handler(uint8_t link)
         if(link_net_flag == 1 && gpro_t.tencent_link_success==1){
 
               link_net_flag ++;
-               send_data_disp_flag = 0;
+             gpro_t.disp_link_wifi_comd_flag = 0;
 			 
 				 MqttData_Publish_SetOpen(0x01);
 		         HAL_Delay(20);
@@ -836,7 +841,7 @@ void link_wifi_net_handler(uint8_t link)
          else if(link_net_flag == 1 && gpro_t.tencent_link_success==0){
 
              link_net_flag ++;
-              send_data_disp_flag = 0;
+             gpro_t.disp_link_wifi_comd_flag = 0;
             
              gpro_t.get_beijing_step = 11;
               SendData_Set_Command(0x1F,0x0);

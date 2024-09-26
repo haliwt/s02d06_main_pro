@@ -181,7 +181,7 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
-          else if((ulValue & DECODER_BIT_10 ) != 0)
+         if((ulValue & DECODER_BIT_10 ) != 0)
           {
             gpro_t.disp_rx_cmd_done_flag = 0;
 
