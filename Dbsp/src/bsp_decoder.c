@@ -206,7 +206,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           wake_up_backlight_on();
 
        if(pdata[3] == 0x01){  // link wifi 
-         buzzer_sound();
+        
 
         second_disp_set_link_wifi_fun();
 

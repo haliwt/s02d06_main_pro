@@ -54,7 +54,7 @@ void second_disp_set_link_wifi_fun(void)
 		
 		wifi_t.gTimer_linking_tencent_duration=0; //120s
          
-        Buzzer_KeySound();
+       
 
 }
 

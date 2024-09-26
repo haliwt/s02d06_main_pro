@@ -28,29 +28,28 @@ void power_long_short_key_fun(void)
 
 
         gkey_t.power_key_long_counter++;
-        if( gkey_t.power_key_long_counter > 29   && KEY_POWER_VALUE() == 1){
+        if( gkey_t.power_key_long_counter > 15   && KEY_POWER_VALUE() == 1){
              gkey_t.power_key_long_counter = 200;
-
+        
           
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
              gpro_t.link_net_step=0;
 			 //WIFI CONNCETOR process
 			gpro_t.tencent_link_success =0;
-			
+			gpro_t.get_beijing_time_success =0;
 			
 		
 		
 			wifi_t.gTimer_linking_tencent_duration=0; //120s
 
-          //  SendData_Set_Command(0x05, 0x01); //link wifi net -> to second display 
-         
             Buzzer_KeySound();
+          
 
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<30){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<15){ //short key of function
 
         gkey_t.power_key_long_counter=0;
 
@@ -121,7 +120,7 @@ void mode_long_short_key_fun(void)
 
 
         gkey_t.key_mode_long_counter++;
-        if(gkey_t.key_mode_long_counter >  29  && KEY_MODE_VALUE() == 1){
+        if(gkey_t.key_mode_long_counter >  15  && KEY_MODE_VALUE() == 1){
             gkey_t.key_mode_long_counter = 150;
 
             gkey_t.key_mode = mode_set_timer;
@@ -136,7 +135,7 @@ void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<30){ //short key of function
+    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<15){ //short key of function
 
         gkey_t.key_mode_long_counter=0;
 
