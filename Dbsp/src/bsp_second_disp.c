@@ -50,7 +50,7 @@ void second_disp_set_link_wifi_fun(void)
 	    gkey_t.wifi_led_fast_blink_flag=1;
 			 //WIFI CONNCETOR process
 		gpro_t.tencent_link_success =0;
-		wifi_t.power_on_login_tencent_cloud_flag=0;
+	
 		
 		wifi_t.gTimer_linking_tencent_duration=0; //120s
          

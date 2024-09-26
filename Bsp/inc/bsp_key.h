@@ -75,10 +75,11 @@ typedef enum mode_key_t{
    uint8_t  gTimer_disp_set_timer;
    uint8_t  gTimer_set_temp_blink;
 
-   uint8_t gTimer_power_off_run_times;
+  
    uint8_t gTimer_key_temp_timing;
 
    uint8_t gTimer_power_key_counter;
+   uint8_t gTimer_power_off_run_times;
 	
 
 }key_fun_t;

@@ -78,10 +78,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	   
        //key timer
 	
-        gkey_t.gTimer_power_off_run_times++;
+         gkey_t.gTimer_power_off_run_times++;
         gkey_t.gTimer_set_temp_value++;
         gkey_t.gTimer_disp_set_timer++;
-      //  gctl_t.gTimer_feed_dog_times++ ;
+    
        
 
         //lcd timer
@@ -109,7 +109,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         //wifi
 
 	
-		wifi_t.power_on_login_tencent_cloud_flag++;
+	
 		
 
         

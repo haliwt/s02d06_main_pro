@@ -254,7 +254,7 @@ void Display_Timer_Timing(void)
     			gpro_t.set_timer_timing_minutes=0;
     			gkey_t.key_power = power_off;
                 gpro_t.power_off_flag = 1;
-    			//gkey_t.gTimer_power_off_run_times=0;
+    		
              
            
 			

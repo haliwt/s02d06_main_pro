@@ -39,7 +39,7 @@ void power_long_short_key_fun(void)
 			gpro_t.tencent_link_success =0;
 			
 			
-			wifi_t.power_on_login_tencent_cloud_flag=0;
+		
 		
 			wifi_t.gTimer_linking_tencent_duration=0; //120s
 

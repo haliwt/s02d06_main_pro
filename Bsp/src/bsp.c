@@ -596,7 +596,7 @@ static void power_off_function(void)
   
             wifi_t.gTimer_linking_tencent_duration=0; //120s
 
-            wifi_t.repeat_login_tencent_cloud_init_ref=0;
+         
     	
       
     		wifi_t.smartphone_app_power_on_flag=0;
@@ -621,9 +621,9 @@ static void power_off_function(void)
 		 
 		  
 	}
-	if(gpro_t.tencent_link_success ==1  && wifi_t.gTimer_wifi_sub_power_off > 4 && power_off_flag==1){
+	if(gpro_t.tencent_link_success ==1   && power_off_flag==1){
 		power_off_flag++;
-		wifi_t.gTimer_wifi_sub_power_off=0;
+		
         Subscriber_Data_FromCloud_Handler();
 	  
 	
