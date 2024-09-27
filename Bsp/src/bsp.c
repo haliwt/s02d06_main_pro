@@ -680,11 +680,12 @@ static void power_on_init_function(void)
 
      if(gpro_t.get_beijing_time_success==0 || gpro_t.tencent_link_success==0){
      
-          gpro_t.gTimer_works_counter_sencods =0;
+         gpro_t.disp_works_minutes_value=0;
+         gpro_t.disp_works_hours_value =0;
+         gpro_t.gTimer_works_counter_sencods =0;
 
      }
-     gpro_t.disp_works_minutes_value=0;
-          gpro_t.disp_works_hours_value =0;
+    
    
     if(wifi_t.smartphone_app_power_on_flag==0){
         main_fun_init();
@@ -712,11 +713,11 @@ static void power_on_init_function(void)
 
 
     //fan on
-    Mainboard_Action_Fun();
+   // Mainboard_Action_Fun();
 
     if(gpro_t.tencent_link_success==1){
     MqttData_Publish_SetOpen(1);  
-    osDelay(100);//300
+    osDelay(10);//300
 
     Publish_Data_Warning(fan_warning,no_warning);
 
