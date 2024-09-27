@@ -30,6 +30,8 @@ typedef struct _WIFI_FUN{
    
     uint8_t wifi_data[150]; 
 
+    uint8_t wifi_data_rx[40];
+
 
     uint8_t soft_ap_config_success;
 	//uint8_t tencent_link_success;

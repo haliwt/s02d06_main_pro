@@ -149,7 +149,8 @@ void Subscribe_Rx_Interrupt_Handler(void)
 
        if(wifi_t.rx_data_success ==0){
 
-            wifi_t.wifi_data[wifi_t.wifi_rx_counter] = usart2_dataBuf[0];
+            //wifi_t.wifi_data[wifi_t.wifi_rx_counter] = usart2_dataBuf[0];
+            wifi_t.wifi_data_rx[wifi_t.wifi_rx_counter]= usart2_dataBuf[0];
             wifi_t.wifi_rx_counter++ ;
 
             if(usart2_dataBuf[0]=='}' || usart2_dataBuf[0]==0x0A) //0x7D='}', 0x0A = line feed // end
@@ -282,6 +283,8 @@ void Tencent_Cloud_Rx_Handler(void)
     if(wifi_t.rx_data_success==1){
         
        wifi_t.rx_data_success=0;
+       wifi_t.wifi_rx_counter=0;
+ 
        wifi_t.gTimer_auto_detected_net_state_times=0;
 	
      if(wifi_t.received_data_from_tencent_cloud > 22){ //36
@@ -296,12 +299,12 @@ void Tencent_Cloud_Rx_Handler(void)
      else{
 
    
-       if(strstr((char *)wifi_t.wifi_data,"open\":0")){
+       if(strstr((char *)wifi_t.wifi_data_rx,"open\":0")){
     		  wifi_t.response_wifi_signal_label = OPEN_OFF_ITEM;
             
     		 
     	}
-    	else if(strstr((char *)wifi_t.wifi_data,"open\":1")){
+    	else if(strstr((char *)wifi_t.wifi_data_rx,"open\":1")){
     	   
     	   wifi_t.response_wifi_signal_label = OPEN_ON_ITEM;
              
@@ -310,7 +313,7 @@ void Tencent_Cloud_Rx_Handler(void)
  
  
     	
-       if(strstr((char *) wifi_t.wifi_data,"ptc\":0")){
+       if(strstr((char *) wifi_t.wifi_data_rx,"ptc\":0")){
                 if(power_on_state() ==power_on){
     			   
     	           wifi_t.response_wifi_signal_label = PTC_OFF_ITEM;
@@ -319,7 +322,7 @@ void Tencent_Cloud_Rx_Handler(void)
              
     			
         }
-        else if(strstr((char *) wifi_t.wifi_data,"ptc\":1")){
+        else if(strstr((char *) wifi_t.wifi_data_rx,"ptc\":1")){
                 if(power_on_state() ==power_on){
     	     
     			  wifi_t.response_wifi_signal_label = PTC_ON_ITEM;
@@ -330,7 +333,7 @@ void Tencent_Cloud_Rx_Handler(void)
 
  
 
-    if(strstr((char *)wifi_t.wifi_data,"Anion\":0")){
+    if(strstr((char *)wifi_t.wifi_data_rx,"Anion\":0")){
           if(power_on_state() ==power_on){
 	      //   gctl_t.plasma_flag=0;
 			wifi_t.response_wifi_signal_label = ANION_OFF_ITEM;
@@ -339,7 +342,7 @@ void Tencent_Cloud_Rx_Handler(void)
         
 		 
     }
-    else if(strstr((char *)wifi_t.wifi_data,"Anion\":1")){
+    else if(strstr((char *)wifi_t.wifi_data_rx,"Anion\":1")){
             if(power_on_state() ==power_on){
          //   gctl_t.plasma_flag=1;
 			wifi_t.response_wifi_signal_label = ANION_ON_ITEM;
@@ -348,7 +351,7 @@ void Tencent_Cloud_Rx_Handler(void)
       }
     
 	
-    if(strstr((char *)wifi_t.wifi_data,"sonic\":0")){
+    if(strstr((char *)wifi_t.wifi_data_rx,"sonic\":0")){
             if(power_on_state() ==power_on){
            // gctl_t.ultrasonic_flag=0;
 			wifi_t.response_wifi_signal_label = SONIC_OFF_ITEM;
@@ -356,7 +359,7 @@ void Tencent_Cloud_Rx_Handler(void)
                 
             }
     }
-    else if(strstr((char *)wifi_t.wifi_data,"sonic\":1")){
+    else if(strstr((char *)wifi_t.wifi_data_rx,"sonic\":1")){
             if(power_on_state() ==power_on){
           //  gctl_t.ultrasonic_flag=1;
 			wifi_t.response_wifi_signal_label = SONIC_ON_ITEM;
@@ -365,7 +368,7 @@ void Tencent_Cloud_Rx_Handler(void)
     }
 
     
-     if(strstr((char *)wifi_t.wifi_data,"state\":1")){
+     if(strstr((char *)wifi_t.wifi_data_rx,"state\":1")){
            if(power_on_state() ==power_on){
            
             
@@ -375,7 +378,7 @@ void Tencent_Cloud_Rx_Handler(void)
          
 		  
     }
-    else if(strstr((char *)wifi_t.wifi_data,"state\":2")){
+    else if(strstr((char *)wifi_t.wifi_data_rx,"state\":2")){
             if(power_on_state() ==power_on){
         
 			wifi_t.response_wifi_signal_label = STATE_TIMER_MODEL_ITEM;
@@ -386,7 +389,7 @@ void Tencent_Cloud_Rx_Handler(void)
 			
     }
 
-       if(strstr((char *)wifi_t.wifi_data,"find")){
+       if(strstr((char *)wifi_t.wifi_data_rx,"find")){
 
 		 if(power_on_state()==power_on){
          
@@ -399,7 +402,7 @@ void Tencent_Cloud_Rx_Handler(void)
    
 
        
-      if(strstr((char *)wifi_t.wifi_data,"find")){
+      if(strstr((char *)wifi_t.wifi_data_rx,"find")){
 
 		 if(power_on_state()==power_on){
             
@@ -412,7 +415,7 @@ void Tencent_Cloud_Rx_Handler(void)
   
 	
    
-   if(strstr((char *)wifi_t.wifi_data,"temperature")){
+   if(strstr((char *)wifi_t.wifi_data_rx,"temperature")){
 
 	        if(power_on_state() ==power_on){
 
@@ -798,12 +801,12 @@ void JsonParse_Tencent_Cmd_Handler(void)
    if(wifi_t.response_wifi_signal_label==0xff){
         
         wifi_t.response_wifi_signal_label=0xf0;
-      
+        
 
 //		for(i=0;i<15;i++){
 //		   rx_tencent_num_buffer[i]=0;
 //		}
-        memset(wifi_t.wifi_data,'\0',25);
+       // memset(wifi_t.wifi_data_rx,'\0',40);
     }
 }
 }
@@ -826,13 +829,13 @@ static void smartphone_app_timer_power_on_handler(void)
     if(app_step==0 ){
 
 		app_step=1;
-		if(strstr((char *)wifi_t.wifi_data,"open\":1")){
+		if(strstr((char *)wifi_t.wifi_data_rx,"open\":1")){
 		    wifi_t.smartphone_app_power_on_flag=1;
 		}
 
 		
 
-		if(strstr((char *)wifi_t.wifi_data,"ptc\":1")){
+		if(strstr((char *)wifi_t.wifi_data_rx,"ptc\":1")){
 
 		gctl_t.ptc_flag=1;
 		}
@@ -843,7 +846,7 @@ static void smartphone_app_timer_power_on_handler(void)
 
 		}
 
-		if(strstr((char *)wifi_t.wifi_data,"sonic\":1")){
+		if(strstr((char *)wifi_t.wifi_data_rx,"sonic\":1")){
 
 		gctl_t.ultrasonic_flag=1;
 
@@ -854,7 +857,7 @@ static void smartphone_app_timer_power_on_handler(void)
 
 		}
 
-		if(strstr((char *)wifi_t.wifi_data,"Anion\":1")){
+		if(strstr((char *)wifi_t.wifi_data_rx,"Anion\":1")){
 		gctl_t.plasma_flag=1;
 		}
 		else{ // if(strstr((char *)TCMQTTRCVPUB,"Anion\":0")){
@@ -901,7 +904,7 @@ static void smartphone_app_timer_power_on_handler(void)
         
 		app_step=0;
 
-	
+	//  memset(wifi_t.wifi_data_rx,'\0',40);
 
 	}
 

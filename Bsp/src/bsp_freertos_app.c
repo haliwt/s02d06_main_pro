@@ -675,8 +675,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				}
 			    else{
 					
-                    ///wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] =usart2_dataBuf[0];
-					//wifi_t.wifi_uart_rx_counter++;
+                   // wifi_t.wifi_data_rx[wifi_t.wifi_uart_rx_counter] =usart2_dataBuf[0];
+					///wifi_t.wifi_uart_rx_counter++;
                     Subscribe_Rx_Interrupt_Handler();
 
 				}

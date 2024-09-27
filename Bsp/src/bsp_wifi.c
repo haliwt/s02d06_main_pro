@@ -45,10 +45,10 @@ void  wifi_get_beijing_time_handler(void)
 
        
 
-         if(flag_switch == 1 && wifi_t.rx_data_success==0){
+         if(flag_switch == 1){
             wifi_t.get_rx_beijing_time_enable=0;
             Subscriber_Data_FromCloud_Handler();
-            osDelay(20);//HAL_Delay(100);
+            HAL_Delay(100);
             gpro_t.get_beijing_step = 1;
 
             
@@ -355,28 +355,35 @@ void  wifi_get_beijing_time_handler(void)
 
           if(gkey_t.key_power == power_on){
                 MqttData_Publish_Update_Data();//Publish_Data_ToTencent_Initial_Data();
-                HAL_Delay(200);
+                osDelay(100);//HAL_Delay(200);
+               gpro_t.get_beijing_step = 14;
 
-            }
-            else if(gkey_t.key_power == power_off){
+           }
+           else if(gkey_t.key_power == power_off){
 
                MqttData_Publish_PowerOff_Ref();
-               HAL_Delay(200);
+               osDelay(100);//HAL_Delay(200);
+               gpro_t.get_beijing_step = 14;
 
 
-            }
-            Subscriber_Data_FromCloud_Handler();
-            HAL_Delay(200);
-
-            SendWifiData_To_Data(0x1F,0x01); //0x1F: wifi link net is succes 
-
-             gpro_t.get_beijing_step = 0;
-		
+           }
          }
          else{
+           gpro_t.get_beijing_step = 10;
 
-             gpro_t.get_beijing_step = 10;
+
          }
+      break;
+
+      case 14:
+                
+         Subscriber_Data_FromCloud_Handler();
+         osDelay(100);//HAL_Delay(200);
+
+         SendWifiData_To_Data(0x1F,0x01); //0x1F: wifi link net is succes 
+
+          gpro_t.get_beijing_step = 0;
+	
 
        break;
 	}
@@ -412,8 +419,7 @@ void wifi_auto_detected_link_state(void)
            auto_link_tencent_step =0;
            wifi_t.link_net_tencent_data_flag=1;
 
-          Subscriber_Data_FromCloud_Handler();
-          HAL_Delay(200);
+          
   
         
           if(gkey_t.key_power == power_off){
@@ -427,6 +433,9 @@ void wifi_auto_detected_link_state(void)
 
 
           }
+
+          Subscriber_Data_FromCloud_Handler();
+          HAL_Delay(200);
          
 		
 	}
