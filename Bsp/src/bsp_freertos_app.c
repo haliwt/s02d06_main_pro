@@ -635,8 +635,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
               if(gl_tMsg.usData[rx_data_counter] ==0xFE && rx_end_flag == 0 &&  rx_data_counter > 4){
                      
                        rx_end_flag = 1 ;
-                          
-                        
                }
 
         break;

@@ -436,6 +436,7 @@ void wifi_auto_detected_link_state(void)
 
           Subscriber_Data_FromCloud_Handler();
           HAL_Delay(200);
+          SendData_Set_Command(0x1F,0x01);//has been link net OK
          
 		
 	}
@@ -446,7 +447,7 @@ void wifi_auto_detected_link_state(void)
         
 
          auto_link_tencent_step  = 0xff;
-        
+         SendData_Set_Command(0x1F,0x0);//has been link net OK
 
      }
    

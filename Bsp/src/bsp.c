@@ -834,12 +834,20 @@ void link_wifi_net_handler(uint8_t link)
              gpro_t.disp_set_wifi_link_cmd=0;
              gpro_t.link_net_step=0;
 			 
-				// MqttData_Publish_SetOpen(0x01);
-		        /// HAL_Delay(200);
+				 MqttData_Publish_SetOpen(0x01);
+		         HAL_Delay(200);
+                 SendData_Set_Command(0x1F,0x01);//has been link net OK
+                 
+        }
+        else if(link_net_flag == 2 && gpro_t.tencent_link_success==1){
 		        // osDelay(100);
+		         link_net_flag ++;
 		         Publish_Data_ToTencent_Initial_Data();
 				 HAL_Delay(200);
                   //osDelay(100);
+         }
+         else if(link_net_flag == 3 && gpro_t.tencent_link_success==1){
+                link_net_flag ++;
 
 				Subscriber_Data_FromCloud_Handler();
 				HAL_Delay(200);
@@ -848,10 +856,7 @@ void link_wifi_net_handler(uint8_t link)
 
                  SendData_Set_Command(0x1F,0x01);//has been link net OK
 
-			 
-
-                   
-         }
+         } 
          else if(link_net_flag == 1 && gpro_t.tencent_link_success==0){
 
              link_net_flag ++;
@@ -863,13 +868,13 @@ void link_wifi_net_handler(uint8_t link)
             
 
         }
-       Detected_Fan_Error();
-       Detected_Ptc_Error();
+        else{
+           Detected_Fan_Error();
+           Detected_Ptc_Error();
+             }
 
-    }
-
-}
-
+     }
+ }
 /********************************************************
  * 
  * Function Name:void read_senson_dht11_data(void)

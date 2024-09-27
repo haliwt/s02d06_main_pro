@@ -49,6 +49,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
 
 	  	if((usart2_dataBuf[0] == 'p') ||usart2_dataBuf[0]=='E' || usart2_dataBuf[0] =='T'){ //hex :54 - "T" -fixed
            rx_data_state=1; //=1
+           wifi_t.wifi_rx_counter=0;
           }
           else{
                wifi_t.wifi_rx_counter=0;
@@ -58,8 +59,10 @@ void Subscribe_Rx_Interrupt_Handler(void)
 
       case 1:
       
-         if((usart2_dataBuf[0] == 'a')  ||usart2_dataBuf[0]=='R' || usart2_dataBuf[0] =='C')//hex :54 - "T" -fixed
+         if((usart2_dataBuf[0] == 'a')  ||usart2_dataBuf[0]=='R' || usart2_dataBuf[0] =='C'){//hex :54 - "T" -fixed
            rx_data_state=2; //=1
+           wifi_t.wifi_rx_counter=0;
+            }
           else{
                wifi_t.wifi_rx_counter=0;
                rx_data_state=0;
@@ -67,17 +70,21 @@ void Subscribe_Rx_Interrupt_Handler(void)
             
          break;
       case 2: //#1
-             if((usart2_dataBuf[0] == 'r')||usart2_dataBuf[0]=='R'||usart2_dataBuf[0] =='M')  //hex :4B - "K" -fixed
-           rx_data_state=3; //=1
-         else{
-            rx_data_state =0;
-             wifi_t.wifi_rx_counter=0;
-         }
+             if((usart2_dataBuf[0] == 'r')||usart2_dataBuf[0]=='R'||usart2_dataBuf[0] =='M')  {//hex :4B - "K" -fixed
+                rx_data_state=3; //=1
+                wifi_t.wifi_rx_counter=0;
+             }
+             else{
+                rx_data_state =0;
+                 wifi_t.wifi_rx_counter=0;
+             }
          break;
             
         case 3:
-            if((usart2_dataBuf[0] == 'a')||usart2_dataBuf[0]=='o'|| usart2_dataBuf[0] =='Q')    //hex :4B - "K" -fixed
+            if((usart2_dataBuf[0] == 'a')||usart2_dataBuf[0]=='o'|| usart2_dataBuf[0] =='Q'){    //hex :4B - "K" -fixed
            rx_data_state=4; //=1
+           wifi_t.wifi_rx_counter=0;
+          }
          else{
           rx_data_state =0;
              wifi_t.wifi_rx_counter=0;
@@ -86,8 +93,10 @@ void Subscribe_Rx_Interrupt_Handler(void)
         break;
         
         case 4:
-            if((usart2_dataBuf[0] == 'm')  ||usart2_dataBuf[0]=='R'|| usart2_dataBuf[0] =='T')  //hex :4B - "K" -fixed
+            if((usart2_dataBuf[0] == 'm')  ||usart2_dataBuf[0]=='R'|| usart2_dataBuf[0] =='T'){  //hex :4B - "K" -fixed
            rx_data_state=5; //=1
+            wifi_t.wifi_rx_counter=0;
+            }
          else{
            rx_data_state =0;
              wifi_t.wifi_rx_counter=0;
@@ -96,8 +105,10 @@ void Subscribe_Rx_Interrupt_Handler(void)
         break;
 
       case 5:
-       if((usart2_dataBuf[0] == 's') ||usart2_dataBuf[0]==':'|| usart2_dataBuf[0] =='T')   //hex :4B - "K" -fixed
-        rx_data_state=6; //=1
+       if((usart2_dataBuf[0] == 's') ||usart2_dataBuf[0]==':'|| usart2_dataBuf[0] =='T'){   //hex :4B - "K" -fixed
+           rx_data_state=6; //=1
+           wifi_t.wifi_rx_counter=0;
+        }
          else{
           rx_data_state=0;
             wifi_t.wifi_rx_counter=0;
@@ -107,8 +118,10 @@ void Subscribe_Rx_Interrupt_Handler(void)
 
       
       case 6:
-       if((usart2_dataBuf[0] == '"')||usart2_dataBuf[0]=='2' || usart2_dataBuf[0] =='S')    //hex :4B - "K" -fixed
-        rx_data_state=7; //=1
+       if((usart2_dataBuf[0] == '"')||usart2_dataBuf[0]=='2' || usart2_dataBuf[0] =='S'){    //hex :4B - "K" -fixed
+            rx_data_state=7; //=1
+           wifi_t.wifi_rx_counter=0;
+        }
          else{
           rx_data_state =0;
             wifi_t.wifi_rx_counter=0;
@@ -119,6 +132,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
       case 7:
        if((usart2_dataBuf[0] == ':')||usart2_dataBuf[0]=='0' ||usart2_dataBuf[0]=='T' ){  //hex :4B - "K" -fixed
         rx_data_state=8; //=1
+         wifi_t.wifi_rx_counter=0;
     	}
 		else{
           rx_data_state =0;
@@ -129,10 +143,20 @@ void Subscribe_Rx_Interrupt_Handler(void)
 
        case 8:
        if((usart2_dataBuf[0] == '{') ||usart2_dataBuf[0]=='8' ||usart2_dataBuf[0]=='A' ){ //hex :4B - "K" -fixed
-         if(usart2_dataBuf[0]=='8') rx_data_state =11;
-         else if(usart2_dataBuf[0]=='A') rx_data_state =12;
-         else
+         if(usart2_dataBuf[0]=='8') {
+            rx_data_state =11;
+             wifi_t.wifi_rx_counter=0;
+         }
+         else if(usart2_dataBuf[0]=='A'){
+            rx_data_state =12;
+             wifi_t.wifi_rx_counter=0;
+
+          }
+         else{
             rx_data_state =9; //=1
+            wifi_t.wifi_rx_counter=0;
+
+            }
 
         }
          else{
@@ -156,10 +180,10 @@ void Subscribe_Rx_Interrupt_Handler(void)
             if(usart2_dataBuf[0]=='}' || usart2_dataBuf[0]==0x0A) //0x7D='}', 0x0A = line feed // end
             {
                 wifi_t.rx_data_success=1;
-               rx_data_state=0;
+                rx_data_state=0;
                 wifi_t.received_data_from_tencent_cloud = wifi_t.wifi_rx_counter;
-                wifi_t.wifi_rx_counter=0;
-                wifi_t.wifi_uart_rx_counter=0;
+               
+               
 
 
             }
@@ -831,18 +855,16 @@ static void smartphone_app_timer_power_on_handler(void)
 		app_step=1;
 		if(strstr((char *)wifi_t.wifi_data_rx,"open\":1")){
 		    wifi_t.smartphone_app_power_on_flag=1;
+            
 		}
+        if(strstr((char *)wifi_t.wifi_data_rx,"ptc\":1")){
 
-		
-
-		if(strstr((char *)wifi_t.wifi_data_rx,"ptc\":1")){
-
-		gctl_t.ptc_flag=1;
+            gctl_t.ptc_flag=1;
 		}
 		else{ //if(strstr((char *)TCMQTTRCVPUB,"ptc\":0")){
+         gctl_t.manual_turn_off_ptc_flag= 1;
+		 gctl_t.ptc_flag=0;
 
-		gctl_t.ptc_flag=0;
-	//	gpro_t.gTimer_gpro_temp_delay =0;
 
 		}
 
@@ -876,35 +898,27 @@ static void smartphone_app_timer_power_on_handler(void)
 	  
 		buzzer_sound();
 
-		//Device_Action_Publish_Handler();
-		if(gkey_t.key_power == power_off ){
-			//gkey_t.key_power = power_on;   
+		wifi_t.smartphone_app_power_on_flag=1;
+        wifi_t.set_wind_speed_value=0;
+        smartphone_turn_on_handler();
 		
-	
-			wifi_t.smartphone_app_power_on_flag=1;
-  
-            wifi_t.set_wind_speed_value=0;
-            smartphone_turn_on_handler();
-		}
-        
-		
-		if(gctl_t.ptc_flag ==0)gpro_t.app_ptc_flag = 1;
-
        // SendData_Set_Command(0x21, 0x01); //smart phone power on command .
        
-        SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
+       
 
         MqttData_Publis_App_PowerOn_Ref();
   
 		
-		HAL_Delay(200);//
-		
+		HAL_Delay(50);//
+
+        SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
+		HAL_Delay(50);//
 		
         
         
 		app_step=0;
 
-	//  memset(wifi_t.wifi_data_rx,'\0',40);
+	  memset(wifi_t.wifi_data_rx,'\0',40);
 
 	}
 
