@@ -20,6 +20,9 @@
 #include "interrupt_manager.h"
 
 
+extern uint8_t usart2_dataBuf[1];
+
+
 
 #define DECODER_BIT_10          (1<<10) 
 

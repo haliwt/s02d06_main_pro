@@ -1,6 +1,9 @@
 #include "bsp.h"
 #include "queue.h"
 
+uint8_t usart2_dataBuf[1];
+
+
 uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
@@ -647,16 +650,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		HAL_UART_Receive_IT(&huart1,disp_inputBuf,1);//UART receive data interrupt 1 byte
 		
 	 }
-    
-    if(huart->Instance==USART2)  //wifi usart1 --wifi 
+    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
-       DISABLE_INT();    
+      // DISABLE_INT();    
 	  if(gpro_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
-			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart2_dataBuf[0];
+			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = usart2_dataBuf[0];
 			wifi_t.wifi_uart_rx_counter++;
 
-			if(*wifi_t.usart2_dataBuf==0X0A) // 0x0A = "\n"
+			if(*usart2_dataBuf==0X0A) // 0x0A = "\n"
 			{
 				//wifi_t.usart2_rx_flag = 1;
 				Wifi_Rx_Link_Net_InputInfo_Handler();
@@ -667,7 +669,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		  else{
 
 		         if(wifi_t.get_rx_beijing_time_enable==1){
-					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = wifi_t.usart2_dataBuf[0];
+					wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] =usart2_dataBuf[0];
 					wifi_t.wifi_uart_rx_counter++;
 				}
 			    else{
@@ -676,13 +678,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				}
 	      }
 	 
-	  ENABLE_INT();
+	 // ENABLE_INT();
 //	__HAL_UART_CLEAR_NEFLAG(&huart2);
 	//__HAL_UART_CLEAR_FEFLAG(&huart2);
 	__HAL_UART_CLEAR_OREFLAG(&huart2);
 	//__HAL_UART_CLEAR_IDLEFLAG(&huart2);
 	//__HAL_UART_CLEAR_TXFECF(&huart2);
-	 HAL_UART_Receive_IT(&huart2,wifi_t.usart2_dataBuf,1);
+	 HAL_UART_Receive_IT(&huart2,usart2_dataBuf,1);
      
 	}
 

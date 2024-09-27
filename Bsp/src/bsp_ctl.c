@@ -51,7 +51,7 @@ void bsp_ctl_init(void)
 
    Buzzer_Sound_Init();
    
-   Wifi_Init();
+ //  Wifi_Init();
    Ptc_State_Handler(Ptc_Default_Handler);
    Plasma_State_Handler(Plasma_Default_Handler);
    Ultrasonic_state_Handler(Ultrasonic_Default_Handler);

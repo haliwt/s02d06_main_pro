@@ -42,7 +42,7 @@ typedef struct _WIFI_FUN{
     uint8_t soft_ap_config_flag;
     
     uint8_t get_rx_beijing_time_enable;
-    uint8_t usart2_dataBuf[1];
+  
     uint8_t wifi_uart_rx_counter;
      uint8_t once_rx_data_done;
 	 uint8_t response_wifi_signal_label;

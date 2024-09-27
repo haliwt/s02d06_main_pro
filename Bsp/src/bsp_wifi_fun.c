@@ -29,48 +29,6 @@ uint8_t at_send_data(uint8_t* pdata, uint16_t len)
 	}	
 }
 
-
-
-
-
-/****************************************************************
-     * 
-     * Function Name:void Wifi_Init(void)
-     * Function: 
-     * Input Ref: NO
-     * Return Ref:NO
-     * 
-****************************************************************/
-void Wifi_Init(void)
-{
-  //Wifi_Link_Net_Handler(wifi_link_default_fun);
-
-
-}
-
-/***************************************************************************************
-     * 
-     * Function Name:void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void))
-     * Function: 
-     * Input Ref: NO
-     * Return Ref:NO
-     * 
-***************************************************************************************/
-//void Wifi_Link_Net_Handler(uint8_t (*wifi_link_handler)(void))
-//{
-//    wifi_link_net_state = wifi_link_handler;
-//}
-
-
-//static uint8_t wifi_link_default_fun(void)
-//{
-//
-//    if(gpro_t.tencent_link_success ==1)return 1;
-//	else return 0;
-//
-//
-//}
-
 /*****************************************************************************
     *
     *Function Name: static void AutoReconnect_Wifi_Neware_Function(void)
@@ -83,15 +41,15 @@ void link_wifi_net_state_handler(void)
 {
   
 
-    uint8_t  device_massage[100];
-  // device_massage = (uint8_t *)malloc(128);
+   uint8_t  device_massage[100];
+  //uint8_t *device_massage = (uint8_t *)malloc(128);
 
       switch( gpro_t.link_net_step){
 
             case 0: //one step
 
-                WIFI_IC_DISABLE();
-        		HAL_Delay(1000);
+               // WIFI_IC_DISABLE();
+        		///HAL_Delay(1000);
         		//HAL_Delay(1000);
         		//HAL_Delay(1000);
         		//net_t.linking_tencent_cloud_doing =1;
@@ -101,6 +59,7 @@ void link_wifi_net_state_handler(void)
         		HAL_Delay(1000);
 
                  gpro_t.link_net_step = 1;
+                gpro_t.linking_tencent_cloud_doing =1;
 
             break;
 
@@ -116,7 +75,7 @@ void link_wifi_net_state_handler(void)
             break;
 
             case 2:
-                 if(gpro_t.gTimer_login_tencent_times> 5){
+                 if(gpro_t.gTimer_login_tencent_times> 3){
                     gpro_t.gTimer_login_tencent_times = 0;
 
                          WIFI_IC_ENABLE();
@@ -134,7 +93,7 @@ void link_wifi_net_state_handler(void)
 
             case 3:
                 
-            if(gpro_t.gTimer_login_tencent_times > 7){
+            if(gpro_t.gTimer_login_tencent_times > 6){
                       gpro_t.gTimer_login_tencent_times= 0;
                    gpro_t.link_net_step = 4;
             WIFI_IC_ENABLE();
@@ -149,8 +108,9 @@ void link_wifi_net_state_handler(void)
 
 
             case 4:
-                 if(gpro_t.gTimer_login_tencent_times> 9){
+                 if(gpro_t.gTimer_login_tencent_times> 7 && gpro_t.link_net_step == 4){
                           gpro_t.gTimer_login_tencent_times = 0;
+                           gpro_t.link_net_step = 5;
 
                    gpro_t.linking_tencent_cloud_doing =1;
                   wifi_t.soft_ap_config_flag =1; //WE.EIDT 
@@ -158,7 +118,7 @@ void link_wifi_net_state_handler(void)
                  at_send_data(device_massage, strlen((const char *)device_massage));
 
 
-                   gpro_t.link_net_step = 5;
+                  
 
 
                     }
@@ -256,6 +216,6 @@ void link_wifi_net_state_handler(void)
 
 
         }
-
+    // free(device_massage);
 }
 
