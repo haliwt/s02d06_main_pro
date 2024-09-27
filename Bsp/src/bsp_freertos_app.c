@@ -441,7 +441,7 @@ static void vTaskStart(void *pvParameters)
                 wifi_auto_detected_link_state();
             }
 
-        //  clear_rx_copy_data();
+        // clear_rx_copy_data();
      
        }
 
@@ -650,9 +650,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		HAL_UART_Receive_IT(&huart1,disp_inputBuf,1);//UART receive data interrupt 1 byte
 		
 	 }
-    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
+    
+    if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
-      // DISABLE_INT();    
+     //  DISABLE_INT();    
 	  if(gpro_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
 			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = usart2_dataBuf[0];
@@ -673,12 +674,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 					wifi_t.wifi_uart_rx_counter++;
 				}
 			    else{
-					Subscribe_Rx_Interrupt_Handler();
+					
+                    ///wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] =usart2_dataBuf[0];
+					//wifi_t.wifi_uart_rx_counter++;
+                    Subscribe_Rx_Interrupt_Handler();
 
 				}
 	      }
 	 
-	 // ENABLE_INT();
+	//  ENABLE_INT();
 //	__HAL_UART_CLEAR_NEFLAG(&huart2);
 	//__HAL_UART_CLEAR_FEFLAG(&huart2);
 	__HAL_UART_CLEAR_OREFLAG(&huart2);

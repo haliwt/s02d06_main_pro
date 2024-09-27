@@ -76,7 +76,7 @@ void Subscribe_Rx_Interrupt_Handler(void);
 void Tencent_Cloud_Rx_Handler(void);
 
 
-void Json_Parse_Command_Fun(void);
+void JsonParse_Tencent_Cmd_Handler(void);
 
 void clear_rx_copy_data(void);
 

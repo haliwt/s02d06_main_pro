@@ -134,12 +134,13 @@ void power_on_run_handler(void)
 
 	  case 3: //7
 
-	  
+	   
 	   if(gpro_t.tencent_link_success==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
              wifi_t.link_net_tencent_data_flag ++;
 		  
 		     MqttData_Publish_SetOpen(0x01);
 		     HAL_Delay(200);
+          
             
 
 		}
@@ -678,7 +679,7 @@ static void power_on_init_function(void)
     gpro_t.set_timer_timing_hours =0 ;
     gpro_t.set_timer_timing_minutes =0;
 
-     if(gpro_t.get_beijing_time_success==0 || gpro_t.tencent_link_success==0){
+     if(gpro_t.get_beijing_time_success==0 ){
      
          gpro_t.disp_works_minutes_value=0;
          gpro_t.disp_works_hours_value =0;
@@ -870,8 +871,8 @@ void link_wifi_net_handler(uint8_t link)
 void read_senson_dht11_data(void)
 {
 
-    static uint8_t power_on_run_dht11_times ;
-  if(gpro_t.gTimer_run_dht11 > 4  ||  power_on_run_dht11_times < 20){
+  static uint8_t power_on_run_dht11_times ;
+  if((gpro_t.gTimer_run_dht11 > 4  ||  power_on_run_dht11_times < 20) && wifi_t.rx_data_success==0){
         gpro_t.gTimer_run_dht11=0;
         power_on_run_dht11_times ++;
 

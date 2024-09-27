@@ -158,6 +158,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
                rx_data_state=0;
                 wifi_t.received_data_from_tencent_cloud = wifi_t.wifi_rx_counter;
                 wifi_t.wifi_rx_counter=0;
+                wifi_t.wifi_uart_rx_counter=0;
 
 
             }
@@ -181,6 +182,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
          gpro_t.get_beijing_time_success = 0;
         rx_data_state =0;
          wifi_t.wifi_rx_counter=0;
+          wifi_t.wifi_uart_rx_counter=0;
 
       break;
 
@@ -224,6 +226,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
             gpro_t.get_beijing_time_success = 0;
            rx_data_state =0;
             wifi_t.wifi_rx_counter=0;
+            wifi_t.wifi_uart_rx_counter=0;
         }
         else if(usart2_dataBuf[0]== '1'){
 
@@ -231,6 +234,7 @@ void Subscribe_Rx_Interrupt_Handler(void)
        
             rx_data_state =0;
              wifi_t.wifi_rx_counter=0;
+             wifi_t.wifi_uart_rx_counter=0;
         }
         else{
 
@@ -430,17 +434,17 @@ void Tencent_Cloud_Rx_Handler(void)
 
 /****************************************************************************
 **
-   *Function Name:void Json_Parse_Command_Fun(void)
+   *Function Name:void JsonParse_Tencent_Cmd_Handler(void)
    *Function: parse setment of wifi receive data from tencent 
    *Input Ref: NO
    *Return Ref:NO
    *
 
 *****************************************************************************/
-void Json_Parse_Command_Fun(void)
+void JsonParse_Tencent_Cmd_Handler(void)
 {
 
-     uint8_t i;
+    uint8_t i;
     static uint8_t wind_hundred, wind_decade,wind_unit,temp_decade,temp_unit;
 	
   while(wifi_t.response_wifi_signal_label != 0xff && wifi_t.response_wifi_signal_label !=0 && wifi_t.response_wifi_signal_label !=0xf0){
@@ -449,16 +453,16 @@ void Json_Parse_Command_Fun(void)
        
 	case OPEN_OFF_ITEM:
 
-       buzzer_sound();
+      
        gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
         MqttData_Publish_SetOpen(0);  
-        osDelay(20);//HAL_Delay(350);//350
+        HAL_Delay(350);//350
 
         gpro_t.tencent_link_success=1;
       
-          gkey_t.power_key_long_counter=0;
-         wifi_t.smartphone_app_power_on_flag=0;
-       
+        gkey_t.power_key_long_counter=0;
+        wifi_t.smartphone_app_power_on_flag=0;
+        buzzer_sound();
          gpro_t.power_off_flag =1;
         SendWifiData_To_Cmd(0x01, 0x00); //power off command
         wifi_t.gTimer_auto_detected_net_state_times=0; //don't need check wifi if has or not
@@ -467,14 +471,14 @@ void Json_Parse_Command_Fun(void)
 	  break;
 
 	  case OPEN_ON_ITEM:
-      	buzzer_sound();
+      
 	   gkey_t.key_power = power_on; 
 	 
 	   //  gkey_t.power_key_long_counter=1;
 		gpro_t.tencent_link_success=1;
 		MqttData_Publish_SetOpen(1);  
-		osDelay(20);//HAL_Delay(350);//300
-
+		HAL_Delay(200);//300
+        buzzer_sound();
         // gkey_t.key_power = power_on;
         SendWifiData_To_Cmd(0x01, 0x01); //power on command
         //smartphone_turn_on_handler();
@@ -491,7 +495,7 @@ void Json_Parse_Command_Fun(void)
 	  case PTC_ON_ITEM:
 	  if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 	    if(ptc_error_state() ==0){
-			
+			 gctl_t.manual_turn_off_ptc_flag= 0;
 	         Ptc_On();
              gctl_t.ptc_flag=1;
              Disp_Dry_Icon();
@@ -499,14 +503,12 @@ void Json_Parse_Command_Fun(void)
              osDelay(200);//HAL_Delay(350);//350ms
              buzzer_sound()	;
              SendWifiData_To_Cmd(0x02, 0x01); //ptc turn on command
-
-             
-		
-	     }
+        }
 		
           
 		 wifi_t.gTimer_auto_detected_net_state_times=0;//don't need check wifi if has or not
          wifi_t.response_wifi_signal_label=0xff;
+         gpro_t.linking_tencent_cloud_doing =0;
 	  	}
 	    
 	   break;
@@ -523,7 +525,7 @@ void Json_Parse_Command_Fun(void)
 		 gctl_t.ptc_flag=0;
          Disp_Dry_Icon();
          buzzer_sound()	;
-
+         gctl_t.manual_turn_off_ptc_flag= 1;
          
         SendWifiData_To_Cmd(0x02, 0x0); //ptc turn off command
 	
@@ -678,7 +680,7 @@ void Json_Parse_Command_Fun(void)
 	  case TEMPERATURE_ITEM:
 	   if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 
-           
+             gctl_t.manual_turn_off_ptc_flag= 0; //only  manual turn on flag is zero can be changed .
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
              temp_decade=wifi_t.wifi_data[14]-0x30; //
              temp_unit=wifi_t.wifi_data[15]-0x30;
@@ -708,39 +710,7 @@ void Json_Parse_Command_Fun(void)
 
            sendData_setTemp_value(gctl_t.gSet_temperature_value); //smart phone set temperature value .
            gpro_t.gTimer_run_dht11=0; 
-			#if 0
-			if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
-
-		    	
-					gctl_t.ptc_flag =1;
-					Ptc_On();
-				    Disp_Dry_Icon();
-                    
-                     MqttData_Publish_SetPtc(1);
-                     osDelay(20);//HAL_Delay(200);
-
-                     gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
-                      //send data to the second display board
-                     SendWifiData_To_Cmd(0x02, 0x1); //ptc turn on command
-		    	
-
-			}
-			else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value ){
-		   		
-                    gctl_t.ptc_flag = 0;
-			   		Ptc_Off();
-                    Disp_Dry_Icon();
-                    
-                     MqttData_Publish_SetPtc(0);
-                      osDelay(20);//HAL_Delay(200);
-
-                     gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
-                      //send data to the second display board
-                      SendWifiData_To_Cmd(0x02, 0x0); //ptc turn off command
-			   		
-				
-			}
-           #endif 
+	
          
 		    buzzer_sound();
 		}
@@ -833,7 +803,7 @@ void Json_Parse_Command_Fun(void)
 //		for(i=0;i<15;i++){
 //		   rx_tencent_num_buffer[i]=0;
 //		}
-        memset(wifi_t.wifi_data,'\0',15);
+        memset(wifi_t.wifi_data,'\0',25);
     }
 }
 }
@@ -860,7 +830,7 @@ static void smartphone_app_timer_power_on_handler(void)
 		    wifi_t.smartphone_app_power_on_flag=1;
 		}
 
-		if(wifi_t.smartphone_app_power_on_flag==1){
+		
 
 		if(strstr((char *)wifi_t.wifi_data,"ptc\":1")){
 
@@ -893,7 +863,7 @@ static void smartphone_app_timer_power_on_handler(void)
 
 
 
-		}
+		
     }
    
 
@@ -917,13 +887,16 @@ static void smartphone_app_timer_power_on_handler(void)
 		
 		if(gctl_t.ptc_flag ==0)gpro_t.app_ptc_flag = 1;
 
-        SendData_Set_Command(0x21, 0x01); //smart phone power on command .
+       // SendData_Set_Command(0x21, 0x01); //smart phone power on command .
+       
+        SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
 
         MqttData_Publis_App_PowerOn_Ref();
   
 		
 		HAL_Delay(200);//
-
+		
+		
         
         
 		app_step=0;

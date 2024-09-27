@@ -167,6 +167,38 @@ void SendData_Tx_Data(uint8_t dcmd,uint8_t ddata)
 		}
 	
 }
+/********************************************************************************
+    **
+    *Function Name:void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra)
+    *Function :
+    *Input Ref: hours,minutes,seconds of beijing time 
+    *Return Ref:NO
+    *
+*******************************************************************************/
+void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra)
+{
+    outputBuf[0]=0x5A; //mainboard head : displayBoard = 0xA5
+	outputBuf[1]=0x10; //mainboard device No: 01
+	outputBuf[2]=0x20; //command : is data of hours and minutes and seconds.
+	outputBuf[3]=0x10; // many command 
+	outputBuf[4]= 0x04; //data of length: 0x01 - 3 byte.
+	outputBuf[5]= 0x01;  // turn on power on
+	outputBuf[6]= ptc; //	
+	outputBuf[7]= plasma; //	
+	outputBuf[8]= ultra; //	
+
+    outputBuf[9] = 0xFE;
+    outputBuf[10] = bcc_check(outputBuf,10);
+
+	transferSize=11;
+	if(transferSize)
+	{
+    	while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
+    	transOngoingFlag=1;
+    	HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
+	}
+}
+
 
 /********************************************************************************
     **
@@ -200,34 +232,7 @@ void SendWifiData_To_PanelWindSpeed(uint8_t dat1)
 
 }
 
-/********************************************************************************
-    **
-    *Function Name:void SendWifiData_To_Cmd(uint8_t cmd,uint8_t data)
-    *Function : commad order , data -command type
-    *Input Ref: commad order , data -command type
-    *Return Ref:NO
-    *
-*******************************************************************************/
-void SendWifiData_To_Cmd(uint8_t cmd,uint8_t data)
-{
-        outputBuf[0]=0x5A; //head : main board 0x5A
-        outputBuf[1]=0x10; //main board device No: 0x10
-        outputBuf[2]=cmd; //command type: fan speed of value 
-        outputBuf[3]=data; // 0x0F : is data ,don't command order.
-        outputBuf[4]= 0x0; // don't data ,onlay is command order,recieve data is 1byte .
-       
-        outputBuf[5] = 0xFE; //frame is end of byte.
-        outputBuf[6] = bcc_check(outputBuf,6);
-        
-        transferSize=7;
-        if(transferSize)
-        {
-            while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
-            transOngoingFlag=1;
-            HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
-        }
-	
-}
+
 
 /********************************************************************************
     **

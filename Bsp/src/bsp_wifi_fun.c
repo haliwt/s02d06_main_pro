@@ -173,19 +173,22 @@ void link_wifi_net_state_handler(void)
             break;
 
             case 7:
-
+              wifi_t.link_net_tencent_data_flag=1;
               gkey_t.wifi_led_fast_blink_flag=0;//gpro_t.wifi_led_fast_blink_flag=0;
               //gpro_t.gTimer_get_data_from_tencent_data=0;
+
+                
 			 
 				 MqttData_Publish_SetOpen(0x01);
-		         HAL_Delay(20);
+		         HAL_Delay(50);
 		        // osDelay(100);
 		         Publish_Data_ToTencent_Initial_Data();
-				 HAL_Delay(20);
+				 HAL_Delay(50);
                   //osDelay(100);
+                 Subscriber_Data_FromCloud_Handler();
+				 HAL_Delay(50);
 
-				Subscriber_Data_FromCloud_Handler();
-				HAL_Delay(20);
+			
 	             //osDelay(100);
 
 			 gpro_t.link_net_step = 0xfe;
