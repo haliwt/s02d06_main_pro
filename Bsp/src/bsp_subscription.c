@@ -464,7 +464,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
         wifi_t.smartphone_app_power_on_flag=0;
         buzzer_sound();
          gpro_t.power_off_flag =1;
-        SendWifiData_To_Cmd(0x01, 0x00); //power off command
+         SendData_Set_Command(0x01, 0x00); //power off command
         wifi_t.gTimer_auto_detected_net_state_times=0; //don't need check wifi if has or not
         wifi_t.response_wifi_signal_label = 0xff;
         
@@ -480,7 +480,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
 		HAL_Delay(200);//300
         buzzer_sound();
         // gkey_t.key_power = power_on;
-        SendWifiData_To_Cmd(0x01, 0x01); //power on command
+        SendData_Set_Command(0x01, 0x01); //power on command
         //smartphone_turn_on_handler();
       
 
@@ -502,7 +502,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
              MqttData_Publish_SetPtc(0x01);
              osDelay(200);//HAL_Delay(350);//350ms
              buzzer_sound()	;
-             SendWifiData_To_Cmd(0x02, 0x01); //ptc turn on command
+             SendData_Set_Command(0x02, 0x01); //ptc turn on command
         }
 		
           
@@ -527,7 +527,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
          buzzer_sound()	;
          gctl_t.manual_turn_off_ptc_flag= 1;
          
-        SendWifiData_To_Cmd(0x02, 0x0); //ptc turn off command
+        SendData_Set_Command(0x02, 0x0); //ptc turn off command
 	
 	    
 
@@ -551,7 +551,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
            Disp_Kill_Icon();
 
            
-            SendWifiData_To_Cmd(0x03, 0x00); //plasma turn off command
+            SendData_Set_Command(0x03, 0x00); //plasma turn off command
            	buzzer_sound();
            
 		  
@@ -572,7 +572,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
            gctl_t.plasma_flag=1;
             Disp_Kill_Icon();
 
-            SendWifiData_To_Cmd(0x03, 0x01); //plasma turn on command
+            SendData_Set_Command(0x03, 0x01); //plasma turn on command
             buzzer_sound();
 		   
 			}
@@ -591,7 +591,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
             gctl_t.ultrasonic_flag=0;
              Disp_Ultrsonic_Icon();
 
-            SendWifiData_To_Cmd(0x04, 0x00); //ultrasonic turn off command
+            SendData_Set_Command(0x04, 0x00); //ultrasonic turn off command
             buzzer_sound();
             
 		}
@@ -612,7 +612,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
             gctl_t.ultrasonic_flag=1;
             Disp_Ultrsonic_Icon();
 
-           SendWifiData_To_Cmd(0x04, 0x01); //ultrasonic turn on  command
+           SendData_Set_Command(0x04, 0x01); //ultrasonic turn on  command
              buzzer_sound();
             //send data to the second display board
            
@@ -636,7 +636,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
            MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
 			HAL_Delay(200);
             //do someting disp timer timing value 
-            SendWifiData_To_Cmd(0x27, 0x02); //AI turn off command
+            SendData_Set_Command(0x27, 0x02); //AI turn off command
            
             
 		
@@ -663,7 +663,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
             MqttData_Publish_SetState(1); //beijing timing = 1
 			HAL_Delay(200);
 
-            SendWifiData_To_Cmd(0x27, 0x01); //AI turn on command
+            SendData_Set_Command(0x27, 0x01); //AI turn on command
 
            
 			

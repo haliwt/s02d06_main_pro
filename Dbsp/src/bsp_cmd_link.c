@@ -236,7 +236,7 @@ void SendWifiData_To_PanelWindSpeed(uint8_t dat1)
 
 /********************************************************************************
     **
-    *Function Name:void SendWifiData_To_Cmd(uint8_t cmd,uint8_t data)
+    *Function Name:
     *Function : commad order , data -command type
     *Input Ref: commad order , data -command type
     *Return Ref:NO
