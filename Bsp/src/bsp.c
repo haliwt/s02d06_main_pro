@@ -157,6 +157,8 @@ void power_on_run_handler(void)
              LCD_Disp_Works_Timing_Init();
              disp_ai_iocn();
 
+             second_disp_ai_time_fun();
+
          if(gpro_t.tencent_link_success==1 ){
              MqttData_Publish_SetState(1);
 	         osDelay(10);//HAL_Delay(350);
@@ -167,6 +169,7 @@ void power_on_run_handler(void)
 
             LCD_Disp_Timer_Timing_Init();
             disp_ai_iocn();
+            second_disp_not_ai_timer_fun();
   
 
         if(gpro_t.tencent_link_success==1){

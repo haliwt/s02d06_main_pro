@@ -76,7 +76,7 @@ void second_disp_ai_time_fun(void)
 
    // LCD_Disp_Works_Timing_Init();
    // disp_ai_iocn();
-    gkey_t.key_mode_be_pressed = 1;
+   // gkey_t.key_mode_be_pressed = 1;
              
 }
 
@@ -104,7 +104,7 @@ void second_disp_not_ai_timer_fun(void)
   
 
 
-    gkey_t.key_mode_be_pressed = 2;
+   // gkey_t.key_mode_be_pressed = 2;
     
               
 }

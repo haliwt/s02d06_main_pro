@@ -309,7 +309,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
         //  buzzer_sound();
         g_tDisp.ai_mode_flag =1;
-         second_disp_ai_time_fun();
+      //   second_disp_ai_time_fun();
          
 
       
@@ -317,7 +317,7 @@ void receive_data_fromm_display(uint8_t *pdata)
        else if(pdata[3] == 0x02){
        /// buzzer_sound();
         g_tDisp.ai_mode_flag =2 ;
-        second_disp_not_ai_timer_fun();
+       // second_disp_not_ai_timer_fun();
        
             
 
