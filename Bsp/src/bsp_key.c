@@ -63,7 +63,7 @@ void power_long_short_key_fun(void)
                gctl_t.ai_flag = 1;
                gctl_t.ptc_warning =0;
                gctl_t.fan_warning =0;
-              
+               
               gctl_t.step_process=0;
               gpro_t.power_off_flag =1;
               gpro_t.send_data_power_on_flag = power_on;
@@ -72,6 +72,7 @@ void power_long_short_key_fun(void)
            else{
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
+              
             // SendData_Set_Command(0x01, 0x0); // power off ->to second display 
               gpro_t.send_data_power_on_flag = power_off;
 

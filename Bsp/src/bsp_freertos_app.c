@@ -51,6 +51,7 @@ uint8_t rx_data_counter,rx_end_flag;
 uint8_t  rx_end_counter,uid;
 
 
+uint8_t power_off_flag_recoder ;
 
 /*
 **********************************************************************************************************
@@ -364,14 +365,14 @@ static void vTaskStart(void *pvParameters)
           if(gpro_t.send_data_power_on_flag == power_on){
 
                gpro_t.send_data_power_on_flag =0xff;
-
+               
                SendData_Set_Command(0X01,0X01);
                osDelay(30);
 
 
           }
           else if(gpro_t.send_data_power_on_flag == power_off){
-
+               power_off_flag_recoder ++ ;
               gpro_t.send_data_power_on_flag =0xff;
           
                SendData_Set_Command(0X01,0X00);
