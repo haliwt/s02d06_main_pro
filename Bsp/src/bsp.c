@@ -148,6 +148,35 @@ void power_on_run_handler(void)
 
 	  case 3: //7
 
+       
+         
+
+        if(g_tDisp.ai_mode_flag ==1){
+            g_tDisp.ai_mode_flag=3;
+
+             LCD_Disp_Works_Timing_Init();
+             disp_ai_iocn();
+
+         if(gpro_t.tencent_link_success==1 ){
+             MqttData_Publish_SetState(1);
+	         osDelay(10);//HAL_Delay(350);
+           }
+        }
+        else if(g_tDisp.ai_mode_flag ==2 ){
+            g_tDisp.ai_mode_flag =3;
+
+            LCD_Disp_Timer_Timing_Init();
+            disp_ai_iocn();
+  
+
+        if(gpro_t.tencent_link_success==1){
+         MqttData_Publish_SetState(2);
+	     osDelay(10);//HAL_Delay(350);
+
+         }
+        }
+        
+
 	   
 	   if(gpro_t.tencent_link_success==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
              wifi_t.link_net_tencent_data_flag ++;

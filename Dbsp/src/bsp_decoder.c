@@ -308,24 +308,19 @@ void receive_data_fromm_display(uint8_t *pdata)
 
       if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
         //  buzzer_sound();
+        g_tDisp.ai_mode_flag =1;
          second_disp_ai_time_fun();
          
 
-        if(gpro_t.tencent_link_success==1){
-         MqttData_Publish_SetState(1);
-	     osDelay(10);//HAL_Delay(350);
-        }
+      
        }
        else if(pdata[3] == 0x02){
        /// buzzer_sound();
+        g_tDisp.ai_mode_flag =2 ;
         second_disp_not_ai_timer_fun();
+       
             
 
-        if(gpro_t.tencent_link_success==1){
-         MqttData_Publish_SetState(2);
-	     osDelay(10);//HAL_Delay(350);
-
-         }
         }
         
      break;

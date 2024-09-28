@@ -16,6 +16,8 @@ typedef struct{
     uint8_t disp_set_temp_value_flag;
     uint8_t second_disp_set_temp_flag;
 
+    uint8_t ai_mode_flag;
+
 
 }second_disp_ref;
 
