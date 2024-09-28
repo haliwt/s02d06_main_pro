@@ -455,7 +455,7 @@ void Set_Timer_Timing_Lcd_Blink(void)
       glcd_t.number8_low =   0x0A;
       glcd_t.number8_high =   0x0A;
       LCD_Disp_Timer_Timing();
-      HAL_Delay(100);
+      osDelay(100);//HAL_Delay(100);
 
       glcd_t.number5_low =  gpro_t.set_timer_timing_hours  / 10 ;
       glcd_t.number5_high =  gpro_t.set_timer_timing_hours  / 10 ;
@@ -470,7 +470,7 @@ void Set_Timer_Timing_Lcd_Blink(void)
       glcd_t.number8_low = 0;
       glcd_t.number8_high =   0;
       LCD_Disp_Timer_Timing();
-      HAL_Delay(100);
+      osDelay(100);//HAL_Delay(100);
     
 
   

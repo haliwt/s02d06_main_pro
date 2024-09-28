@@ -332,9 +332,11 @@ void receive_data_fromm_display(uint8_t *pdata)
          if(pdata[4]==0x01){
 
             gkey_t.key_mode = mode_set_timer;
+        
             g_tDisp.second_disp_set_temp_flag=1; //send data to the second display board .
             gkey_t.gTimer_disp_set_timer = 0; 
             gpro_t.set_timer_timing_minutes =0;
+          
             gpro_t.set_timer_timing_hours = pdata[5];
            // Set_Timer_Timing_Lcd_Blink();
          }

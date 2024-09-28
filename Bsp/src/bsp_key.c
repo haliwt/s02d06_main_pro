@@ -304,6 +304,7 @@ void Add_Key_Fun(uint8_t cmd)
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
         gpro_t.gTimer_set_temp_temp=0;
+      //  g_tDisp.disp_set_temp_value_flag =0;
       
     break;
 
@@ -348,7 +349,7 @@ void key_add_dec_set_temp_value_fun(void)
     if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 2){
 
         gpro_t.gTimer_run_dht11=0; 
-        Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+        Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
      
     }
     else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
