@@ -226,50 +226,40 @@ void Dec_Key_Fun(uint8_t cmd)
 
          case set_temp_value_item: //set temperature 
 
-             gpro_t.gTimer_run_main_fun =0;
-             gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
+        gpro_t.gTimer_run_main_fun =0;
+        gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
          
-             gctl_t.gSet_temperature_value  --;
-			if( gctl_t.gSet_temperature_value  <20)  gctl_t.gSet_temperature_value  =40;
-	        else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
+        gctl_t.gSet_temperature_value  --;
+		if( gctl_t.gSet_temperature_value  <20)gctl_t.gSet_temperature_value  =40;
+	    else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
 
-           if( gctl_t.gSet_temperature_value   > 40) gctl_t.gSet_temperature_value  = 20;
+        if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
 				
-			   glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
-            glcd_t.number3_high =  gctl_t.gSet_temperature_value   / 10 ;
-			   glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
-            glcd_t.number4_high =  gctl_t.gSet_temperature_value   % 10; //
+	    glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
+        glcd_t.number3_high = glcd_t.number3_low;// gctl_t.gSet_temperature_value   / 10 ;
+	    glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
+        glcd_t.number4_high = glcd_t.number4_low; //gctl_t.gSet_temperature_value   % 10; //
 
-        
-          
-            gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
-         
-            gkey_t.set_temp_value_be_pressed =1;
+        gkey_t.set_temp_value_be_pressed =1;
+        gpro_t.gTimer_set_temp_temp=0;
            
-     
-            gpro_t.gTimer_set_temp_temp=0;
-           gpro_t.app_ptc_flag = 0;
          break;
 
          case mode_set_timer: //set timer timing value 
 
          //   gkey_t.key_sound_flag = key_sound;
-              gkey_t.gTimer_disp_set_timer = 0; 
+          gkey_t.gTimer_disp_set_timer = 0; 
 
-              gpro_t.set_timer_timing_minutes =0;
+          gpro_t.set_timer_timing_minutes =0;
 
-              gpro_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
-				if(gpro_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
+          gpro_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
+		  if(gpro_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
 
-				    gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
-					
-					
-				}
-            
-
-         
+			 gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
+				
+		  }
          Set_Timer_Timing_Lcd_Blink();
-         SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
+       
 
          break;
  
@@ -308,8 +298,6 @@ void Add_Key_Fun(uint8_t cmd)
 
      
     
-      
-        gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
     
      //   Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
@@ -318,7 +306,7 @@ void Add_Key_Fun(uint8_t cmd)
        
 
        gpro_t.gTimer_set_temp_temp=0;
-       gpro_t.app_ptc_flag = 0;
+      
     break;
 
     case mode_set_timer: //set timer timing value 
@@ -339,7 +327,7 @@ void Add_Key_Fun(uint8_t cmd)
 	
         Set_Timer_Timing_Lcd_Blink();
 
-        SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours );
+      
         
      break;
         
@@ -347,9 +335,18 @@ void Add_Key_Fun(uint8_t cmd)
 
 }
 
-
+/***************************************************************************
+    *
+    *Function Name:void key_add_dec_set_temp_value_fun(void)
+    *Function :
+    *Input Ref: 
+    *Return Ref : NO
+    *
+***************************************************************************/
 void key_add_dec_set_temp_value_fun(void)
 {
+
+   
 
     if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 2){
 
@@ -357,32 +354,39 @@ void key_add_dec_set_temp_value_fun(void)
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
      
     }
-    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 1){
+    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
       
        gpro_t.gTimer_run_dht11=0; 
       if(gkey_t.set_temp_value_be_pressed ==1){
 
           gkey_t.set_temp_value_be_pressed ++;
            lcd_donot_disp_number_34_temperature();
-            osDelay(200);
+            osDelay(400);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
             
             gpro_t.set_temperature_value_success =1;
 
+            //sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
+           
+             sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
+             set_temp_value_compare_dht11_temp_value();
 
-        }
-       else if(g_tDisp.disp_set_temp_value_flag == 1){
+
+      }
+       else if(g_tDisp.disp_set_temp_value_flag == 1){ //this is the second display board  to the first display baord displa numbers.
 
           g_tDisp.disp_set_temp_value_flag++;
 
            lcd_donot_disp_number_34_temperature();
-            osDelay(200);
+            osDelay(400);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
             gpro_t.set_temperature_value_success =1;
 
-           
-      }
-       set_temp_value_compare_dht11_temp_value();
+            //send_data_disp =0;//sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
+            set_temp_value_compare_dht11_temp_value();
+
+       }
+      
 
      if(gpro_t.tencent_link_success==1){
         
@@ -394,7 +398,12 @@ void key_add_dec_set_temp_value_fun(void)
         
         }
 
+
+
     }
+
+    
+  
 }
     
  

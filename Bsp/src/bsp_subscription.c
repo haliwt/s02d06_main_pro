@@ -471,7 +471,7 @@ void Tencent_Cloud_Rx_Handler(void)
 void JsonParse_Tencent_Cmd_Handler(void)
 {
 
-    uint8_t i;
+ //   uint8_t i;
     static uint8_t wind_hundred, wind_decade,wind_unit,temp_decade,temp_unit;
 	
   while(wifi_t.response_wifi_signal_label != 0xff && wifi_t.response_wifi_signal_label !=0 && wifi_t.response_wifi_signal_label !=0xf0){

@@ -205,7 +205,7 @@ void  wifi_get_beijing_time_handler(void)
 
                 gpro_t.get_beijing_step = 0;
 
-                 SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
+                SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
                   osDelay(10);
 
                  wifi_t.wifi_data[50] =0;//memset(wifi_t.wifi_data,'\0',60);

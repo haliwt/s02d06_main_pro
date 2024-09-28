@@ -95,7 +95,7 @@ typedef struct {
 
 
   
-    uint8_t gTimer_power_off_run_times;
+ 
    //WIFI
 
 
@@ -104,7 +104,7 @@ typedef struct {
  
    uint8_t disp_timer_switch_time_flag;
 
-   uint8_t app_ptc_flag;
+
    //display board
    uint8_t disp_rx_cmd_done_flag;
    uint8_t buzzer_sound_flag;
@@ -128,7 +128,7 @@ typedef struct {
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
 
-
+ //TIMER OF TIMES 
    uint8_t gTimer_run_adc;
    uint8_t gTimer_run_dht11;
 
@@ -154,7 +154,7 @@ typedef struct {
    uint8_t gTimer_disp_short_time;
    uint8_t gTimer_login_tencent_times;
    uint8_t gTImer_send_disp_board;
-   
+   uint8_t gTimer_power_off_run_times;
   
 }BSP_process_t;
 

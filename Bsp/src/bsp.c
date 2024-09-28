@@ -160,14 +160,9 @@ void power_on_run_handler(void)
             gpro_t.gTimer_publish_tencent_dht11=0;
             Update_Dht11_Totencent_Value();
             osDelay(20);
+       }
 
-
-        }
-
-      
-	 
-	   
-	      gctl_t.step_process=5;
+      gctl_t.step_process=5;
 
 	 break;
 
@@ -322,15 +317,15 @@ static uint8_t Works_Time_Out(void)
 *	形    参: 无
 *	返 回 值: 无
 **********************************************************************************************************/
-static void Mainboard_Action_Fun(void)
-{
-    Ptc_On();
-	Ultrasonic_Pwm_Output();
-	Fan_Run();
-	Plasma_On();
-	
-	
-}
+//static void Mainboard_Action_Fun(void)
+//{
+//    Ptc_On();
+//	Ultrasonic_Pwm_Output();
+//	Fan_Run();
+//	Plasma_On();
+//	
+//	
+//}
 
 /*
 *********************************************************************************************************
@@ -885,7 +880,7 @@ void read_senson_dht11_data(void)
 {
 
   static uint8_t power_on_run_dht11_times ;
-  if((gpro_t.gTimer_run_dht11 > 5  ||  power_on_run_dht11_times < 10) && wifi_t.rx_data_success==0){
+  if(gpro_t.gTimer_run_dht11 > 5  ||  power_on_run_dht11_times < 20){
         gpro_t.gTimer_run_dht11=0;
         power_on_run_dht11_times ++;
 
@@ -935,6 +930,7 @@ void record_time_or_time_handler(void)
             
         }
         }
+        
      }
      else if(gkey_t.key_mode == disp_works_timing){
 

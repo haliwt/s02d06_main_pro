@@ -121,18 +121,18 @@ void Display_Works_Timing(void)
           }
 
 
-       
-		
-		glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
+        glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
 		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
 
 
 		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
 		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
 
-        
-		
+       if(gpro_t.get_beijing_time_success==0 && gpro_t.tencent_link_success==0){
 
+          SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
+		
+       }
 	}
     
 
@@ -338,7 +338,7 @@ void LCD_Disp_Timer_Timing_Init(void)
 void Display_WorksTimingr_Handler(uint8_t sel_item)
 {
 
-   static uint8_t switch_counter;
+  // static uint8_t switch_counter;
  
     switch(sel_item){
 

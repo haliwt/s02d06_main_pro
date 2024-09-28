@@ -198,42 +198,6 @@ void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra)
     	HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
 }
-
-
-/********************************************************************************
-    **
-    *Function Name:void SendWifiData_To_PanelWindSpeed(uint8_t dat1)
-    *Function :
-    *Input Ref: dat1- fan of grade value 
-    *Return Ref:NO
-    *
-*******************************************************************************/
-void SendWifiData_To_PanelWindSpeed(uint8_t dat1)
-{
-   
-	    outputBuf[0]=0x5A; //head : displayBoard = 0xA5
-        outputBuf[1]=0x10; //device No: 01
-        outputBuf[2]=0x1E; //command type: fan speed of value 
-        outputBuf[3]=0x0F; // 0x0F : is data ,don't command data.
-        outputBuf[4]= 0x01; //data of length: 0x01 - 2 byte.
-        outputBuf[5] =dat1;
-    
-    
-        outputBuf[6] = 0xFE;
-        outputBuf[7] = bcc_check(outputBuf,7);
-        
-        transferSize=8;
-        if(transferSize)
-        {
-            while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
-            transOngoingFlag=1;
-            HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
-        }
-
-}
-
-
-
 /********************************************************************************
     **
     *Function Name:

@@ -89,7 +89,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         
         if(gctl_t.interval_stop_run_flag  ==0){
 
-         if(gctl_t.manual_turn_off_ptc_flag ==0){
+         gctl_t.manual_turn_off_ptc_flag =0;  //at last set is active.
             
           gctl_t.ptc_flag = 1;
           Ptc_On();
@@ -99,11 +99,13 @@ void receive_data_fromm_display(uint8_t *pdata)
 	  	      osDelay(100);//HAL_Delay(350);
            }
           
-         }
+         
          }
        }
        else if(pdata[3] == 0x0){
-        
+
+       
+          gctl_t.manual_turn_off_ptc_flag =0;
           gctl_t.ptc_flag = 0;
           Ptc_Off();
           Disp_Dry_Icon();
