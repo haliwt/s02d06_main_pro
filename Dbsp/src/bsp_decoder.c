@@ -24,6 +24,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
      case 0x01: //表示开机指令
+        wake_up_backlight_on();
 
         if(pdata[3] == 0x01 ){ //open
              buzzer_sound();
@@ -82,10 +83,11 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
      case 0x22: //compare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
+      wake_up_backlight_on();
 
       if(pdata[3] == 0x01){
 
-          wake_up_backlight_on();
+         
         
         if(gctl_t.interval_stop_run_flag  ==0){
 
@@ -301,6 +303,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      
 
      case 0x27: //AI mode 
+      wake_up_backlight_on();
 
       if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
         //  buzzer_sound();
@@ -328,7 +331,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
 
      case 0x4C: //display #1 or display #2  timer timing .
-
+         wake_up_backlight_on();
          if(pdata[4]==0x01){
 
             gkey_t.key_mode = mode_set_timer;

@@ -220,7 +220,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为30ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为30ms */
  
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
@@ -376,8 +376,6 @@ static void vTaskStart(void *pvParameters)
           
                SendData_Set_Command(0X01,0X00);
                osDelay(30);
-
-
           }
         
         
@@ -418,28 +416,28 @@ static void vTaskStart(void *pvParameters)
 
          if(gkey_t.key_power==power_on){
             
-             backlight_on_off_state();
-              power_on_run_handler();
-              record_time_or_time_handler();
-              key_add_dec_set_temp_value_fun();
-              Display_WorksTimingr_Handler(gkey_t.key_mode);
-              mainboard_active_handler();
-              link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
-              LCD_Timer_Colon_Flicker();
-              LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
-              Disip_Wifi_Icon_State();
+          backlight_on_off_state();
+          power_on_run_handler();
+          record_time_or_time_handler();
+          key_add_dec_set_temp_value_fun();
+          Display_WorksTimingr_Handler(gkey_t.key_mode);
+          mainboard_active_handler();
+          link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+          LCD_Timer_Colon_Flicker();
+          LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+          Disip_Wifi_Icon_State();
 
-            }
-            else{
+        }
+        else{
             
-             power_off_run_handler();
+          power_off_run_handler();
 
-            }
-            
-           if(gkey_t.wifi_led_fast_blink_flag==0 ){
-                wifi_get_beijing_time_handler();
-                wifi_auto_detected_link_state();
-            }
+       }
+        
+       if(gkey_t.wifi_led_fast_blink_flag==0 ){
+            wifi_get_beijing_time_handler();
+            wifi_auto_detected_link_state();
+        }
 
         // clear_rx_copy_data();
      
@@ -681,11 +679,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	      }
 	 
 	//  ENABLE_INT();
-//	__HAL_UART_CLEAR_NEFLAG(&huart2);
-	//__HAL_UART_CLEAR_FEFLAG(&huart2);
+
 	__HAL_UART_CLEAR_OREFLAG(&huart2);
-	//__HAL_UART_CLEAR_IDLEFLAG(&huart2);
-	//__HAL_UART_CLEAR_TXFECF(&huart2);
+	
 	 HAL_UART_Receive_IT(&huart2,usart2_dataBuf,1);
      
 	}

@@ -105,14 +105,28 @@ void power_on_run_handler(void)
 
             power_on_init_function();
 
-            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-            gkey_t.key_mode  = disp_works_timing;
+             power_off_flag=0;
+            gpro_t.power_off_flag=1;
+            
+      
+            //temperature value inti
+            gpro_t.set_temperature_value_success=0;
 
-            gpro_t.gTimer_timer_Counter =0;
-            gpro_t.set_timer_timing_hours=0;
-            gpro_t.set_timer_timing_minutes=0;
+            wifi_t.set_wind_speed_value=0; //init 
+
+            //timig init
+            gpro_t.gTimer_run_total=0;
+
+            gpro_t.set_timer_timing_hours =0 ;
+            gpro_t.set_timer_timing_minutes =0;
+
+             gpro_t.gTimer_timer_Counter =0;
+        
             gpro_t.gTimer_run_dht11=100;
 
+            gkey_t.set_timer_timing_success = 0;
+            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+            gkey_t.key_mode = disp_works_timing;
 
 
             gctl_t.step_process = 1;
@@ -230,7 +244,6 @@ void mainboard_active_handler(void)
     if(gpro_t.gTimer_run_main_fun > 0){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
-            Backlight_On();
         Process_Dynamical_Action();
         }
         else{
@@ -662,20 +675,7 @@ static void power_on_init_function(void)
      //led on 
 
    
-    power_off_flag=0;
-    gpro_t.power_off_flag=1;
-    
-    gkey_t.set_timer_timing_success =0;
-    //temperature value inti
-    gpro_t.set_temperature_value_success=0;
-
-    wifi_t.set_wind_speed_value=0; //init 
-
-    //timig init
-    gpro_t.gTimer_run_total=0;
-
-    gpro_t.set_timer_timing_hours =0 ;
-    gpro_t.set_timer_timing_minutes =0;
+  
 
      if(gpro_t.get_beijing_time_success==0 ){
      
@@ -889,6 +889,8 @@ void read_senson_dht11_data(void)
         Disp_HumidityTemp_Value();
 
         
+
+        
     }
 
   if(gpro_t.gTImer_send_disp_board > 7 ){
@@ -898,11 +900,18 @@ void read_senson_dht11_data(void)
             set_temp_value_compare_dht11_temp_value();//SetTemp_Compare_SensoTemp();
 
         }
-
+      
 
         sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
         osDelay(10);
 
+  }
+
+  if(gpro_t.gTimer_update_data_to_tencent > 12 && gpro_t.tencent_link_success == 1){
+
+      gpro_t.gTimer_update_data_to_tencent =0;
+
+      Update_Dht11_Totencent_Value();
   }
 
 }

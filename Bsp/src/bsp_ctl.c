@@ -241,9 +241,6 @@ static uint8_t ai_mode_default(void)
 
 }
 
-
-
-
 void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
 {
 

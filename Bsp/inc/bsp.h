@@ -155,6 +155,7 @@ typedef struct {
    uint8_t gTimer_login_tencent_times;
    uint8_t gTImer_send_disp_board;
    uint8_t gTimer_power_off_run_times;
+   uint8_t gTimer_update_data_to_tencent ;
   
 }BSP_process_t;
 
