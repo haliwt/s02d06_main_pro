@@ -239,20 +239,6 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      break;
 
-     case 0x07: // AI mode -> timer and beijing time
-
-//        wake_up_backlight_on();
-//        if(pdata[3] == 0x01){  // AI 
-//            //second_disp_ai_time_fun();
-//            
-//            
-//        }
-//        else if(pdata[3] == 0x0){ // don't buzzer sound .
-//
-//          
-//
-//        }
-
 
 
      break;
@@ -341,15 +327,16 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
 
-     case 0x4C: //display #1 or display #2 set temperature value .
+     case 0x4C: //display #1 or display #2  timer timing .
 
          if(pdata[4]==0x01){
 
             gkey_t.key_mode = mode_set_timer;
+            g_tDisp.second_disp_set_temp_flag=1; //send data to the second display board .
             gkey_t.gTimer_disp_set_timer = 0; 
             gpro_t.set_timer_timing_minutes =0;
             gpro_t.set_timer_timing_hours = pdata[5];
-            Set_Timer_Timing_Lcd_Blink();
+           // Set_Timer_Timing_Lcd_Blink();
          }
 
 

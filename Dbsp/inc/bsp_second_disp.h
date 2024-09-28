@@ -14,7 +14,7 @@ typedef struct{
     uint8_t disp_set_temp_value;
     uint8_t disp_set_timer_value;
     uint8_t disp_set_temp_value_flag;
-
+    uint8_t second_disp_set_temp_flag;
 
 
 }second_disp_ref;

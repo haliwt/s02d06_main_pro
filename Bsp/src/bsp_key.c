@@ -226,39 +226,39 @@ void Dec_Key_Fun(uint8_t cmd)
 
          case set_temp_value_item: //set temperature 
 
-        gpro_t.gTimer_run_main_fun =0;
-        gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
-         
-        gctl_t.gSet_temperature_value  --;
-		if( gctl_t.gSet_temperature_value  <20)gctl_t.gSet_temperature_value  =40;
-	    else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
+            gpro_t.gTimer_run_main_fun =0;
+            gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
+             
+            gctl_t.gSet_temperature_value  --;
+    		if( gctl_t.gSet_temperature_value  <20)gctl_t.gSet_temperature_value  =40;
+    	    else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
 
-        if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
-				
-	    glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
-        glcd_t.number3_high = glcd_t.number3_low;// gctl_t.gSet_temperature_value   / 10 ;
-	    glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
-        glcd_t.number4_high = glcd_t.number4_low; //gctl_t.gSet_temperature_value   % 10; //
+            if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
+    				
+    	    glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
+            glcd_t.number3_high = glcd_t.number3_low;// gctl_t.gSet_temperature_value   / 10 ;
+    	    glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
+            glcd_t.number4_high = glcd_t.number4_low; //gctl_t.gSet_temperature_value   % 10; //
 
-        gkey_t.set_temp_value_be_pressed =1;
-        gpro_t.gTimer_set_temp_temp=0;
+            gkey_t.set_temp_value_be_pressed =1;
+            gpro_t.gTimer_set_temp_temp=0;
            
          break;
 
          case mode_set_timer: //set timer timing value 
 
-         //   gkey_t.key_sound_flag = key_sound;
-          gkey_t.gTimer_disp_set_timer = 0; 
+              g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
+              gkey_t.gTimer_disp_set_timer = 0; 
 
-          gpro_t.set_timer_timing_minutes =0;
+              gpro_t.set_timer_timing_minutes =0;
 
-          gpro_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
-		  if(gpro_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
+              gpro_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
+    		  if(gpro_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
 
-			 gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
-				
-		  }
-         Set_Timer_Timing_Lcd_Blink();
+    			 gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
+    				
+    		  }
+             Set_Timer_Timing_Lcd_Blink();
        
 
          break;
@@ -303,18 +303,15 @@ void Add_Key_Fun(uint8_t cmd)
 
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
-       
-
-       gpro_t.gTimer_set_temp_temp=0;
+        gpro_t.gTimer_set_temp_temp=0;
       
     break;
 
     case mode_set_timer: //set timer timing value 
 
         // gkey_t.key_sound_flag = key_sound;
-
+         g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
          gkey_t.gTimer_disp_set_timer = 0; 
-
          gpro_t.set_timer_timing_minutes=0;
 
 

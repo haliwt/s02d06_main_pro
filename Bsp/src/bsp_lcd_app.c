@@ -408,7 +408,11 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
                     HAL_Delay(200);
                 }
-                SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
+                if(g_tDisp.second_disp_set_temp_flag == 0){
+                    
+                    SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
+
+                 }
                
             }
         }
