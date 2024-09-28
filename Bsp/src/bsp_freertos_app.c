@@ -414,7 +414,7 @@ static void vTaskStart(void *pvParameters)
                  }
         }   
 
-         if(gkey_t.key_power==power_on){
+       if(gkey_t.key_power==power_on){
             
           backlight_on_off_state();
           power_on_run_handler();

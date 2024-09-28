@@ -208,6 +208,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       case 0x05: // link wifi command
 
           wake_up_backlight_on();
+         
 
        if(pdata[3] == 0x01){  // link wifi 
         

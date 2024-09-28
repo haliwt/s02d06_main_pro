@@ -40,17 +40,17 @@ void  wifi_get_beijing_time_handler(void)
 
      
 
-       if(gpro_t.gTimer_get_data_from_tencent_data > 9 && gpro_t.tencent_link_success==1){
+      if(gpro_t.gTimer_get_data_from_tencent_data > 9 && gpro_t.tencent_link_success==1){
        
              gpro_t.gTimer_get_data_from_tencent_data =0;
-             if(alternate_flag ==1){
-                alternate_flag=0;
+            if(alternate_flag ==0){
+                alternate_flag++;
                 Subscriber_Data_FromCloud_Handler();
                 osDelay(30);
                 gpro_t.get_beijing_step = 1;
             }
-            else if(alternate_flag==0){
-                alternate_flag++;
+            else if(alternate_flag==1){
+                alternate_flag=0;
                gpro_t.get_beijing_step = 1;
                 wifi_t.get_rx_beijing_time_enable=0;
 
@@ -60,8 +60,7 @@ void  wifi_get_beijing_time_handler(void)
        }
        else if(gpro_t.tencent_link_success==0){
       
-           
-          gpro_t.get_beijing_step = 10;
+         gpro_t.get_beijing_step = 10;
        }
 
        

@@ -315,6 +315,7 @@ void wake_up_backlight_on_fun(void)
    if(gkey_t.key_power==power_on && gpro_t.shut_Off_backlight_flag == turn_off){
                
            gpro_t.shut_Off_backlight_flag = turn_on;
+           gpro_t.gTimer_shut_off_backlight =0;
            Backlight_On();
      }
 
