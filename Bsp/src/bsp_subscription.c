@@ -709,8 +709,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
              gctl_t.manual_turn_off_ptc_flag= 0; //only  manual turn on flag is zero can be changed .
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
-             temp_decade=wifi_t.wifi_data[14]-0x30; //
-             temp_unit=wifi_t.wifi_data[15]-0x30;
+             temp_decade=wifi_t.wifi_data_rx[14]-0x30; //
+             temp_unit=wifi_t.wifi_data_rx[15]-0x30;
              
             gctl_t.gSet_temperature_value = temp_decade*10 +  temp_unit;
             
@@ -753,10 +753,10 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 		     if(gctl_t.fan_warning ==0){
                  
-           		     wind_hundred =wifi_t.wifi_data[7]-0x30;
+           		     wind_hundred =wifi_t.wifi_data_rx[7]-0x30;
                  
-                     wind_decade=wifi_t.wifi_data[8]-0x30;
-                     wind_unit = wifi_t.wifi_data[9]-0x30;
+                     wind_decade=wifi_t.wifi_data_rx[8]-0x30;
+                     wind_unit = wifi_t.wifi_data_rx[9]-0x30;
                      
                    
                    if(wind_hundred ==1 && wind_decade==0 && wind_unit==0) wind_total_value=100;
