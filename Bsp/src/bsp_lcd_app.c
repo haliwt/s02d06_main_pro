@@ -390,6 +390,12 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
             
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
+
+                if(g_tDisp.second_disp_set_temp_flag == 0){
+                    
+                    SendData_Tx_Data(0x4C,0x0);
+
+                 }
                  
                 
             }
