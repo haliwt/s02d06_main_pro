@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#define BALL_FAN       1 
+#define BALL_FAN       0
 
 /* USER CODE END Includes */
 

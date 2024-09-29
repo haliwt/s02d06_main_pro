@@ -802,11 +802,12 @@ static void power_on_init_function(void)
 ***************************************************************************/
 static void Detected_Fan_Error(void)
 {
-    if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
-				gpro_t.gTimer_run_adc=0;
-
-                if( gctl_t.interval_stop_run_flag  ==0){
-				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+    if(gpro_t.gTimer_run_adc > 30 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
+		gpro_t.gTimer_run_adc=0;
+        fan_max_run();
+        osDelay(200);
+        if( gctl_t.interval_stop_run_flag  ==0){
+		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
         }
 				
 	}
@@ -815,8 +816,8 @@ static void Detected_Fan_Error(void)
 static void Detected_Ptc_Error(void)
 {
     if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
-			gpro_t.gTimer_ptc_detected =0;	
-			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
+	   gpro_t.gTimer_ptc_detected =0;	
+	   Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
     }
 
 }
@@ -955,7 +956,7 @@ void read_senson_dht11_data(void)
 
   }
 
-  if(gpro_t.gTimer_update_data_to_tencent > 12 && gpro_t.tencent_link_success == 1){
+  if(gpro_t.gTimer_update_data_to_tencent > 20 && gpro_t.tencent_link_success == 1){
 
       gpro_t.gTimer_update_data_to_tencent =0;
 

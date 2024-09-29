@@ -8,7 +8,7 @@ static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times);
 
 uint16_t fan_detect_voltage,ptc_temp_voltage;
 
-uint8_t times_flag;
+//uint8_t times_flag;
 /*****************************************************************
 *
 	*Function Name: static uint16_t Get_Adc(uint32_t ch)  
@@ -79,11 +79,11 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 
     #endif 
 
-    times_flag++;
-    if(times_flag > 3){
-        ptc_temp_voltage = 200; //unit test .
-
-    }
+//    times_flag++;
+//    if(times_flag > 3){
+//        ptc_temp_voltage = 200; //unit test .
+//
+//    }
 
 	if(ptc_temp_voltage < 373 || ptc_temp_voltage ==373){ //87 degree
   
@@ -146,7 +146,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
     #else
 
-	if(fan_detect_voltage >300 ){
+	if(fan_detect_voltage >560 ){
            detect_error_times=0;
 		   #ifdef DEBUG
              printf("adc= %d",run_t.fan_detect_voltage);

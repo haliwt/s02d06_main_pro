@@ -174,11 +174,11 @@ void MX_TIM16_Init(uint8_t duty_pwm)
   htim16.Instance = TIM16;
   htim16.Init.Prescaler = 63; //F = 64(MHZ)/(63+1)MHZ = 1MHZ
   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  #if BALL_FAN
+ // #if BALL_FAN
      htim16.Init.Period = 9 ;//65535; 1//100K F = 1/(1+9)=0.1MHZ = 100KHZ.
-  #else 
-    htim16.Init.Period = 49 ; // 1/(49+1)= 0.02MHZ = 20KHZ
-  #endif 
+//  #else 
+//    htim16.Init.Period = 49 ; // 1/(49+1)= 0.02MHZ = 20KHZ
+ // #endif 
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
