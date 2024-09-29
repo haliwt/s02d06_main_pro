@@ -427,12 +427,20 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
        case disp_fan_error_number:
           fan_error_code_number();
+          if(gctl_t.ptc_warning == 1){
+             gkey_t.key_mode = disp_ptc_error_number;
+
+          }
 
        break;
 
        case disp_ptc_error_number:
 
           ptc_error_code_number();
+          if(gctl_t.fan_warning == 1){
+             gkey_t.key_mode = disp_fan_error_number ;
+
+          }
        break;
 
      

@@ -490,7 +490,7 @@ static void Process_Dynamical_Action(void)
 
      }
 
-   if(ptc_state() ==1 && gctl_t.manual_turn_off_ptc_flag == 0){
+   if(ptc_state() ==1 && gctl_t.manual_turn_off_ptc_flag == 0 &&  gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
 
 
        Ptc_On();

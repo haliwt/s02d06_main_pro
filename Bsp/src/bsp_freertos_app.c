@@ -265,11 +265,15 @@ static void vTaskStart(void *pvParameters)
 
                   }
                   else{
+
+                  if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
                     
                      gkey_t.key_mode_long_counter=1;
                      gpro_t.gTimer_shut_off_backlight =0;
 
                     }
+
+                 }
 
                 }
                
@@ -306,9 +310,10 @@ static void vTaskStart(void *pvParameters)
 
                   }
                   else{
-                    dec_flag =1;
-                    gpro_t.gTimer_shut_off_backlight =0;
-
+                    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
+                        dec_flag =1;
+                        gpro_t.gTimer_shut_off_backlight =0;
+                    }
 
                    }
                   }
@@ -327,9 +332,11 @@ static void vTaskStart(void *pvParameters)
 
                   }
                   else{
+                   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
+                       add_flag =1;
+                       gpro_t.gTimer_shut_off_backlight =0;
 
-                   add_flag =1;
-                   gpro_t.gTimer_shut_off_backlight =0;
+                   }
 
                 }
                 

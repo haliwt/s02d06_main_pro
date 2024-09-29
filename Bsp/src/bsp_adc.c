@@ -6,8 +6,9 @@ static uint16_t Get_Adc_Channel(uint32_t ch) ;
 
 static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times);
 
-uint16_t fan_detect_voltage;
+uint16_t fan_detect_voltage,ptc_temp_voltage;
 
+uint8_t times_flag;
 /*****************************************************************
 *
 	*Function Name: static uint16_t Get_Adc(uint32_t ch)  
@@ -59,7 +60,9 @@ static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times)
 
 void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 {
-    uint16_t adcx,ptc_temp_voltage;
+    uint16_t adcx;
+
+ 
 
     #if 1
 	
@@ -76,10 +79,15 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 
     #endif 
 
+    times_flag++;
+    if(times_flag > 3){
+        ptc_temp_voltage = 200; //unit test .
+
+    }
 
 	if(ptc_temp_voltage < 373 || ptc_temp_voltage ==373){ //87 degree
   
-	    gctl_t.plasma_flag = 0; //turn off
+	    gctl_t.ptc_flag = 0; //turn off
 	    Ptc_Off(); //turn off
 
         gctl_t.ptc_warning = 1;
@@ -165,8 +173,10 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
            MqttData_Publis_SetFan(0);
 	       HAL_Delay(200);//osDelay(350);//HAL_Delay(350);
 
+            MqttData_Publish_SetPtc(0);
+            HAL_Delay(200);//osDelay(350);//HAL_Delay(350);
 
-         // LCD_Fault_Numbers_Code();
+             
 
             }
 
