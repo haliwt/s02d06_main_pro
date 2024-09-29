@@ -144,7 +144,7 @@ typedef struct {
    uint8_t gTimer_disp_set_timer_blink ;
 
  
-   uint8_t gTimer_publish_tencent_dht11;
+
  
    uint8_t gTimer_ptc_detected;
    uint8_t gTimer_shut_off_backlight;
