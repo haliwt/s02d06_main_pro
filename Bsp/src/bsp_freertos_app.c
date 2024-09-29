@@ -421,11 +421,14 @@ static void vTaskStart(void *pvParameters)
           power_on_run_handler();
           record_time_or_time_handler();
           key_add_dec_set_temp_value_fun();
+          
           Display_WorksTimingr_Handler(gkey_t.key_mode);
+          
           mainboard_active_handler();
-          link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+         
           LCD_Timer_Colon_Flicker();
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+          link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
           Disip_Wifi_Icon_State();
 
         }

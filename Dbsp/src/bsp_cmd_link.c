@@ -148,8 +148,8 @@ void SendData_Set_Command(uint8_t cmd,uint8_t data)  //  SendData_Set_Command(0x
 void SendData_Tx_Data(uint8_t dcmd,uint8_t ddata)
 
 {
-	outputBuf[0]=0xA5; //display board head = 0xA5
-	outputBuf[1]= 0x01; //display device Number:is 0x01
+	outputBuf[0]=0x5A; //main board head = 0x5A
+	outputBuf[1]= 0x10; //main board device number: 0x10 .
 	outputBuf[2]= dcmd; // command type = 0x06 ->buzzer sound open or not
 	outputBuf[3]= 0x0f; //  0x0f -> is data ,don't command.
 	outputBuf[4]=0x01; // data is length: 00 ->don't data ,0x01 -> has one data.
