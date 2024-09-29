@@ -24,13 +24,14 @@ void power_long_short_key_fun(void)
 {
 
   
-    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter > 0 && gkey_t.power_key_long_counter < 60){
+    if(KEY_POWER_VALUE() == 1   && gkey_t.power_key_long_counter < 60){
 
 
         gkey_t.power_key_long_counter++;
         if( gkey_t.power_key_long_counter > 15   && KEY_POWER_VALUE() == 1){
              gkey_t.power_key_long_counter = 200;
-        
+             
+             gkey_t.power_on_flag++;
           
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
@@ -46,18 +47,20 @@ void power_long_short_key_fun(void)
 			wifi_t.gTimer_linking_tencent_duration=0; //120s
 
             Buzzer_KeySound();
-            Disip_Wifi_Icon_State();
+            
           
 
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<15){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter<15){ //short key of function
 
         gkey_t.power_key_long_counter=0;
 
       
            if(gkey_t.key_power==power_off){
+              
+              gkey_t.power_on_flag++;
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
                gctl_t.ai_flag = 1;
@@ -70,6 +73,8 @@ void power_long_short_key_fun(void)
             //  SendData_Set_Command(0x01, 0x01); // power on ->to second display 
             }
            else{
+              
+              gkey_t.power_on_flag++;
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
               
@@ -353,12 +358,15 @@ void key_add_dec_set_temp_value_fun(void)
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
      
     }
-    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp > 2){
+    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1 || gpro_t.smart_phone_set_tmep_value_flag == 1)&& gpro_t.gTimer_set_temp_temp > 2){
       
        gpro_t.gTimer_run_dht11=0; 
-      if(gkey_t.set_temp_value_be_pressed ==1){
+       gpro_t.gTImer_send_disp_board =0;
+      if(gkey_t.set_temp_value_be_pressed ==1 || gpro_t.smart_phone_set_tmep_value_flag == 1){
 
           gkey_t.set_temp_value_be_pressed ++;
+          if(gpro_t.smart_phone_set_tmep_value_flag == 1) gpro_t.smart_phone_set_tmep_value_flag ++;
+          
            lcd_donot_disp_number_34_temperature();
             osDelay(400);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );

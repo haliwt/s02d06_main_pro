@@ -122,6 +122,8 @@ typedef struct {
 
    uint8_t disp_set_wifi_link_cmd;
 
+   uint8_t smart_phone_set_tmep_value_flag;
+
 
      
 

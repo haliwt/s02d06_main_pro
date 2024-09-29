@@ -709,6 +709,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
              gctl_t.manual_turn_off_ptc_flag= 0; //only  manual turn on flag is zero can be changed .
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
+             gpro_t.gTImer_send_disp_board =0;
+
              temp_decade=wifi_t.wifi_data_rx[14]-0x30; //
              temp_unit=wifi_t.wifi_data_rx[15]-0x30;
              
@@ -723,17 +725,18 @@ void JsonParse_Tencent_Cmd_Handler(void)
 		
 
            
-            gkey_t.key_add_dec_mode = set_temp_value_item; //set_temp_value_item;
+         //   gkey_t.key_add_dec_mode = set_temp_value_item; //set_temp_value_item;
            
-            gpro_t.set_temperature_value_success =1;
+            gpro_t.smart_phone_set_tmep_value_flag = 1;//gpro_t.set_temperature_value_success =1;
         
            gpro_t.gTimer_run_dht11=0; 
            wifi_t.gTimer_auto_detected_net_state_times=0;
            gpro_t.gTimer_set_temp_temp = 5;
+          
          
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //send data to the second display board
-            gkey_t.set_temp_value_be_pressed = 1 ;
+          //  gkey_t.set_temp_value_be_pressed = 1 ;
 
            sendData_setTemp_value(gctl_t.gSet_temperature_value); //smart phone set temperature value .
            gpro_t.gTimer_run_dht11=0; 
@@ -830,7 +833,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
 //		for(i=0;i<15;i++){
 //		   rx_tencent_num_buffer[i]=0;
 //		}
-       // memset(wifi_t.wifi_data_rx,'\0',40);
+        memset(wifi_t.wifi_data_rx,'\0',40);
     }
 }
 }

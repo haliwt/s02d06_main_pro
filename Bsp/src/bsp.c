@@ -804,10 +804,10 @@ static void Detected_Fan_Error(void)
 {
     if(gpro_t.gTimer_run_adc > 30 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 		gpro_t.gTimer_run_adc=0;
-        fan_max_run();
-        osDelay(200);
+        if(wifi_t.set_wind_speed_value ==0){ //max fan speed be detected if not defalut .
         if( gctl_t.interval_stop_run_flag  ==0){
 		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+        }
         }
 				
 	}

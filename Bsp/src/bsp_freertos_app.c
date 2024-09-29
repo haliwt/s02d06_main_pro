@@ -53,6 +53,8 @@ uint8_t  rx_end_counter,uid;
 
 uint8_t power_off_flag_recoder ;
 
+
+
 /*
 **********************************************************************************************************
 											函数声明
@@ -225,7 +227,6 @@ static void vTaskStart(void *pvParameters)
  
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
-
     while(1)
     {
 		/* 按键扫描 */
@@ -248,7 +249,7 @@ static void vTaskStart(void *pvParameters)
 
                 }
                 else{
-                    gkey_t.power_key_long_counter =1;
+                    gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
                     gpro_t.gTimer_shut_off_backlight =0;
                 }
             
@@ -365,8 +366,10 @@ static void vTaskStart(void *pvParameters)
             smart_phone_sound++;
            smartphone_power_on_handler();
           }
-          else
+          else if(gkey_t.power_on_flag ==1){
             power_long_short_key_fun();
+
+          }
 
 
           if(gpro_t.send_data_power_on_flag == power_on){
