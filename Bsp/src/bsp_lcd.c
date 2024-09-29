@@ -750,7 +750,7 @@ void fan_error_code_number(void)
 
     }
 
-    osDelay(400);
+    osDelay(300);
 
      if(ultrasonic_state()==1){
 
@@ -765,7 +765,7 @@ void fan_error_code_number(void)
 
 
      }
-    osDelay(400);
+    osDelay(300);
 
   }  
 
@@ -811,7 +811,7 @@ void ptc_error_code_number(void)
 
     }
 
-    osDelay(600);
+    osDelay(300);
 
      if(ultrasonic_state() == 1){
 
@@ -826,7 +826,7 @@ void ptc_error_code_number(void)
 
      }
 
-    osDelay(600);
+    osDelay(300);
 
   }  
 
