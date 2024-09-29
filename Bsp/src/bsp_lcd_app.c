@@ -425,11 +425,17 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
        break;
 
-       case disp_error_number:
-
-       LCD_Fault_Numbers_Code();
+       case disp_fan_error_number:
+          fan_error_code_number();
 
        break;
+
+       case disp_ptc_error_number:
+
+          ptc_error_code_number();
+       break;
+
+     
     }
 }
 

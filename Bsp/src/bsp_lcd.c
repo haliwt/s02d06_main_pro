@@ -25,6 +25,7 @@ lcd_ref glcd_t;
 
 //wind symbol 0xCE
 /****run wind 1******/
+#define T8                       0X01
 #define T9                       0x01      //addr 0xCE --> high word
 #define T11                      0x01    //address:0xCF
 #define T13                      0X04     //address: 0xCE
@@ -561,23 +562,22 @@ static uint8_t Detecting_Fault_Code(void)
 void LCD_Fault_Numbers_Code(void)
 {
 
-
- // display "E"
-
- TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0] + DRY_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
-   
  
+ // display "E",turn off dry icon 'ICON'of fucntion
+
+ TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0]) & 0xff); //numbers : '3' addr: 0xC2
+   
+ if(plasma_state()==1){
  //display 'r' 
- TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0] + PLASMA_Symbol) & 0xff); //numbers : '4' 
+ TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0] + PLASMA_Symbol) & 0xff); //numbers : 'r' 
+  }
+  else 
+     TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0]) & 0xff); //numbers : 'r' 
 
  //display error code "01"--ptc_warning , "02"--fan_warning
 
-  //number symbol ":"
-  TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4
-
-  //number '1' or '2'
  
-  //"01" or "o2" blink
+ //"01" or "o2" blink
   if(glcd_t.gTimer_error_times < 2){ //500ms
   	if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0){ //code is "02" ==1){ 
 
@@ -585,6 +585,7 @@ void LCD_Fault_Numbers_Code(void)
          if(ultrasonic_state()==1){
         
               TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xff);
+              TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4
           }//numbers : '2' addr: 0xC
           else{
             
@@ -608,8 +609,6 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==1){ //code is "02" ==1){ 
 
-
-       
 
           if(ultrasonic_state()==1){
         
@@ -653,18 +652,7 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning==1 &&  gctl_t.fan_warning ==1 ){
 
-        //err:01;
-//        if(ultrasonic_state()==1){
-//             
-//                   TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
-//               }//numbers : '2' addr: 0xC
-//               else{
-//                 
-//                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
-//      
-//               }
-          
-      
+
    	 
 
         //error : 02
@@ -714,42 +702,124 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==1){ //code is "02" ==1){ 
 
-      
-//         //err:01
-//          if(ultrasonic_state()==1){
-//        
-//              TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
-//          }//numbers : '2' addr: 0xC
-//          else{
-//            
-//            TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
-//
-//            }
-
-
-           
-        
-       
-      
-           
-//           //err:02
-//            if(ultrasonic_state()==1){
-//                TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
-//            }
-//            else{
-//                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); 
-//
-//            }
-          
-
-           
-
-        }
+     }
 
   
    }
 
 }
+
+/*************************************************************************************
+	*
+	*Function Name: void fan_error_code_number(void)
+	*Function : display error of code
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+*************************************************************************************/
+void fan_error_code_number(void)
+{
+ 
+ if(gctl_t.fan_warning ==1){
+
+ 
+ // display "E",turn off dry icon 'ICON'of fucntion
+
+ TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0]) & 0xff); //numbers : '3' addr: 0xC2
+   
+ if(gctl_t.plasma_flag == 1){
+    //display 'r' 
+    TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0] + PLASMA_Symbol) & 0xff); //numbers : 'r' 
+  }
+  else 
+     TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0]) & 0xff); //numbers : 'r' 
+
+ //display error code "01"--ptc_warning , "02"--fan_warning
+
+
+ // if(glcd_t.gTimer_error_times < 2){ //500ms
+  	
+    if(ultrasonic_state()==1){
+         TM1723_Write_Display_Data(0xCB,(T8+lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4
+         TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xff);
+             
+    }//display "02"
+    else{
+            TM1723_Write_Display_Data(0xCB,(T8+lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4 
+            TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xff);
+
+    }
+
+    osDelay(1000);
+
+     if(ultrasonic_state()==1){
+
+     TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0x0A] + lcdNumber7_Low[0x0A]) & 0xff); //numbers : '1' addr: 0xC4 
+     TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[0x0A] + lcdNumber8_Low[0x0A]+BUG_Symbol) & 0xff);
+     }
+     else{
+
+
+        TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0x0A] + lcdNumber7_Low[0x0A]) & 0xff); //numbers : '1' addr: 0xC4 
+        TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[0x0A] + lcdNumber8_Low[0x0A]) & 0xff);
+
+
+     }
+    osDelay(1000);
+
+  }  
+
+}
+/*************************************************************************************
+	*
+	*Function Name: void ptc_error_code_number(void)
+	*Function : display error of code
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+*************************************************************************************/
+void ptc_error_code_number(void)
+{
+ 
+ if(gctl_t.fan_warning ==1){
+
+ 
+ // display "E",turn off dry icon 'ICON'of fucntion
+
+ TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0]) & 0xff); //numbers : '3' addr: 0xC2
+   
+ if(plasma_state()==1){
+    //display 'r' 
+    TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0] + PLASMA_Symbol) & 0xff); //numbers : 'r' 
+  }
+  else 
+     TM1723_Write_Display_Data(0xCA,(lcdNumber6_Low_r[0] + lcdNumber6_High_r[0]) & 0xff); //numbers : 'r' 
+
+ //display error code "01"--ptc_warning , "02"--fan_warning
+
+
+ // if(glcd_t.gTimer_error_times < 2){ //500ms
+  	
+    if(ultrasonic_state()==1){
+         TM1723_Write_Display_Data(0xCB,(T8+lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4
+         TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xff);
+             
+    }//display "02"
+    else{
+            TM1723_Write_Display_Data(0xCB,(T8+lcdNumber7_High[0] + lcdNumber7_Low[0]) & 0xff); //numbers : '1' addr: 0xC4 
+            TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xff);
+
+    }
+
+    osDelay(200);
+
+     TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0x0A] + lcdNumber7_Low[0x0A]) & 0xff); //numbers : '1' addr: 0xC4 
+     TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[0x0A] + lcdNumber8_Low[0x0A]) & 0xff);
+
+  }  
+
+}
+
  
 /*****************************************************************************
  * 
@@ -765,7 +835,7 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
    static uint8_t alternate_flag;
 
-
+   if(gctl_t.fan_warning == 0){
    switch(wind_speed){
 
 
@@ -860,6 +930,8 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
 
     break;
+
+   }
 
    }
 	  
@@ -1028,29 +1100,7 @@ void Disp_Dry_Icon(void)
            }
 
     }
-    else{
-
-        if(gctl_t.ptc_warning ==1 && gctl_t.ptc_warning ==0){
-
-        
-           LCD_Fault_Numbers_Code();
-            if(ptc_state()== 1){
-        
-                //number '5' and 'ptc' icon
-                //TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
-                TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0] + DRY_Symbol ) & 0xffff); // dry of icon display
-           }
-           else{
-               //number '5' and 'ptc' icon
-               // TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
-                TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0]  ) & 0xffff); //numbers : "dry of icon"
-           }
-
-
-        }
-        
-       }
-
+   
 }
 
 /*************************************************************************************
@@ -1064,7 +1114,7 @@ void Disp_Dry_Icon(void)
 void Disp_Kill_Icon(void)
 {
 
-    
+   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
     if(plasma_state() ==1){
     
      //number '6' 
@@ -1075,6 +1125,8 @@ void Disp_Kill_Icon(void)
         //number '6' 
       TM1723_Write_Display_Data(0xCA,(lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
     
+    }
+
     }
 
 
@@ -1104,21 +1156,7 @@ void Disp_Ultrsonic_Icon(void)
         }
 
     }
-    else{
-
-        if(ultrasonic_state()==1 &&  gctl_t.ptc_warning == 1){ //disp "02"
-        //number '8'
-    	  TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
-        }
-        else{
-
-           TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
-
-        }
-        
-        
-        
-        }
+    
 }
 
 

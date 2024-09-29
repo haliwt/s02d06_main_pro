@@ -150,8 +150,8 @@ void power_on_run_handler(void)
 
        
          
-
-        if(g_tDisp.ai_mode_flag ==1){
+        if(gctl_t.ptc_warning == 0 && gctl_t.fan_warning ==0){
+        if(g_tDisp.ai_mode_flag ==1 ){
             g_tDisp.ai_mode_flag=3;
 
              LCD_Disp_Works_Timing_Init();
@@ -178,6 +178,8 @@ void power_on_run_handler(void)
 
          }
         }
+
+       }
         
 
 	   
@@ -780,30 +782,19 @@ static void Detected_Fan_Error(void)
 
                 if( gctl_t.interval_stop_run_flag  ==0){
 				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
-                }
+        }
 				
-	               
-
-		 }
-
-
+	}
 }
 
 static void Detected_Ptc_Error(void)
 {
-
-   if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
+    if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
 			gpro_t.gTimer_ptc_detected =0;	
 			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
-
-              
-					
-       }
-
-
+    }
 
 }
-
 /***************************************************************************
     *
     *Function Name:void link_wifi_net_handler(uint8_t link)

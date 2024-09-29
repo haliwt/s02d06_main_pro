@@ -83,7 +83,7 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 	    Ptc_Off(); //turn off
 
         gctl_t.ptc_warning = 1;
-        gkey_t.key_mode = disp_error_number;
+        gkey_t.key_mode = disp_ptc_error_number; //disp_error_number;
         
         Buzzer_Ptc_Error_Sound();
 
@@ -97,6 +97,8 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 		 HAL_Delay(100);//osDelay(300);//HAL_Delay(350);  
 
         }
+
+	     SendData_Set_Command(0x08,0x01); //ptc error codes
    	      
    }
 }
@@ -150,7 +152,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 		if(detect_error_times >0){
 			detect_error_times=0;
 		  gctl_t.fan_warning = 1;
-          gkey_t.key_mode = disp_error_number;
+          gkey_t.key_mode = disp_fan_error_number; //disp_error_number;
 		  Buzzer_Fan_Error_Sound();
 
            wifi_t.set_wind_speed_value = 2;
@@ -164,9 +166,11 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 	       HAL_Delay(200);//osDelay(350);//HAL_Delay(350);
 
 
-          LCD_Fault_Numbers_Code();
+         // LCD_Fault_Numbers_Code();
 
             }
+
+			SendData_Set_Command(0x09,0x01); //fan error codes
 
           }
 		detect_error_times++;

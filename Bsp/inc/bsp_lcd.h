@@ -170,6 +170,11 @@ void donot_disp_ai_symbol(void);
 
 void lcd_donot_disp_number_34_temperature(void);
 
+void fan_error_code_number(void);
+
+void ptc_error_code_number(void);
+
+
 #endif 
 
 

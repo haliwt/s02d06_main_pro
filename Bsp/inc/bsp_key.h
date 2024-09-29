@@ -43,6 +43,8 @@ typedef enum mode_key_t{
    counter_up,
    counter_down,
    key_sound,
+   disp_fan_error_number,
+   disp_ptc_error_number,
    disp_error_number
    
 }mode_state;
