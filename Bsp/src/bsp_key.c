@@ -160,8 +160,8 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
             
-            LCD_Disp_Timer_Timing_Init();
-             disp_ai_iocn();
+          //  LCD_Disp_Timer_Timing_Init();
+           //  disp_ai_iocn();
              buzzer_sound();
             // SendData_Set_Command(0x27,0x02); //timer timing.
             // HAL_Delay(10);
@@ -175,10 +175,10 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_mode  = disp_works_timing;
             gkey_t.key_add_dec_mode = set_temp_value_item;
-            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-           
-            LCD_Disp_Works_Timing_Init();
-             disp_ai_iocn();
+//            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+//           
+//            LCD_Disp_Works_Timing_Init();
+//             disp_ai_iocn();
              buzzer_sound();
 //             SendData_Set_Command(0x27,0x01); //works time .
 //             HAL_Delay(10);
@@ -205,6 +205,11 @@ void  key_mode_be_pressed_send_data_wifi(void)
 
         SendData_Set_Command(0x27,0x01); 
         osDelay(5);//HAL_Delay(10);
+
+             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+           
+            LCD_Disp_Works_Timing_Init();
+             disp_ai_iocn();
    
        
         if(gpro_t.tencent_link_success==1){
@@ -218,6 +223,10 @@ void  key_mode_be_pressed_send_data_wifi(void)
 
           SendData_Set_Command(0x27,0x02); //timer timing.
           osDelay(5);//HAL_Delay(10);
+
+           gctl_t.ai_flag = 0; // NOT AI DISPLAY AI ICON    
+           LCD_Disp_Timer_Timing_Init();
+           disp_ai_iocn();
    
          if(gpro_t.tencent_link_success==1){
 
