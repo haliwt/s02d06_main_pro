@@ -9,7 +9,7 @@
 
 key_fun_t gkey_t;
 
-static void  key_mode_be_pressed_send_data_wifi(void);
+
 
 
 /*********************************************************************************
@@ -32,6 +32,7 @@ void power_long_short_key_fun(void)
              gkey_t.power_key_long_counter = 200;
              
              gkey_t.power_on_flag++;
+             gkey_t.power_key_be_pressed_flag++;
           
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
@@ -53,7 +54,7 @@ void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter<15){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_be_pressed_flag == 1 && gkey_t.power_key_long_counter<15){ //short key of function
 
         gkey_t.power_key_long_counter=0;
 
@@ -61,6 +62,7 @@ void power_long_short_key_fun(void)
            if(gkey_t.key_power==power_off){
               
               gkey_t.power_on_flag++;
+              gkey_t.power_key_be_pressed_flag++;
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
                gctl_t.ai_flag = 1;
@@ -75,6 +77,7 @@ void power_long_short_key_fun(void)
            else{
               
               gkey_t.power_on_flag++;
+              gkey_t.power_key_be_pressed_flag++;
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
               
@@ -160,8 +163,8 @@ void mode_long_short_key_fun(void)
             LCD_Disp_Timer_Timing_Init();
              disp_ai_iocn();
              buzzer_sound();
-             SendData_Set_Command(0x27,0x02); //timer timing.
-             HAL_Delay(10);
+            // SendData_Set_Command(0x27,0x02); //timer timing.
+            // HAL_Delay(10);
              
             gkey_t.key_mode_be_pressed = 2;
             gpro_t.gTimer_disp_short_time=0;
@@ -177,8 +180,8 @@ void mode_long_short_key_fun(void)
             LCD_Disp_Works_Timing_Init();
              disp_ai_iocn();
              buzzer_sound();
-             SendData_Set_Command(0x27,0x01); //works time .
-             HAL_Delay(10);
+//             SendData_Set_Command(0x27,0x01); //works time .
+//             HAL_Delay(10);
             
            
             gkey_t.key_mode_be_pressed = 1;
@@ -189,26 +192,38 @@ void mode_long_short_key_fun(void)
 
      }
 
-    key_mode_be_pressed_send_data_wifi();
+   // key_mode_be_pressed_send_data_wifi();
 
  }
 
-
-static void  key_mode_be_pressed_send_data_wifi(void)
+void  key_mode_be_pressed_send_data_wifi(void)
 {
    
-   if(gkey_t.key_mode_be_pressed == 1 && gpro_t.tencent_link_success==1){
+   if(gkey_t.key_mode_be_pressed == 1){   // && gpro_t.tencent_link_success==1){
 
          gkey_t.key_mode_be_pressed= 0xff;
-    
-        MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
-        osDelay(20);
+
+        SendData_Set_Command(0x27,0x01); 
+        osDelay(5);//HAL_Delay(10);
+   
+       
+        if(gpro_t.tencent_link_success==1){
+            MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
+            osDelay(20);
+
+        }
      }
-     else if(gkey_t.key_mode_be_pressed == 2  && gpro_t.tencent_link_success==1){
+     else if(gkey_t.key_mode_be_pressed == 2 ){  // && gpro_t.tencent_link_success==1){
             gkey_t.key_mode_be_pressed= 0xff;
 
-          MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+          SendData_Set_Command(0x27,0x02); //timer timing.
+          osDelay(5);//HAL_Delay(10);
+   
+         if(gpro_t.tencent_link_success==1){
+
+           MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
            osDelay(20);
+          }
        }
 
 

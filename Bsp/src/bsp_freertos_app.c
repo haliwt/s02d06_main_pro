@@ -366,7 +366,7 @@ static void vTaskStart(void *pvParameters)
             smart_phone_sound++;
            smartphone_power_on_handler();
           }
-          else if(gkey_t.power_on_flag ==1){
+          else if(gkey_t.power_on_flag ==1 && gkey_t.power_key_be_pressed_flag==1){
             power_long_short_key_fun();
 
           }
@@ -431,6 +431,8 @@ static void vTaskStart(void *pvParameters)
           power_on_run_handler();
           record_time_or_time_handler();
           key_add_dec_set_temp_value_fun();
+
+          key_mode_be_pressed_send_data_wifi();
           
           Display_WorksTimingr_Handler(gkey_t.key_mode);
           
@@ -502,7 +504,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
        // DISABLE_INT(); //WT.EDIT 2024.08.15 modify.
         if(KEY_POWER_VALUE()==KEY_DOWN){
 
-     
+         gkey_t.power_key_be_pressed_flag = 1;
       
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */

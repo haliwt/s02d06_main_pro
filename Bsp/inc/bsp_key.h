@@ -56,6 +56,7 @@ typedef enum mode_key_t{
    uint8_t  key_sound_flag;
    uint8_t  key_mode_be_pressed;
    uint8_t  power_on_flag;
+   uint8_t  power_key_be_pressed_flag;
 
  
    uint8_t  key_add_dec_mode;
@@ -109,6 +110,7 @@ void smartphone_power_on_handler(void);
 void set_temp_value_compare_dht11_temp_value(void);
 
 
+void  key_mode_be_pressed_send_data_wifi(void);
 
 
 
