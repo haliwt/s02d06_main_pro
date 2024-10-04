@@ -128,12 +128,13 @@ void smartphone_power_on_handler(void)
 *********************************************************************************/
 void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100 && gkey_t.key_mode_long_counter >0){
+    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100){
 
 
         gkey_t.key_mode_long_counter++;
         if(gkey_t.key_mode_long_counter >  15  && KEY_MODE_VALUE() == 1){
             gkey_t.key_mode_long_counter = 150;
+            gkey_t.key_mode_flag++;
 
             gkey_t.key_mode = mode_set_timer;
            gkey_t.key_add_dec_mode = mode_set_timer;
@@ -147,10 +148,10 @@ void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<15){ //short key of function
+    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter<15){ //short key of function
 
         gkey_t.key_mode_long_counter=0;
-
+        gkey_t.key_mode_flag++;
      
          if(gkey_t.key_mode  == disp_works_timing){
              gkey_t.key_mode  = disp_timer_timing;
@@ -207,6 +208,7 @@ void  key_mode_be_pressed_send_data_wifi(void)
         osDelay(5);//HAL_Delay(10);
 
              gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+
            
             LCD_Disp_Works_Timing_Init();
              disp_ai_iocn();

@@ -269,7 +269,7 @@ static void vTaskStart(void *pvParameters)
 
                   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
                     
-                     gkey_t.key_mode_long_counter=1;
+                     gkey_t.key_mode_flag=1;
                      gpro_t.gTimer_shut_off_backlight =0;
 
                     }
@@ -370,31 +370,11 @@ static void vTaskStart(void *pvParameters)
             power_long_short_key_fun();
 
           }
-
-
-          if(gpro_t.send_data_power_on_flag == power_on){
-
-               gpro_t.send_data_power_on_flag =0xff;
-               
-               SendData_Set_Command(0X01,0X01);
-               osDelay(30);
-
-
-          }
-          else if(gpro_t.send_data_power_on_flag == power_off){
-               power_off_flag_recoder ++ ;
-              gpro_t.send_data_power_on_flag =0xff;
-          
-               SendData_Set_Command(0X01,0X00);
-               osDelay(30);
-          }
-          else if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200 ){
+          else if(gkey_t.key_mode_flag== 1){
       
                mode_long_short_key_fun();
-           }
-          
-          
-           if(add_flag==1 ||dec_flag ==1){
+          }
+          else if(add_flag==1 ||dec_flag ==1){
 
                 if(add_flag ==1){
                      add_flag ++;
@@ -421,7 +401,26 @@ static void vTaskStart(void *pvParameters)
                        dec_flag ++;
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
                  }
-        }   
+         }
+
+
+        if(gpro_t.send_data_power_on_flag == power_on){
+
+               gpro_t.send_data_power_on_flag =0xff;
+               
+               SendData_Set_Command(0X01,0X01);
+               osDelay(30);
+                
+
+          }
+          else if(gpro_t.send_data_power_on_flag == power_off){
+               power_off_flag_recoder ++ ;
+              gpro_t.send_data_power_on_flag =0xff;
+          
+               SendData_Set_Command(0X01,0X00);
+               osDelay(30);
+          }
+       
 
        if(gkey_t.key_power==power_on){
             
@@ -440,6 +439,12 @@ static void vTaskStart(void *pvParameters)
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
           Disip_Wifi_Icon_State();
+          if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
+
+             gkey_t.key_mode_long_counter =0;
+             gkey_t.key_mode_flag=0;
+
+          }
 
         }
         else{

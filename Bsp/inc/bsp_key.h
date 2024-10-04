@@ -57,6 +57,7 @@ typedef enum mode_key_t{
    uint8_t  key_mode_be_pressed;
    uint8_t  power_on_flag;
    uint8_t  power_key_be_pressed_flag;
+   uint8_t  key_mode_flag;
 
  
    uint8_t  key_add_dec_mode;
