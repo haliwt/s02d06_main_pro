@@ -127,8 +127,6 @@ void receive_data_fromm_display(uint8_t *pdata)
          
          buzzer_sound();
 
-        
-
         if(pdata[3] == 0x01){
            
           if( gctl_t.interval_stop_run_flag ==0){
@@ -243,6 +241,27 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
 
+
+     break;
+
+
+     case 0x0A: //the second display board link state. dc power on the first link state
+
+        wake_up_backlight_on();
+        if(pdata[3] == 0x01){  //
+          if(gkey_t.key_power==power_on){
+            g_tDisp.disp_second_link_state_flag =1;
+
+          }
+          else{
+              g_tDisp.disp_second_link_state_flag =0;
+
+
+          }
+           
+
+        }
+       
 
      break;
 

@@ -445,7 +445,8 @@ static void vTaskStart(void *pvParameters)
              gkey_t.key_mode_flag=0;
 
           }
-
+          
+         link_second_disp_board_handler();
         }
         else{
             

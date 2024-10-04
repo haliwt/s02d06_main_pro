@@ -38,8 +38,6 @@ void  wifi_get_beijing_time_handler(void)
 
      case 0: //WT.EDIT .2024.08.10
 
-     
-
       if(gpro_t.gTimer_get_data_from_tencent_data > 10 && gpro_t.tencent_link_success==1){
        
              gpro_t.gTimer_get_data_from_tencent_data =0;
