@@ -326,15 +326,14 @@ void receive_data_fromm_display(uint8_t *pdata)
       wake_up_backlight_on();
 
       if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
-        //  buzzer_sound();
+        
         g_tDisp.ai_mode_flag =1;
+        gkey_t.key_mode = disp_works_timing;
       //   second_disp_ai_time_fun();
-         
-
+      }
+       else{
       
-       }
-       else if(pdata[3] == 0x02){
-       /// buzzer_sound();
+        gkey_t.key_mode = disp_timer_timing;
         g_tDisp.ai_mode_flag =2 ;
        // second_disp_not_ai_timer_fun();
        

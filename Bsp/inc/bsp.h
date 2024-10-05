@@ -93,6 +93,8 @@ typedef struct {
    uint8_t linking_tencent_cloud_doing ;
    uint8_t disp_link_wifi_comd_flag;
 
+   uint8_t wind_speed_init_flag ;
+
 
   
  

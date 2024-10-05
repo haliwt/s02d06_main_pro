@@ -919,6 +919,7 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
     case 2: //lowd 
 
+
         if(glcd_t.gTimer_fan_blink < 25){ //open 
 
                if(alternate_flag == 0){

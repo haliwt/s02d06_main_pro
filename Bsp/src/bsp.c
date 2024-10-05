@@ -245,17 +245,18 @@ void power_on_run_handler(void)
 
 
 	case 5: //check works times 
-			  if(gpro_t.gTimer_run_total > 119){//119 //120 minutes
+			  if(gpro_t.gTimer_run_total > 4){//119 //120 minutes
 			       gpro_t.gTimer_run_total =0;
 				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
 				   gpro_t.gTimer_run_one_mintue =0;
 				   fan_continue_flag=0;
                    gctl_t.step_process=7;
 			       gctl_t.interval_stop_run_flag  =1 ;
+                   gpro_t.wind_speed_init_flag = 1;
 		         
 			    }
                 else if(gctl_t.interval_stop_run_flag  ==1){
-                 gctl_t.step_process=7;
+                    gctl_t.step_process=7;
                 
                 }
 			    else{
@@ -342,7 +343,7 @@ void disp_works_or_timer_timing_fun(void)
 **********************************************************************************************************/
 static uint8_t Works_Time_Out(void)
 {
-	if(gpro_t.gTimer_run_time_out < 11){
+	if(gpro_t.gTimer_run_time_out < 4){
 		
 		interval_two_hours_stop_action();//Mainboard_Fun_Stop();
 		 
@@ -554,6 +555,13 @@ static void Process_Dynamical_Action(void)
     
     
        }
+
+    if(gpro_t.wind_speed_init_flag ==1){
+        gpro_t.wind_speed_init_flag++;
+           Fan_Run();
+           osDelay(1000);
+
+   }
 
 
     if(g_tDisp.second_disp_power_on ==2){

@@ -457,7 +457,7 @@ void set_temp_value_compare_dht11_temp_value(void)
 
     case 1:
 
-        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value && gctl_t.interval_stop_run_flag  ==0){
 
             if(gctl_t.manual_turn_off_ptc_flag ==0 && gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
                 gctl_t.ptc_flag = 1;
@@ -525,7 +525,7 @@ void set_temp_value_compare_dht11_temp_value(void)
 
 
     }
-    else if(gctl_t.dht11_temp_value < 38 && first_turn_off_flag==1){
+    else if(gctl_t.dht11_temp_value < 38 && first_turn_off_flag==1 && gctl_t.interval_stop_run_flag ==0  ){
 
         if(gctl_t.manual_turn_off_ptc_flag ==0 &&  gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
          gctl_t.ptc_flag = 1;
@@ -547,7 +547,7 @@ void set_temp_value_compare_dht11_temp_value(void)
 
 
     }
-    else if(gctl_t.dht11_temp_value < 40 && first_turn_off_flag==0){
+    else if(gctl_t.dht11_temp_value < 40 && first_turn_off_flag==0  && gctl_t.interval_stop_run_flag ==0){
 
           if(gctl_t.manual_turn_off_ptc_flag ==0 &&  gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
              gctl_t.ptc_flag = 1;
