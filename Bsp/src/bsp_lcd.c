@@ -851,7 +851,10 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
    switch(wind_speed){
 
 
-    case 0: //max wind speed.
+   case 0x64:
+
+
+   case 0: //max wind speed.
     
         if(glcd_t.gTimer_fan_blink < 15){ //open 
 
@@ -882,6 +885,8 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
         }
 
     break;
+
+    
 
     case 1: //middle 
 

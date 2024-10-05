@@ -391,6 +391,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
             if(gpro_t.gTimer_disp_short_time > 19){
                 gpro_t.gTimer_disp_short_time=0;
                 gkey_t.key_mode = disp_works_timing;
+                gctl_t.ai_flag =1;
                disp_speical_works_timing_value();
 
 

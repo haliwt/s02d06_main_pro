@@ -2,6 +2,9 @@
 
 second_disp_ref  g_tDisp;
 
+uint8_t step_disp;
+
+
 static void second_disp_ref_data(void);
 
 /**********************************************************************
@@ -115,26 +118,43 @@ void second_disp_not_ai_timer_fun(void)
 void link_second_disp_board_handler(void)
 {
 
+ 
+
     if( g_tDisp.second_disp_power_on ==1){
 
-        g_tDisp.second_disp_power_on ++ ;
+        //g_tDisp.second_disp_power_on ++ ;
 
-     
+      switch(step_disp){
+
+       case 0:
         if(gpro_t.tencent_link_success==1){
               
              SendWifiData_To_Data(0x1F,0x01); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
-             
+             osDelay(10);
          }
          else{
 
               SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
+             osDelay(10);
 
 
          }
-         SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
-    
-       
+         step_disp = 1;
+         break;
 
+         case 1:
+         SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
+         osDelay(20);
+
+     
+         g_tDisp.second_disp_power_on ++ ;
+         step_disp = 0;
+
+         break;
+
+
+         
+        }
 
     }
 

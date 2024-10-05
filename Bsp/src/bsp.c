@@ -555,6 +555,27 @@ static void Process_Dynamical_Action(void)
     
        }
 
+
+    if(g_tDisp.second_disp_power_on ==2){
+        
+        g_tDisp.second_disp_power_on++;
+
+    if(gpro_t.tencent_link_success==1){
+              
+             SendWifiData_To_Data(0x1F,0x01); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
+             osDelay(10);
+         }
+         else{
+
+              SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
+             osDelay(10);
+
+
+         }
+
+    }
+
+
 }
 
 
