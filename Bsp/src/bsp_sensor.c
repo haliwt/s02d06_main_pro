@@ -1,7 +1,6 @@
 #include "bsp_sensor.h"
 #include "bsp.h"
 
-#if 0
 
 /**
  * @brief       复位DHT11
@@ -158,9 +157,9 @@ uint8_t dht11_init(void)
     HAL_GPIO_Init(DHT11_DQ_GPIO_PORT, &gpio_init_struct);   /* 初始化DHT11_DQ引脚 */
     /* DHT11_DQ引脚模式设置,开漏输出,上拉, 这样就不用再设置IO方向了, 开漏输出的时候(=1), 也可以读取外部信号的高低电平 */
 
-    dht11_reset();
+   // dht11_reset();
     
-    return dht11_check();
+   /// return dht11_check();
 }
 
 
@@ -171,7 +170,7 @@ void Update_DHT11_Value(void)
    dht11_read_data(&gctl_t.dht11_temp_value,&gctl_t.dht11_humidity_value);
 	
 
-  // sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
+   sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
 
 }
 
@@ -190,7 +189,7 @@ void Update_Dht11_Totencent_Value(void)
 }
 
 
-#endif 
+
 
 
 

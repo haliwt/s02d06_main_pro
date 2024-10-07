@@ -245,7 +245,7 @@ void power_on_run_handler(void)
 
 
 	case 5: //check works times 
-			  if(gpro_t.gTimer_run_total > 4){//119 //120 minutes
+			  if(gpro_t.gTimer_run_total > 9){//119 //120 minutes //be testing is 9
 			       gpro_t.gTimer_run_total =0;
 				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
 				   gpro_t.gTimer_run_one_mintue =0;
@@ -253,6 +253,8 @@ void power_on_run_handler(void)
                    gctl_t.step_process=7;
 			       gctl_t.interval_stop_run_flag  =1 ;
                    gpro_t.wind_speed_init_flag = 1;
+                   gpro_t.fan_lower_speed++;
+                   gpro_t.fan_middle_speed ++ ;
 		         
 			    }
                 else if(gctl_t.interval_stop_run_flag  ==1){
@@ -302,18 +304,14 @@ void power_on_run_handler(void)
 **********************************************************************************************************/
 void mainboard_active_handler(void)
 {
-
-
-    if(gpro_t.gTimer_run_main_fun > 0){
+   if(gpro_t.gTimer_run_main_fun > 0){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
-        Process_Dynamical_Action();
+            Process_Dynamical_Action();
         }
         else{
-        interval_two_hours_stop_action();
-
-
-        }
+            interval_two_hours_stop_action();
+         }
     }
     
 
@@ -343,11 +341,12 @@ void disp_works_or_timer_timing_fun(void)
 **********************************************************************************************************/
 static uint8_t Works_Time_Out(void)
 {
-	if(gpro_t.gTimer_run_time_out < 4){
+	if(gpro_t.gTimer_run_time_out < 4){  //test for 4 minutes.
 		
 		interval_two_hours_stop_action();//Mainboard_Fun_Stop();
 		 
     }
+    
 
 	if(gpro_t.gTimer_run_one_mintue < 60 && ( fan_continue_flag ==0)){
 
@@ -362,13 +361,11 @@ static uint8_t Works_Time_Out(void)
          Fan_Stop();
 	 }
 
-	if(gpro_t.gTimer_run_time_out > 10){ //10 minutes
+	if(gpro_t.gTimer_run_time_out > 4){ //10 minutes,test for 4 minutes .
 		gpro_t.gTimer_run_time_out=0;
 		gpro_t.gTimer_run_total=0;
 
         gctl_t.interval_stop_run_flag= 0;
-
-		//Continuce_main_action_Fun();
 		
         interval_continuce_works_fun();
 		
@@ -550,18 +547,20 @@ static void Process_Dynamical_Action(void)
          break;
     
          case 2: //lower speed
-          Fan_Run_Lower();
+         
+          
+          if(gpro_t.wind_speed_init_flag ==1){
+               gpro_t.wind_speed_init_flag++;
+                  Fan_Run();
+                  osDelay(1000);
+          
+          }
+          else
+             Fan_Run_Lower();
          break;
     
     
        }
-
-    if(gpro_t.wind_speed_init_flag ==1){
-        gpro_t.wind_speed_init_flag++;
-           Fan_Run();
-           osDelay(1000);
-
-   }
 
 
     if(g_tDisp.second_disp_power_on ==2){
@@ -650,7 +649,14 @@ static void interval_continuce_works_fun(void)
             break;
        
             case 2: //lower speed
-             Fan_Run_Lower();
+             if(gpro_t.wind_speed_init_flag ==1){
+                   gpro_t.wind_speed_init_flag++;
+                   gpro_t.fan_lower_speed++;
+                     Fan_Run();
+                     osDelay(1000);
+             }
+             else
+                Fan_Run_Lower();
             break;
        
        

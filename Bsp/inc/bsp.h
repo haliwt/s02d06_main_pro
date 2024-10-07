@@ -35,7 +35,7 @@
 #include "bsp_lcd.h"
 #include "bsp_buzzer.h"
 #include "bsp_key.h"
-#include "bsp_sensor.h"
+
 #include "bsp_ultrasonic.h"
 #include "bsp_delay.h"
 #include "bsp_ctl.h"
@@ -44,7 +44,7 @@
 #include "bsp_ptc.h"
 #include "bsp_usart.h"
 #include "bsp_lcd_app.h"
-#include "bsp_dht11.h"
+#include "bsp_sensor.h"//#include "bsp_dht11.h"
 #include "bsp_freertos_app.h"
 
 
@@ -94,6 +94,10 @@ typedef struct {
    uint8_t disp_link_wifi_comd_flag;
 
    uint8_t wind_speed_init_flag ;
+
+   uint8_t fan_lower_speed;
+   uint8_t fan_middle_speed;
+
 
 
   

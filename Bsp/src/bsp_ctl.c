@@ -38,8 +38,8 @@ void bsp_ctl_init(void)
 {
 
    
-  // dht11_init();
-   DHT11_Init ();
+   
+   //DHT11_Init ();
    gctl_t.fan_warning =0;
    gctl_t.ptc_warning = 0;
    gctl_t.ptc_flag=1;

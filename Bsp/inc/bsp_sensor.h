@@ -2,7 +2,7 @@
 #define __BSP_SENSOR_H_
 #include "main.h"
 
-#if 0
+
 
 #define DHT11_DQ_GPIO_PORT                  GPIOB
 #define DHT11_DQ_GPIO_PIN                   GPIO_PIN_13
@@ -31,12 +31,14 @@ uint8_t dht11_read_data(uint8_t *temp,uint8_t *humi);   /* 读取温湿度 */
 
 
 
+
+
 void Update_DHT11_Value(void);
 
 
 void Update_Dht11_Totencent_Value(void);
 
-#endif 
+
 
 #endif 
 

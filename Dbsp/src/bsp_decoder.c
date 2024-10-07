@@ -335,6 +335,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       
         gkey_t.key_mode = disp_timer_timing;
         g_tDisp.ai_mode_flag =2 ;
+        gpro_t.gTimer_disp_short_time =0;
        // second_disp_not_ai_timer_fun();
        
             

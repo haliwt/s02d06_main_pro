@@ -1,7 +1,7 @@
 #include "bsp_fan.h"
 #include "bsp.h"
 
-uint8_t fan_full_speed,fan_lower_speed,fan_middle_speed,fan_stop_flag;
+uint8_t fan_full_speed,fan_stop_flag;
 void FAN_GPIO_Iint(void)
 {
 
@@ -25,15 +25,12 @@ void Fan_Run(void)
    static uint8_t fan_full_init =0xff;
    if(fan_full_init !=fan_full_speed){
      fan_full_init =fan_full_speed;
-      fan_lower_speed++;
-      fan_middle_speed++;
+      gpro_t.fan_lower_speed++;
+      gpro_t.fan_middle_speed++;
       fan_stop_flag++;
-    // #if BALL_FAN
+
       MX_TIM16_Init(10); //100KHZ,duty =50%
-//     #else 
-//      MX_TIM16_Init(50); //20KHZ,duty =50%
-//
-//     #endif 
+
 
     }
 
@@ -59,17 +56,15 @@ void Fan_Run_Middle(void)
 
   static uint8_t run_mid_init= 0xff;
 
-   if(run_mid_init != fan_middle_speed){
-     run_mid_init = fan_middle_speed;
+   if(run_mid_init != gpro_t.fan_middle_speed){
+     run_mid_init = gpro_t.fan_middle_speed;
      fan_full_speed++;
-     fan_lower_speed++;
+     gpro_t.fan_lower_speed++;
      fan_stop_flag++;
-    // #if BALL_FAN
+ 
         MX_TIM16_Init(9); //100KHZ,duty =50%
 
-//     #else 
-//       MX_TIM16_Init(40); //50KHZ,duty =50%
-//     #endif 
+
 
    }
    
@@ -84,17 +79,14 @@ void Fan_Run_Lower(void)
 {
    uint8_t run_low_init=0xff;
 
-   if(run_low_init != fan_lower_speed){
-     run_low_init = fan_lower_speed;
+   if(run_low_init != gpro_t.fan_lower_speed){
+     run_low_init = gpro_t.fan_lower_speed;
      fan_full_speed++;
-     fan_middle_speed++;
+     gpro_t.fan_middle_speed++;
      fan_stop_flag++;
-     //#if BALL_FAN
       MX_TIM16_Init(8); //100KHZ,duty =50%
 
-//     #else
-//      MX_TIM16_Init(30); //10KHZ,
-//     #endif 
+
 
     }
    
@@ -114,8 +106,8 @@ void Fan_Stop(void)
        fan_stop_init = fan_stop_flag;
 
         fan_full_speed++;
-        fan_middle_speed++;
-        fan_lower_speed++;
+        gpro_t.fan_middle_speed++;
+        gpro_t.fan_lower_speed++;
 
 
    }
