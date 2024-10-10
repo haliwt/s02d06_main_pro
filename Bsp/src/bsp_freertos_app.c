@@ -109,7 +109,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为200ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为200ms */
 	uint32_t ulValue;
    
    
@@ -223,7 +223,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为30ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为30ms */
  
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
@@ -250,6 +250,7 @@ static void vTaskStart(void *pvParameters)
                 }
                 else{
                     gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
+                    
                     gpro_t.gTimer_shut_off_backlight =0;
                 }
             
@@ -366,7 +367,7 @@ static void vTaskStart(void *pvParameters)
             smart_phone_sound++;
            smartphone_power_on_handler();
           }
-          else if(gkey_t.power_on_flag ==1 && gkey_t.power_key_be_pressed_flag==1){
+          else if(gkey_t.power_on_flag ==1){
             power_long_short_key_fun();
 
           }
@@ -508,7 +509,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
        // DISABLE_INT(); //WT.EDIT 2024.08.15 modify.
         if(KEY_POWER_VALUE()==KEY_DOWN){
 
-         gkey_t.power_key_be_pressed_flag = 1;
+       
       
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
@@ -528,7 +529,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
      // DISABLE_INT();
       if(KEY_MODE_VALUE() == KEY_DOWN){
         
-        gkey_t.power_key_be_pressed_flag = 0;
+        gkey_t.power_on_flag =0;
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */

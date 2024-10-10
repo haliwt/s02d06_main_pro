@@ -29,10 +29,10 @@ void power_long_short_key_fun(void)
 
         gkey_t.power_key_long_counter++;
         if( gkey_t.power_key_long_counter > 15   && KEY_POWER_VALUE() == 1){
-             gkey_t.power_key_long_counter = 200;
+             gkey_t.power_key_long_counter = 0;
              
              gkey_t.power_on_flag++;
-             gkey_t.power_key_be_pressed_flag++;
+         
           
              	//WIFI CONNCETOR process
 			 gkey_t.wifi_led_fast_blink_flag=1;
@@ -54,15 +54,15 @@ void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_be_pressed_flag == 1 && gkey_t.power_key_long_counter<15){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter<15){ //short key of function
 
         gkey_t.power_key_long_counter=0;
 
       
            if(gkey_t.key_power==power_off){
               
-              gkey_t.power_on_flag++;
-              gkey_t.power_key_be_pressed_flag++;
+              gkey_t.power_on_flag++; 
+          
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
                gctl_t.ai_flag = 1;
@@ -77,7 +77,7 @@ void power_long_short_key_fun(void)
            else{
               
               gkey_t.power_on_flag++;
-              gkey_t.power_key_be_pressed_flag++;
+            
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
               
