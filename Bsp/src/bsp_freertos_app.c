@@ -137,7 +137,7 @@ static void vTaskMsgPro(void *pvParameters)
 		xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间 */
+						          portMAX_DELAY);  /* 最大允许延迟时间 */
 		
 		if( xResult == pdPASS )
 		{
