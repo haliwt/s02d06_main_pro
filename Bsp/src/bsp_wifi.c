@@ -223,7 +223,7 @@ void  wifi_get_beijing_time_handler(void)
                    gpro_t.get_beijing_step = 0;
                    gpro_t.gTimer_get_data_from_tencent_data=0;
                    wifi_t.gTimer_get_beijing_time = 50;
-                   wifi_t.wifi_data[50] =0;
+              
                    
 
                 }

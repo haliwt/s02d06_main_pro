@@ -82,7 +82,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       
      break;
 
-     case 0x22: //compare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
+     case 0x22: //notification :ccompare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
       wake_up_backlight_on();
 
       if(pdata[3] == 0x01){
@@ -204,6 +204,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
       case 0x05: // link wifi command
+          buzzer_sound();
 
           wake_up_backlight_on();
          

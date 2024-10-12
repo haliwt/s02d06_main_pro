@@ -139,7 +139,7 @@ void Display_Works_Timing(void)
     
 
    
-    //Display_LCD_Works_Timing();
+  
 
    }
 
@@ -163,14 +163,18 @@ void Display_Works_Timing(void)
 
 		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
 		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
-        Display_LCD_Works_Timing();
+       // Display_LCD_Works_Timing();
+
+
+       display_works_times_handler();
 
 
 
 
    }
 
-   Display_LCD_Works_Timing();
+   //Display_LCD_Works_Timing();
+   
 
 }
 
@@ -192,7 +196,9 @@ static void disp_speical_works_timing_value(void)
 
    glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
    glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
-   Display_LCD_Works_Timing();
+   //Display_LCD_Works_Timing();
+
+   display_works_times_handler();
 
 
 
@@ -236,9 +242,10 @@ void LCD_Disp_Works_Timing_Init(void)
 		  glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
 
 	    
+           display_works_times_handler();
 
 	 
-    Display_LCD_Works_Timing();
+    //Display_LCD_Works_Timing();
 
 
 }
@@ -256,7 +263,7 @@ void LCD_Disp_Works_Timing_Init(void)
 void Display_Timer_Timing(void)
 {
 
-    // static uint8_t minutes_changed_flag = 0xff;
+    static uint8_t send_timer_times_flag;
      if(gpro_t.gTimer_timer_Counter > 59){
 	    gpro_t.gTimer_timer_Counter =0;
 		
@@ -301,15 +308,18 @@ void Display_Timer_Timing(void)
 		 glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
 		 glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
-         LCD_Disp_Timer_Timing();
+        // LCD_Disp_Timer_Timing();
+         display_works_times_handler();
+         send_timer_times_flag= 1;
 		    
      }
 
-//     if(minutes_changed_flag != gpro_t.set_timer_timing_minutes){
-//
-//
-//
-//     }
+     if(send_timer_times_flag==1){
+         send_timer_times_flag++;
+         
+        SendWifiData_To_SynTimerTime(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes,gpro_t.gTimer_timer_Counter);
+
+     }
      
  
 
@@ -347,7 +357,8 @@ void LCD_Disp_Timer_Timing_Init(void)
     glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
     glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
-    LCD_Disp_Timer_Timing();
+    //LCD_Disp_Timer_Timing();
+    display_works_times_handler();
 
 }
 /*********************************************************************************
@@ -386,7 +397,8 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
             gctl_t.ai_flag =0;
         
 
-             LCD_Disp_Timer_Timing();
+            // LCD_Disp_Timer_Timing();
+            display_works_times_handler();
 
             if(gpro_t.gTimer_disp_short_time > 19){
                 gpro_t.gTimer_disp_short_time=0;
@@ -502,7 +514,8 @@ void Set_Timer_Timing_Lcd_Blink(void)
 
       glcd_t.number8_low =   0x0A;
       glcd_t.number8_high =   0x0A;
-      LCD_Disp_Timer_Timing();
+      //LCD_Disp_Timer_Timing();
+      display_works_times_handler();
       osDelay(100);//HAL_Delay(100);
 
       glcd_t.number5_low =  gpro_t.set_timer_timing_hours  / 10 ;
@@ -520,11 +533,6 @@ void Set_Timer_Timing_Lcd_Blink(void)
       LCD_Disp_Timer_Timing();
       osDelay(100);//HAL_Delay(100);
     
-
-  
-
-    
-
 }
 
 

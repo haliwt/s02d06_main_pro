@@ -174,6 +174,9 @@ void fan_error_code_number(void);
 
 void ptc_error_code_number(void);
 
+void display_works_times_handler(void);
+
+
 
 #endif 
 

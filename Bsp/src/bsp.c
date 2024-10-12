@@ -312,6 +312,8 @@ void mainboard_active_handler(void)
         else{
             interval_two_hours_stop_action();
          }
+
+        display_works_times_handler();
     }
     
 

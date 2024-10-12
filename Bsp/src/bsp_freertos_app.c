@@ -312,31 +312,8 @@ static void vTaskStart(void *pvParameters)
     while(1)
     {
 
-#if 0
-         if( gpro_t.disp_rx_cmd_done_flag == 1)
-          {
-            gpro_t.disp_rx_cmd_done_flag = 0;
 
-
-            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
-
-           if(check_code == gl_tMsg.bcc_check_code ){
-           
-              receive_data_fromm_display(gl_tMsg.usData);
-              if(gpro_t.buzzer_sound_flag == 1){
-                  gpro_t.buzzer_sound_flag++ ;
-                  buzzer_sound();
-
-
-              }
-           }
-
-           gl_tMsg.usData[0]=0;
-            
-         }
-         #endif 
-            
-        //DC the first power on run prcess once times.      
+       //DC the first power on run prcess once times.      
         if(power_sound_flag==0){
           power_sound_flag++;
           
@@ -575,7 +552,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   
      static uint8_t state;
-     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+  //   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     if(huart->Instance==USART1)//if(huart==&huart1) // Motor Board receive data (filter)
 	{
