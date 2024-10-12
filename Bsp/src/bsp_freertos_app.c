@@ -110,7 +110,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为200ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
 	uint32_t ulValue;
    
    
@@ -169,9 +169,7 @@ static void vTaskMsgPro(void *pvParameters)
 			}
             else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
             {
-                        // xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							///PHONE_POWER_ON_9 ,            /* 设置目标任务事件标志位bit0  */
-							///eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+                    
 				if(gpro_t.shut_Off_backlight_flag == turn_off){
 
                      gpro_t.gTimer_shut_off_backlight =0;
@@ -190,12 +188,6 @@ static void vTaskMsgPro(void *pvParameters)
                
             }
             else if((ulValue & MODE_KEY_1) != 0){
-
-//               //switch timer timing and works timing 
-//
-//                xTaskNotify(xHandleTaskStart, /* 目标任务 */
-//							RUN_MODE_5 ,            /* 设置目标任务事件标志位bit0  */
-//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 
               if(gkey_t.key_power == power_on ){
 
@@ -225,11 +217,6 @@ static void vTaskMsgPro(void *pvParameters)
             }   
             else if((ulValue & DEC_KEY_2) != 0){
 
-               
-//                xTaskNotify(xHandleTaskStart, /* 目标任务 */
-//							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
-//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
                  if(gkey_t.key_power==power_on){
 
                    if(gpro_t.shut_Off_backlight_flag == turn_off){
@@ -254,10 +241,6 @@ static void vTaskMsgPro(void *pvParameters)
                
             }
             else if((ulValue & ADD_KEY_3) != 0){
-                  
-//                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
-//							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
-//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 
               if(gkey_t.key_power==power_on){
 
@@ -285,8 +268,7 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
-        #if 1
-          else if( gpro_t.disp_rx_cmd_done_flag==1 )
+         else if( gpro_t.disp_rx_cmd_done_flag==1 )
           {
             gpro_t.disp_rx_cmd_done_flag = 0;
 
@@ -307,7 +289,7 @@ static void vTaskMsgPro(void *pvParameters)
            gl_tMsg.usData[0]=0;
             
          }
-         #endif 
+      
        }
    }
 
@@ -465,7 +447,7 @@ static void vTaskStart(void *pvParameters)
         }
 
         // clear_rx_copy_data();
-        vTaskDelay(10);
+        vTaskDelay(20);
        }
 
     }
@@ -491,7 +473,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
                  "vTaskStart",   		/* 任务名    */
-                 128,            		/* 任务栈大小，单位word，也就是4字节 */
+                 256,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
