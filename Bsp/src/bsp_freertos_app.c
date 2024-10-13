@@ -323,7 +323,10 @@ static void vTaskStart(void *pvParameters)
         
          if(smart_phone_sound == 1){
             smart_phone_sound++;
-           smartphone_power_on_handler();
+           
+            smartphone_power_on_handler();
+            
+
           }
           else if(gkey_t.power_on_flag ==1){
             power_long_short_key_fun();
@@ -405,7 +408,7 @@ static void vTaskStart(void *pvParameters)
 
           }
           
-         link_second_disp_board_handler();
+         
         }
         else{
             
@@ -418,7 +421,7 @@ static void vTaskStart(void *pvParameters)
             wifi_auto_detected_link_state();
         }
 
-        // clear_rx_copy_data();
+         clear_rx_copy_data();
         vTaskDelay(20);
        }
 

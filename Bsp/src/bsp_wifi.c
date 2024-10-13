@@ -180,7 +180,7 @@ void  wifi_get_beijing_time_handler(void)
         		wifi_t.wifi_uart_rx_counter =0;
                
         		Get_Beijing_Time();
-                 osDelay(100);//HAL_Delay(20); //WT.EDIT .2024.08.10
+                osDelay(100);//HAL_Delay(20); //WT.EDIT .2024.08.10
                  beijing_step =2;
           
           break; 

@@ -262,7 +262,7 @@ void power_on_run_handler(void)
 **********************************************************************************************************/
 void mainboard_active_handler(void)
 {
-   if(gpro_t.gTimer_run_main_fun > 10){
+   if(gpro_t.gTimer_run_main_fun > 1){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
             Process_Dynamical_Action();
@@ -271,7 +271,7 @@ void mainboard_active_handler(void)
             interval_two_hours_stop_action();
          }
 
-        
+        link_second_disp_board_handler();
     }
 
     if(gpro_t.gTimer_disp_works_time > 24){
