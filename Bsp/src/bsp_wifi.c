@@ -191,7 +191,7 @@ void  wifi_get_beijing_time_handler(void)
             if(wifi_t.wifi_data[50]== 0x32){
 
                  
-           
+                
                 gpro_t.disp_works_hours_value  = (wifi_t.wifi_data[41]-0x30)*10 + wifi_t.wifi_data[42]-0x30;
                 if(gpro_t.disp_works_hours_value < 24 ){
                     
@@ -200,6 +200,7 @@ void  wifi_get_beijing_time_handler(void)
 
                     wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
                   
+                 
 
                     gpro_t.get_beijing_time_success =1;
 
@@ -217,7 +218,7 @@ void  wifi_get_beijing_time_handler(void)
                 
             }
             else if(wifi_t.wifi_data[50] == 0x31){  //"0x31" ASCII = '1'
-
+               
                wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
                if(gpro_t.tencent_link_success==1){
                    gpro_t.get_beijing_step = 0;
@@ -229,14 +230,14 @@ void  wifi_get_beijing_time_handler(void)
                 }
                 else{ 
 
-          
+                 wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
                    gpro_t.get_beijing_step = 0;
 
                 }
             }
             else{
-
-              gpro_t.get_beijing_step = 0;
+               wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
+               gpro_t.get_beijing_step = 0;
               
               
             }

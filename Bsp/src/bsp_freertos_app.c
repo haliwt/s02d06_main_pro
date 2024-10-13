@@ -169,7 +169,8 @@ static void vTaskMsgPro(void *pvParameters)
 			}
             else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
             {
-              
+                  gpro_t.gTimer_shut_off_backlight =0;
+                  wake_up_backlight_on();
                   buzzer_sound();
 
                

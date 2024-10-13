@@ -924,8 +924,7 @@ static void smartphone_app_timer_power_on_handler(void)
 		wifi_t.smartphone_app_power_on_flag=1;
         wifi_t.set_wind_speed_value=0;
 
-         gpro_t.gTimer_shut_off_backlight =0;
-         wake_up_backlight_on();
+      
        
 		
       #if 0
