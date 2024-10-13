@@ -521,6 +521,9 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 	  case PTC_ON_ITEM:
 	  if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
+
+         gpro_t.gTimer_shut_off_backlight =0;
+         wake_up_backlight_on();
 	    if(ptc_error_state() ==0){
 			 gctl_t.manual_turn_off_ptc_flag= 0;
 	         Ptc_On();
@@ -543,7 +546,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case PTC_OFF_ITEM:
 	  	if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 		
-		 
+		 gpro_t.gTimer_shut_off_backlight =0;
+         wake_up_backlight_on();
          MqttData_Publish_SetPtc(0);
 		 HAL_Delay(350);
 
@@ -568,7 +572,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 	  case ANION_OFF_ITEM: //"杀菌" //5
 	  	if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
-		
+		     gpro_t.gTimer_shut_off_backlight =0;
+             wake_up_backlight_on();
 		    Plasma_Off();
 	    
 			
@@ -591,7 +596,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 		
 	  case ANION_ON_ITEM: //plasma 
 	  	if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
-			
+			gpro_t.gTimer_shut_off_backlight =0;
+            wake_up_backlight_on();
 			Plasma_On();
 	  
             MqttData_Publish_SetPlasma(1);
@@ -610,7 +616,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 	  case SONIC_OFF_ITEM://ultransonic off
         if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
-          
+            gpro_t.gTimer_shut_off_backlight =0;
+            wake_up_backlight_on();
 			Ultrasonic_Pwm_Stop();
 	    
             MqttData_Publish_SetUltrasonic(0);
@@ -631,7 +638,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case SONIC_ON_ITEM://ultransonic on
 	    if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 			
-			
+			gpro_t.gTimer_shut_off_backlight =0;
+            wake_up_backlight_on();
 			Ultrasonic_Pwm_Output();
             MqttData_Publish_SetUltrasonic(1);
 			HAL_Delay(200);
@@ -653,6 +661,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case STATE_TIMER_MODEL_ITEM: //display timer timing of value  
 	  if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 	  	    buzzer_sound();
+            gpro_t.gTimer_shut_off_backlight =0;
+             wake_up_backlight_on();
 	       
 	        gkey_t.key_mode=disp_timer_timing;
             gctl_t.ai_flag = 0 ; //timer model
@@ -677,6 +687,9 @@ void JsonParse_Tencent_Cmd_Handler(void)
 		
 	  case STATE_AI_MODEL_ITEM: //display works timing 
 	  	 if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
+
+            gpro_t.gTimer_shut_off_backlight =0;
+             wake_up_backlight_on();
 		    buzzer_sound();
 		    gkey_t.key_mode=disp_works_timing;
             gctl_t.ai_flag = 1;//AI mode
@@ -706,6 +719,9 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 	  case TEMPERATURE_ITEM:
 	   if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
+
+             gpro_t.gTimer_shut_off_backlight =0;
+             wake_up_backlight_on();
 
              gctl_t.manual_turn_off_ptc_flag= 0; //only  manual turn on flag is zero can be changed .
 			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
@@ -753,6 +769,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case FAN_ITEM:
 	    if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 			buzzer_sound();
+            gpro_t.gTimer_shut_off_backlight =0;
+             wake_up_backlight_on();
 
 		     if(gctl_t.fan_warning ==0){
                  
@@ -809,6 +827,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case APP_TIMER_POWER_ON_REF :
 
 		//   gpro_t.gTimer_gpro_temp_delay =0;
+		  
+        
 		
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
           
@@ -898,28 +918,30 @@ static void smartphone_app_timer_power_on_handler(void)
    
 
 	if(app_step==1){
-	  
+	  	app_step=0;
 		buzzer_sound();
 
 		wifi_t.smartphone_app_power_on_flag=1;
         wifi_t.set_wind_speed_value=0;
-        smartphone_turn_on_handler();
-		
-       // SendData_Set_Command(0x21, 0x01); //smart phone power on command .
-       
-       
 
-        MqttData_Publis_App_PowerOn_Ref();
+         gpro_t.gTimer_shut_off_backlight =0;
+         wake_up_backlight_on();
+       
+		
+      #if 0
+       
+       MqttData_Publis_App_PowerOn_Ref();
   
 		
-		HAL_Delay(50);//
+		osDelay(200);//HAL_Delay(50);//
 
         SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
-		HAL_Delay(50);//
-		
+		osDelay(100);//HAL_Delay(50);//
+		#endif 
+		smartphone_turn_on_handler();
         
         
-		app_step=0;
+	
 
 	  memset(wifi_t.wifi_data_rx,'\0',40);
 

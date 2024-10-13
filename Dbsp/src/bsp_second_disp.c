@@ -53,7 +53,7 @@ void second_disp_power_off_fun(void)
 void second_disp_set_link_wifi_fun(void)
 {
 
-    gpro_t.disp_set_wifi_link_cmd =1;
+   
 
     //WIFI CONNCETOR process
     gkey_t.wifi_led_fast_blink_flag=1;
@@ -130,12 +130,12 @@ void link_second_disp_board_handler(void)
         if(gpro_t.tencent_link_success==1){
               
              SendWifiData_To_Data(0x1F,0x01); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
-             osDelay(10);
+             //osDelay(10);
          }
          else{
 
               SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
-             osDelay(10);
+             //osDelay(10);
 
 
          }
@@ -144,7 +144,7 @@ void link_second_disp_board_handler(void)
 
          case 1:
          SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
-         osDelay(20);
+         ///osDelay(20);
 
      
          g_tDisp.second_disp_power_on ++ ;

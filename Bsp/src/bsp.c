@@ -22,55 +22,13 @@ uint8_t power_off_flag;
 
 uint8_t  fan_continue_flag;
 
-
-
-/*
-*********************************************************************************************************
-*	函 数 名: bsp_Idle
-*	功能说明: 空闲时执行的函数。一般主程序在for和while循环程序体中需要插入 CPU_IDLE() 宏来调用本函数。
-*			 本函数缺省为空操作。用户可以添加喂狗、设置CPU进入休眠模式的功能。
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-void bsp_Idle(void)
-{
-//	/* --- 喂狗 8s input reset */
-//    if(gctl_t.gTimer_prcoess_iwdg > 5){
-//		gctl_t.gTimer_prcoess_iwdg =0;
-//    	iwdg_feed();
-//
-//    }
-
-	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
-
-	/* 例如 emWin 图形库，可以插入图形库需要的轮询函数 */
-	//GUI_Exec();
-
-    if(gkey_t.key_power == power_on){
-
-        
-
-         LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
-
-         Disip_Wifi_Icon_State();
-
- 
-
-    }
-	
-}
-
-
-/*
-*********************************************************************************************************
+/*******************************************************************************************************
 *	函 数 名: void mainboard_process_handler(void)
 *	功能说明: 空闲时执行的函数。一般主程序在for和while循环程序体中需要插入 CPU_IDLE() 宏来调用本函数。
 *			 本函数缺省为空操作。用户可以添加喂狗、设置CPU进入休眠模式的功能。
 *	形    参: 无
 *	返 回 值: 无
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
 //void mainboard_process_handler(void)
 void power_off_run_handler(void)
 {
@@ -201,7 +159,7 @@ void power_on_run_handler(void)
              wifi_t.link_net_tencent_data_flag ++;
 		  
 		      MqttData_Publish_Update_Data();//MqttData_Publish_SetOpen(0x01);
-		     osDelay(50);//HAL_Delay(20);
+		     osDelay(100);//HAL_Delay(20);
           
             
 
@@ -213,7 +171,7 @@ void power_on_run_handler(void)
 		    //MqttData_Publish_Update_Data();
 		    /// osDelay(20);//HAL_Delay(20);
 		    Subscriber_Data_FromCloud_Handler();
-            osDelay(50);
+            osDelay(100);
 		     
 
 		}
@@ -222,7 +180,7 @@ void power_on_run_handler(void)
          
             wifi_t.link_net_tencent_data_flag ++;
             Update_Dht11_Totencent_Value();
-            osDelay(20);
+            osDelay(100);
        }
        else if(gpro_t.tencent_link_success==1 && wifi_t.link_net_tencent_data_flag ==4 ){
                  wifi_t.link_net_tencent_data_flag++ ;
@@ -304,7 +262,7 @@ void power_on_run_handler(void)
 **********************************************************************************************************/
 void mainboard_active_handler(void)
 {
-   if(gpro_t.gTimer_run_main_fun > 0){
+   if(gpro_t.gTimer_run_main_fun > 10){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
             Process_Dynamical_Action();
@@ -313,25 +271,17 @@ void mainboard_active_handler(void)
             interval_two_hours_stop_action();
          }
 
+        
+    }
+
+    if(gpro_t.gTimer_disp_works_time > 24){
+       gpro_t.gTimer_disp_works_time=0;
+
         display_works_times_handler();
+
+
     }
     
-
-}
-
-/**********************************************************************************************************
-*
-*	函 数 名: void disp_works_or_timer_timing_fun(void)
-*	功能说明: 
-*			 
-*	形    参: 无
-*	返 回 值: 无
-*
-**********************************************************************************************************/
-void disp_works_or_timer_timing_fun(void)
-{
-
-  
 
 }
 /**********************************************************************************************************
@@ -383,35 +333,14 @@ static uint8_t Works_Time_Out(void)
 	}
 
 }
-
-
-/**********************************************************************************************************
-*	函 数 名: static void Mainboard_Action_Fun(void)
-*	功能说明: 主板工作：功能动作输出
-*			 
-*	形    参: 无
-*	返 回 值: 无
-**********************************************************************************************************/
-//static void Mainboard_Action_Fun(void)
-//{
-//    Ptc_On();
-//	Ultrasonic_Pwm_Output();
-//	Fan_Run();
-//	Plasma_On();
-//	
-//	
-//}
-
-/*
-*********************************************************************************************************
+/********************************************************************************************************
 *
 *	函 数 名: static void interval_two_hours_stop_action(void)
 *	功能说明: 主板工作：功能动作输出			 
 *	形    参: 无
 *	返 回 值: 无
 *
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
 static void interval_two_hours_stop_action(void)
 {
    Ptc_Off();
@@ -789,6 +718,17 @@ static void power_on_init_function(void)
         main_fun_init();
 
     }
+    else{
+        MqttData_Publis_App_PowerOn_Ref();
+  
+		
+		osDelay(200);//HAL_Delay(50);//
+
+        SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
+		osDelay(100);//HAL_Delay(50);//
+
+
+    }
    
 
 
@@ -869,7 +809,7 @@ static void Detected_Ptc_Error(void)
 void link_wifi_net_handler(uint8_t link)
 {
 
-   static uint8_t link_net_flag;
+   static uint8_t link_net_flag,send_second_disp_flag;
     if(link == 1){
 
          if(wifi_t.gTimer_linking_tencent_duration > 119){
@@ -884,20 +824,19 @@ void link_wifi_net_handler(uint8_t link)
            }
    
          link_net_flag = 1;
-         gpro_t.disp_set_wifi_link_cmd=0;
-         gpro_t.disp_link_wifi_comd_flag =0;
+         send_second_disp_flag=0;
+     
          gpro_t.link_net_step=0;
          
         }
-        else{
+        else{ //link wifi this is led fast blinking . 
           link_wifi_net_state_handler();
 
-           if(gpro_t.disp_link_wifi_comd_flag == 1 && gpro_t.disp_set_wifi_link_cmd==0){
+           if( gkey_t.wifi_led_fast_blink_flag== 1 && send_second_disp_flag==0){
+               send_second_disp_flag++;
 
-               gpro_t.disp_link_wifi_comd_flag ++;
-
-            SendData_Set_Command(0x05,0x01);// link wifi net .
-            osDelay(10);
+               SendData_Set_Command(0x05,0x01);// link wifi net .
+               osDelay(10);
 
          }
 
@@ -906,53 +845,94 @@ void link_wifi_net_handler(uint8_t link)
        
 
     }
-    else{
-      
-        if(link_net_flag == 1 && gpro_t.tencent_link_success==1){
+    else{ //don't link wifi net .
 
-              link_net_flag ++;
-             gpro_t.disp_link_wifi_comd_flag = 0;
-             gpro_t.disp_set_wifi_link_cmd=0;
-             gpro_t.link_net_step=0;
+       switch(link_net_flag ){
+
+
+       case 0:
+
+           Detected_Fan_Error();
+           Detected_Ptc_Error();
+
+       break;
+
+        case 1:
+      
+        if(gpro_t.tencent_link_success==1){
+
+              link_net_flag = 2 ; 
+              send_second_disp_flag=0;
+
+                gpro_t.link_net_step=0;
 			 
 				 MqttData_Publish_SetOpen(0x01);
-		         HAL_Delay(200);
+		         osDelay(200);//HAL_Delay(200);
                  SendData_Set_Command(0x1F,0x01);//has been link net OK
-                 
-        }
-        else if(link_net_flag == 2 && gpro_t.tencent_link_success==1){
-		        // osDelay(100);
-		         link_net_flag ++;
+                  
+           }
+           else{
+
+                link_net_flag = 4 ;
+                send_second_disp_flag=0;
+           }
+        break;
+
+        case 2:
+
+           if(gpro_t.tencent_link_success==1){
+                  link_net_flag = 3 ;     
+        
+                Subscriber_Data_FromCloud_Handler();
+                osDelay(200);//HAL_Delay(200);
+                
+               
+           }
+           else{
+
+                link_net_flag = 4 ;
+           }
+         break;
+
+
+        case 3:
+        if(gpro_t.tencent_link_success==1){
+               link_net_flag = 0;
 		         Publish_Data_ToTencent_Initial_Data();
-				 HAL_Delay(200);
-                  //osDelay(100);
+				// HAL_Delay(200);
+                  osDelay(200);
+               
          }
-         else if(link_net_flag == 3 && gpro_t.tencent_link_success==1){
-                link_net_flag ++;
+          else{
 
-				Subscriber_Data_FromCloud_Handler();
-				HAL_Delay(200);
-	             //osDelay(100);
+                link_net_flag = 4 ;
+           }
+
+        break;
 
 
-                 SendData_Set_Command(0x1F,0x01);//has been link net OK
+        case 4:
+        
+         if(gpro_t.tencent_link_success==0){
 
-         } 
-         else if(link_net_flag == 1 && gpro_t.tencent_link_success==0){
-
-             link_net_flag ++;
-             gpro_t.disp_link_wifi_comd_flag = 0;
-              gpro_t.disp_set_wifi_link_cmd=0;
+             link_net_flag = 0;
+             send_second_disp_flag=0;
+            
               gpro_t.link_net_step=0;
              gpro_t.get_beijing_step = 11;
               SendData_Set_Command(0x1F,0x0);
-            
+              
+
+           }
+
+        break;
+       
 
         }
-        else{
-           Detected_Fan_Error();
-           Detected_Ptc_Error();
-             }
+
+        
+        
+             
 
      }
  }

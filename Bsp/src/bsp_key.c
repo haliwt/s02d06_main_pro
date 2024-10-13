@@ -41,8 +41,7 @@ void power_long_short_key_fun(void)
 			gpro_t.tencent_link_success =0;
 			gpro_t.get_beijing_time_success =0;
 			
-		     gpro_t.disp_link_wifi_comd_flag=1;
-             gpro_t.disp_set_wifi_link_cmd = 0;
+		
             
 		
 			wifi_t.gTimer_linking_tencent_duration=0; //120s
@@ -113,9 +112,8 @@ void smartphone_power_on_handler(void)
       
         gctl_t.step_process=0;
         gpro_t.power_off_flag =1;
-            
-          
-    //   Buzzer_KeySound();
+       gpro_t.send_data_power_on_flag = power_on;   
+
 
 }
 /*********************************************************************************

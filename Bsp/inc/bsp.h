@@ -91,7 +91,7 @@ typedef struct {
 
    uint8_t tencent_link_success;
    uint8_t linking_tencent_cloud_doing ;
-   uint8_t disp_link_wifi_comd_flag;
+
 
    uint8_t wind_speed_init_flag ;
 
@@ -126,7 +126,6 @@ typedef struct {
 
    //the second display ref 
 
-   uint8_t disp_set_wifi_link_cmd;
 
    uint8_t smart_phone_set_tmep_value_flag;
 
@@ -151,9 +150,6 @@ typedef struct {
   
    uint8_t gTimer_disp_set_timer_blink ;
 
- 
-
- 
    uint8_t gTimer_ptc_detected;
    uint8_t gTimer_shut_off_backlight;
    uint8_t gTimer_get_data_from_tencent_data;
@@ -164,12 +160,11 @@ typedef struct {
    uint8_t gTImer_send_disp_board;
    uint8_t gTimer_power_off_run_times;
    uint8_t gTimer_update_data_to_tencent ;
+   uint8_t gTimer_disp_works_time;
   
 }BSP_process_t;
 
 extern BSP_process_t gpro_t;
-
-void bsp_Idle(void);
 
 
 extern uint8_t disp_inputBuf[1];

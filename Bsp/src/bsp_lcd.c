@@ -610,8 +610,10 @@ void display_works_times_handler(void)
                 TM1723_Write_Display_Data(0xCC,(0x00+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
 
           }
+          
    }
-
+    TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
+}
   /**************************************************************/
  #if 0
    if(plasma_state() ==1){
@@ -659,7 +661,7 @@ void display_works_times_handler(void)
 
 
 
-}
+
 
 
 /*****************************************************************************

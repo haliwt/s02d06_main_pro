@@ -44,7 +44,7 @@ void  wifi_get_beijing_time_handler(void)
             if(alternate_flag ==0){
                 alternate_flag++;
                 Subscriber_Data_FromCloud_Handler();
-                osDelay(10);
+                osDelay(200);
                 gpro_t.get_beijing_step = 1;
             }
             else if(alternate_flag > 0){
@@ -81,8 +81,8 @@ void  wifi_get_beijing_time_handler(void)
                   beijing_step=0;
 
              }
-                 gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
-                SendWifiData_To_Data(0x1F,0x01);
+             gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
+             SendWifiData_To_Data(0x1F,0x01);
                
 
          }
@@ -188,12 +188,12 @@ void  wifi_get_beijing_time_handler(void)
 
           case 2:
 
-            if(wifi_t.wifi_data[50] > 0x31 ){
+            if(wifi_t.wifi_data[50]== 0x32){
 
                  
            
                 gpro_t.disp_works_hours_value  = (wifi_t.wifi_data[41]-0x30)*10 + wifi_t.wifi_data[42]-0x30;
-                if(gpro_t.disp_works_hours_value < 25){
+                if(gpro_t.disp_works_hours_value < 24 ){
                     
                     gpro_t.disp_works_minutes_value  =(wifi_t.wifi_data[44]-0x30)*10 + wifi_t.wifi_data[45]-0x30;
                     gpro_t.gTimer_works_counter_sencods = (wifi_t.wifi_data[47]-0x30)*10 + wifi_t.wifi_data[48]-0x30;
@@ -469,7 +469,7 @@ void wifi_auto_detected_link_state(void)
         SendData_Set_Command(0x1F,0x01);//has been link net OK
         osDelay(20);
         Subscriber_Data_FromCloud_Handler();
-        osDelay(20);
+        HAL_Delay(200); //osDelay(200)
 
     }
    

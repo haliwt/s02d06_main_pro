@@ -53,7 +53,7 @@ uint8_t  rx_end_counter,uid;
 
 uint8_t power_off_flag_recoder ;
 
-uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
+uint8_t add_flag,dec_flag,smart_phone_sound;
 
 
 /*
@@ -169,22 +169,13 @@ static void vTaskMsgPro(void *pvParameters)
 			}
             else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
             {
-                    
-				if(gpro_t.shut_Off_backlight_flag == turn_off){
+              
+                  buzzer_sound();
 
-                     gpro_t.gTimer_shut_off_backlight =0;
-                     wake_up_backlight_on();
-                     buzzer_sound();
-
-                  }
-                 else{
-                    smart_phone_sound = 1;
-                    gpro_t.gTimer_shut_off_backlight =0;
-                
-
-                }
-            
-                  gpro_t.gTimer_run_dht11=0;
+               
+                 smart_phone_sound = 1;
+                 gpro_t.gTimer_shut_off_backlight =0;
+                 gpro_t.gTimer_run_dht11=0;
                
             }
             else if((ulValue & MODE_KEY_1) != 0){
@@ -268,7 +259,7 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
-         else if( gpro_t.disp_rx_cmd_done_flag==1 )
+          else if( gpro_t.disp_rx_cmd_done_flag==1 )
           {
             gpro_t.disp_rx_cmd_done_flag = 0;
 
@@ -289,6 +280,8 @@ static void vTaskMsgPro(void *pvParameters)
            gl_tMsg.usData[0]=0;
             
          }
+         
+             
       
        }
    }
@@ -308,14 +301,15 @@ static void vTaskStart(void *pvParameters)
   // const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为30ms */
  
   // uint32_t ulValue;
+   static uint8_t dc_power_on_flag;
   
     while(1)
     {
 
 
        //DC the first power on run prcess once times.      
-        if(power_sound_flag==0){
-          power_sound_flag++;
+        if(dc_power_on_flag==0){
+         dc_power_on_flag++;
           
           LED_Mode_Off();
           Backlight_Off();
@@ -632,7 +626,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     
     if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
-     //  DISABLE_INT();    
+      // DISABLE_INT();    
 	  if(gpro_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
 			wifi_t.wifi_data[wifi_t.wifi_uart_rx_counter] = usart2_dataBuf[0];
