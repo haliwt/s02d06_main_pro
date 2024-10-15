@@ -165,42 +165,39 @@ static void vTaskMsgPro(void *pvParameters)
                   gpro_t.gTimer_shut_off_backlight =0;
                    wake_up_backlight_on();
                   buzzer_sound();
+                  gkey_t.mode_key_long_counter=0;
                 }
-                else if(gkey_t.key_long_power_flag == 0){
-              
+                else if(gkey_t.key_long_mode_flag  == 0){
+                   gkey_t.mode_key_long_counter=0;
                   
                    mode_long_short_key_fun();
 
                 }
+                
+               
               }
           }
-          else if(add_flag==1 ||dec_flag ==1){
+          else if(dec_flag ==1){
 
-                if(add_flag ==1){
-                     add_flag ++;
-                     Buzzer_KeySound();
-                     osDelay(20);
+               if(KEY_DEC_VALUE() == KEY_UP){
+               
+                    dec_flag ++;
+                    Buzzer_KeySound();
+                                   
+                   Dec_Key_Fun(gkey_t.key_add_dec_mode);
+               }
 
-                 }
-                 else if(dec_flag ==1){
-                     dec_flag ++;
-                     Buzzer_KeySound();
-                     osDelay(20);
 
-                 }
+           }
+           else if(add_flag==1){
 
+            if(KEY_ADD_VALUE() == KEY_UP){
+                   add_flag ++;
+                   Buzzer_KeySound();
+                   Add_Key_Fun(gkey_t.key_add_dec_mode);
                  
-                 if(add_flag ==2){
-                    add_flag ++;
-                    Add_Key_Fun(gkey_t.key_add_dec_mode);
-                 
 
-                 }
-                 else if(dec_flag ==2){
-
-                       dec_flag ++;
-                       Dec_Key_Fun(gkey_t.key_add_dec_mode);
-                 }
+             }
          }
          else if(gpro_t.send_data_power_on_flag == power_on){
 
@@ -235,7 +232,13 @@ static void vTaskMsgPro(void *pvParameters)
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
           Disip_Wifi_Icon_State();
+
+          if(gkey_t.key_long_mode_flag ==1){
+
+              Set_Timer_Timing_Lcd_Blink();
+          }
           if( gkey_t.gTimer_key_long_rec_times  > 1 &&  gkey_t.key_long_mode_flag ==1){
+                
                 gkey_t.key_long_mode_flag = 0;
                 gkey_t.gTimer_key_long_rec_times=0;
 
@@ -249,9 +252,8 @@ static void vTaskMsgPro(void *pvParameters)
 
        }
         
-     
-        if( gpro_t.disp_rx_cmd_done_flag==1 )
-          {
+       if( gpro_t.disp_rx_cmd_done_flag==1)
+        {
             gpro_t.disp_rx_cmd_done_flag = 0;
 
 
@@ -277,7 +279,7 @@ static void vTaskMsgPro(void *pvParameters)
           }
 
         clear_rx_copy_data();
-        vTaskDelay(30);
+        vTaskDelay(20);
        }
 }
 /**********************************************************************************************************
@@ -313,9 +315,9 @@ static void vTaskStart(void *pvParameters)
 
            if(KEY_MODE_VALUE() == KEY_DOWN &&  gkey_t.key_long_mode_flag ==0 && gpro_t.shut_Off_backlight_flag == turn_on){
                 
-                if(gkey_t.mode_key_long_counter > 30 ){
+                if(gkey_t.mode_key_long_counter > 50 ){
                 gkey_t.mode_key_long_counter = 0;
-                gkey_t.key_mode_flag++;
+          
 
                 gkey_t.key_mode = mode_set_timer;
                 gkey_t.key_add_dec_mode = mode_set_timer;
@@ -325,7 +327,7 @@ static void vTaskStart(void *pvParameters)
                 gkey_t.gTimer_key_long_rec_times=0;
 
                 buzzer_sound();
-                Set_Timer_Timing_Lcd_Blink();
+               // Set_Timer_Timing_Lcd_Blink();
 
 
                 }
