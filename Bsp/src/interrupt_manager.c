@@ -78,7 +78,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
          gkey_t.gTimer_power_off_run_times++;
         
         gkey_t.gTimer_disp_set_timer++;
-        gkey_t.gTimer_key_long_rec_times++;
     
         //process gtimer
         gpro_t.gTimer_ptc_detected++;

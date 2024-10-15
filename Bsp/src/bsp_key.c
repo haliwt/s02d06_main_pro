@@ -24,11 +24,43 @@ void power_long_short_key_fun(void)
 {
 
   
-   gkey_t.power_key_long_counter=0;
+    if(KEY_POWER_VALUE() == 1   && gkey_t.power_key_long_counter < 60){
+
+
+        gkey_t.power_key_long_counter++;
+        if( gkey_t.power_key_long_counter > 15   && KEY_POWER_VALUE() == 1){
+             gkey_t.power_key_long_counter = 0;
+             
+             gkey_t.power_on_flag++;
+         
+          
+             	//WIFI CONNCETOR process
+			 gkey_t.wifi_led_fast_blink_flag=1;
+             gpro_t.link_net_step=0;
+			 //WIFI CONNCETOR process
+			gpro_t.tencent_link_success =0;
+			gpro_t.get_beijing_time_success =0;
+			
+		
+            
+		
+			wifi_t.gTimer_linking_tencent_duration=0; //120s
+
+            Buzzer_KeySound();
+            
+          
+
+        }
+
+    }
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter<15){ //short key of function
+
+        gkey_t.power_key_long_counter=0;
 
       
            if(gkey_t.key_power==power_off){
               
+              gkey_t.power_on_flag++; 
           
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
@@ -43,7 +75,7 @@ void power_long_short_key_fun(void)
             }
            else{
               
-          
+              gkey_t.power_on_flag++;
             
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
@@ -54,8 +86,10 @@ void power_long_short_key_fun(void)
            }
            Buzzer_KeySound();
        
-}
+      
 
+        }
+}
 /*********************************************************************************
 *
 *	函 数 名:void smartphone_power_on_handler(uint8_t phone_on)
@@ -92,9 +126,32 @@ void smartphone_power_on_handler(void)
 *********************************************************************************/
 void mode_long_short_key_fun(void)
 {
-        gkey_t.mode_key_long_counter=0;
-      
-        if(gkey_t.key_mode  == disp_works_timing){
+    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100){
+
+
+        gkey_t.key_mode_long_counter++;
+        if(gkey_t.key_mode_long_counter >  15  && KEY_MODE_VALUE() == 1){
+            gkey_t.key_mode_long_counter = 150;
+            gkey_t.key_mode_flag++;
+
+            gkey_t.key_mode = mode_set_timer;
+           gkey_t.key_add_dec_mode = mode_set_timer;
+           gctl_t.ai_flag = 0; //timer tiiming model
+           gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+          
+           buzzer_sound();
+           Set_Timer_Timing_Lcd_Blink();
+           
+
+        }
+
+    }
+    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter<15){ //short key of function
+
+        gkey_t.key_mode_long_counter=0;
+        gkey_t.key_mode_flag++;
+     
+         if(gkey_t.key_mode  == disp_works_timing){
              gkey_t.key_mode  = disp_timer_timing;
            
                gctl_t.ai_flag = 0; // DON'T DISP AI ICON
@@ -117,9 +174,13 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_mode  = disp_works_timing;
             gkey_t.key_add_dec_mode = set_temp_value_item;
-
+//            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+//           
+//            LCD_Disp_Works_Timing_Init();
+//             disp_ai_iocn();
              buzzer_sound();
-
+//             SendData_Set_Command(0x27,0x01); //works time .
+//             HAL_Delay(10);
             
            
             gkey_t.key_mode_be_pressed = 1;
@@ -127,8 +188,12 @@ void mode_long_short_key_fun(void)
              
          }
 
-}
 
+     }
+
+   // key_mode_be_pressed_send_data_wifi();
+
+ }
 
 void  key_mode_be_pressed_send_data_wifi(void)
 {

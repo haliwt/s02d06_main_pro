@@ -97,15 +97,206 @@ void freeRTOS_Handler(void)
 }
 
 
-/**********************************************************************************************************
+/*
+*********************************************************************************************************
 *	函 数 名: vTaskMsgPro
 *	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 3  
-*******************************************************************************************************/
+*********************************************************************************************************
+*/
 static void vTaskMsgPro(void *pvParameters)
+{
+   // MSG_T *ptMsg;
+    BaseType_t xResult;
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
+	uint32_t ulValue;
+   
+   
+	
+    while(1)
+    {
+		/*
+			第一个参数 ulBitsToClearOnEntry的作用（函数执行前）：
+		          ulNotifiedValue &= ~ulBitsToClearOnEntry
+		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
+		          的那个位就会被清零。
 
+		          这里ulBitsToClearOnEntry = 0x00000000就是函数执行前保留所有位。
+		
+		    第二个参数 ulBitsToClearOnExit的作用（函数退出前）：			
+				  ulNotifiedValue &= ~ulBitsToClearOnExit
+		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
+		          的那个位就会被清零。
+
+				  这里ulBitsToClearOnExi = 0xFFFFFFFF就是函数退出前清楚所有位。
+		
+		    注：ulNotifiedValue表示任务vTaskMsgPro的任务控制块里面的变量。		
+		*/
+		
+		xResult = xTaskNotifyWait(0x00000000,      
+						          0xFFFFFFFF,      
+						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
+						          xMaxBlockTime);  /* 最大允许延迟时间 */
+		
+		if( xResult == pdPASS )
+		{
+			/* 接收到消息，检测那个位被按下 */
+             
+			if((ulValue & POWER_KEY_0) != 0)
+			{
+   
+                     
+               // xTaskNotify(xHandleTaskStart, /* 目标任务 */
+						///RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
+						///eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+			   if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                }
+                else{
+                    gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
+                    
+                    gpro_t.gTimer_shut_off_backlight =0;
+                }
+            
+                gpro_t.gTimer_run_dht11=0;
+				                                    
+			}
+            else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
+            {
+                  gpro_t.gTimer_shut_off_backlight =0;
+                  wake_up_backlight_on();
+                  buzzer_sound();
+
+               
+                 smart_phone_sound = 1;
+                 gpro_t.gTimer_shut_off_backlight =0;
+                 gpro_t.gTimer_run_dht11=0;
+               
+            }
+            else if((ulValue & MODE_KEY_1) != 0){
+
+              if(gkey_t.key_power == power_on ){
+
+                  if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+
+                  if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
+                    
+                     gkey_t.key_mode_flag=1;
+                     gpro_t.gTimer_shut_off_backlight =0;
+
+                    }
+
+                 }
+
+                }
+               
+             
+                 gpro_t.gTimer_run_dht11=0;
+               
+            }   
+            else if((ulValue & DEC_KEY_2) != 0){
+
+                 if(gkey_t.key_power==power_on){
+
+                   if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+                    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
+                        dec_flag =1;
+                        gpro_t.gTimer_shut_off_backlight =0;
+                    }
+
+                   }
+                  }
+                
+                  gpro_t.gTimer_run_dht11=0;
+               
+
+               
+            }
+            else if((ulValue & ADD_KEY_3) != 0){
+
+              if(gkey_t.key_power==power_on){
+
+                 if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+                   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
+                       add_flag =1;
+                       gpro_t.gTimer_shut_off_backlight =0;
+
+                   }
+
+                }
+                
+              }
+                
+                gpro_t.gTimer_run_dht11=0;
+            }
+
+              
+                    
+          }
+          else if( gpro_t.disp_rx_cmd_done_flag==1 )
+          {
+            gpro_t.disp_rx_cmd_done_flag = 0;
+
+
+            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
+
+           if(check_code == gl_tMsg.bcc_check_code ){
+           
+              receive_data_fromm_display(gl_tMsg.usData);
+              if(gpro_t.buzzer_sound_flag == 1){
+                  gpro_t.buzzer_sound_flag++ ;
+                  buzzer_sound();
+
+
+              }
+           }
+
+           gl_tMsg.usData[0]=0;
+            
+         }
+         
+             
+      
+       }
+   }
+
+
+
+/**********************************************************************************************************
+*	函 数 名: vTaskStart
+*	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
+*	形    参: pvParameters 是在创建该任务时传递的形参
+*	返 回 值: 无
+*   优 先 级: 4  
+**********************************************************************************************************/
+static void vTaskStart(void *pvParameters)
 {
    //BaseType_t xResult;
   // const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为30ms */
@@ -138,41 +329,12 @@ static void vTaskMsgPro(void *pvParameters)
 
           }
           else if(gkey_t.power_on_flag ==1){
+            power_long_short_key_fun();
 
-           if(KEY_POWER_VALUE()==KEY_UP){
-               gkey_t.power_on_flag++; 
-
-            if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-              gpro_t.gTimer_shut_off_backlight =0;
-               wake_up_backlight_on();
-              buzzer_sound();
-            }
-            else if(gkey_t.key_long_power_flag != 1){
-                
-               power_long_short_key_fun();
-               }
-
-            }
           }
           else if(gkey_t.key_mode_flag== 1){
-
-             if(KEY_MODE_VALUE() == KEY_UP){
-                   gkey_t.key_mode_flag++;
-                    
-                if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                  gpro_t.gTimer_shut_off_backlight =0;
-                   wake_up_backlight_on();
-                  buzzer_sound();
-                }
-                else if(gkey_t.key_long_power_flag == 0){
-              
-                  
-                   mode_long_short_key_fun();
-
-                }
-              }
+      
+               mode_long_short_key_fun();
           }
           else if(add_flag==1 ||dec_flag ==1){
 
@@ -202,7 +364,9 @@ static void vTaskMsgPro(void *pvParameters)
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
                  }
          }
-         else if(gpro_t.send_data_power_on_flag == power_on){
+
+
+        if(gpro_t.send_data_power_on_flag == power_on){
 
                gpro_t.send_data_power_on_flag =0xff;
                
@@ -218,7 +382,9 @@ static void vTaskMsgPro(void *pvParameters)
                SendData_Set_Command(0X01,0X00);
                osDelay(30);
           }
-          else if(gkey_t.key_power==power_on){
+       
+
+       if(gkey_t.key_power==power_on){
             
           backlight_on_off_state();
           power_on_run_handler();
@@ -235,9 +401,10 @@ static void vTaskMsgPro(void *pvParameters)
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
           Disip_Wifi_Icon_State();
-          if( gkey_t.gTimer_key_long_rec_times  > 1 &&  gkey_t.key_long_mode_flag ==1){
-                gkey_t.key_long_mode_flag = 0;
-                gkey_t.gTimer_key_long_rec_times=0;
+          if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
+
+             gkey_t.key_mode_long_counter =0;
+             gkey_t.key_mode_flag=0;
 
           }
           
@@ -249,143 +416,18 @@ static void vTaskMsgPro(void *pvParameters)
 
        }
         
-     
-        if( gpro_t.disp_rx_cmd_done_flag==1 )
-          {
-            gpro_t.disp_rx_cmd_done_flag = 0;
-
-
-            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
-
-           if(check_code == gl_tMsg.bcc_check_code ){
-           
-              receive_data_fromm_display(gl_tMsg.usData);
-              if(gpro_t.buzzer_sound_flag == 1){
-                  gpro_t.buzzer_sound_flag++ ;
-                  buzzer_sound();
-
-
-              }
-           }
-
-           gl_tMsg.usData[0]=0;
-            
-         }
-         else if(gkey_t.wifi_led_fast_blink_flag==0 ){
+       if(gkey_t.wifi_led_fast_blink_flag==0 ){
             wifi_get_beijing_time_handler();
             wifi_auto_detected_link_state();
-          }
+        }
 
-        clear_rx_copy_data();
-        vTaskDelay(30);
+         clear_rx_copy_data();
+        vTaskDelay(20);
        }
-}
-/**********************************************************************************************************
-*	函 数 名: vTaskStart
-*	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 4  
-**********************************************************************************************************/
-static void vTaskStart(void *pvParameters)
-{
 
-   while(1){
+    }
 
-
-
-      if(KEY_POWER_VALUE()==KEY_DOWN){
-            gkey_t.mode_key_long_counter=0;
-            gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
-
-            gpro_t.gTimer_shut_off_backlight =0;
-            gkey_t.power_key_long_counter++;
-          //  gkey_t.key_long_power_flag = 1;
-            gpro_t.gTimer_run_dht11=0;
-                            
-       }
-       else if(KEY_MODE_VALUE() == KEY_DOWN){
-       
-           gkey_t.power_on_flag =0;
-           gkey_t.power_key_long_counter=0;
-         if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-              gkey_t.mode_key_long_counter++;
-
-           if(KEY_MODE_VALUE() == KEY_DOWN &&  gkey_t.key_long_mode_flag ==0 && gpro_t.shut_Off_backlight_flag == turn_on){
-                
-                if(gkey_t.mode_key_long_counter > 30 ){
-                gkey_t.mode_key_long_counter = 0;
-                gkey_t.key_mode_flag++;
-
-                gkey_t.key_mode = mode_set_timer;
-                gkey_t.key_add_dec_mode = mode_set_timer;
-                gctl_t.ai_flag = 0; //timer tiiming model
-                gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
-                gkey_t.key_long_mode_flag = 1;
-                gkey_t.gTimer_key_long_rec_times=0;
-
-                buzzer_sound();
-                Set_Timer_Timing_Lcd_Blink();
-
-
-                }
-
-           }
-
-            gkey_t.key_mode_flag=1;
-            gpro_t.gTimer_shut_off_backlight =0;
-            gpro_t.gTimer_run_dht11=0;
-
-         }
-
-      }
-      else if(KEY_ADD_VALUE() == KEY_DOWN){
-      
-           if(gkey_t.key_power==power_on){
-
-            if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
-                buzzer_sound();
-
-            }
-            else{
-                if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-                add_flag =1;
-                gpro_t.gTimer_shut_off_backlight =0;
-
-                }
-
-            }
-           }
-       }
-       else if(KEY_DEC_VALUE() == KEY_DOWN){
-       if(gkey_t.key_power==power_on){
-
-            if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
-                buzzer_sound();
-
-            }
-            else{
-                    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-                    dec_flag =1;
-                    gpro_t.gTimer_shut_off_backlight =0;
-                    }
-
-                    }
-            }
-
-            gpro_t.gTimer_run_dht11=0;
-                     
-      }
-   
-    vTaskDelay(20);
-   }
- }
+ 
 /**********************************************************************************************************
 *	函 数 名: AppTaskCreate
 *	功能说明: 创建应用任务
@@ -400,7 +442,7 @@ static void AppTaskCreate (void)
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级*/
+                 2,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -408,11 +450,11 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  256,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级*/
+                 1,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
-#if 0
+
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 
@@ -495,7 +537,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 }
 
 
-#endif 
+
 /********************************************************************************
 	**
 	*Function Name:void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)

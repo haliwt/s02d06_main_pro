@@ -58,17 +58,12 @@ typedef enum mode_key_t{
    uint8_t  power_on_flag;
   
    uint8_t  key_mode_flag;
-   
-   uint8_t  key_long_power_flag ;
-   uint8_t  key_long_mode_flag;
-  
-   
 
  
    uint8_t  key_add_dec_mode;
    uint8_t  set_timer_timing_success;
    uint8_t  power_key_long_counter;
-   uint8_t  mode_key_long_counter;
+   uint8_t  key_mode_long_counter;
 
    uint8_t set_temp_value_be_pressed;
   
@@ -90,7 +85,6 @@ typedef enum mode_key_t{
 
    uint8_t gTimer_power_key_counter;
    uint8_t gTimer_power_off_run_times;
-   uint8_t gTimer_key_long_rec_times;
 	
 
 }key_fun_t;
