@@ -51,18 +51,20 @@ void receive_data_fromm_display(uint8_t *pdata)
         buzzer_sound();
         wake_up_backlight_on();
          gpro_t.gTimer_shut_off_backlight =0;
-        if(gctl_t.interval_stop_run_flag  ==0){
+       
           gctl_t.manual_turn_off_ptc_flag = 0;
           gctl_t.ptc_flag = 1;
-          
-          Ptc_On();
           Disp_Dry_Icon();
+          if(gctl_t.interval_stop_run_flag  ==0){
+
+               Ptc_On();
+
+           }
           
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
            }
-       }
        }
        else if(pdata[3] == 0x0){
         
@@ -92,21 +94,22 @@ void receive_data_fromm_display(uint8_t *pdata)
       if(pdata[3] == 0x01){
 
          
-        
-        if(gctl_t.interval_stop_run_flag  ==0){
-
-         gctl_t.manual_turn_off_ptc_flag =0;  //at last set is active.
+          gctl_t.manual_turn_off_ptc_flag =0;  //at last set is active.
             
           gctl_t.ptc_flag = 1;
-          Ptc_On();
+         
           Disp_Dry_Icon();
+          if(gctl_t.interval_stop_run_flag  ==0){
+
+                 Ptc_On();
+          }
          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x01);
 	  	      osDelay(100);//HAL_Delay(350);
            }
           
          
-         }
+         
        }
        else if(pdata[3] == 0x0){
 
@@ -133,13 +136,15 @@ void receive_data_fromm_display(uint8_t *pdata)
          
 
         if(pdata[3] == 0x01){
-           
-          if( gctl_t.interval_stop_run_flag ==0){
             
-           
            gctl_t.plasma_flag  = 1;
-           Plasma_On();
+          
            Disp_Kill_Icon();
+           if(gctl_t.interval_stop_run_flag  ==0){
+                Plasma_On();
+
+           }
+           
 
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPlasma(0x01);
@@ -148,7 +153,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           
          
 
-           }
+           
         }
         else if(pdata[3] == 0x0){
        
@@ -177,11 +182,16 @@ void receive_data_fromm_display(uint8_t *pdata)
             
        if(pdata[3] == 0x01){  //open 
 
-         if( gctl_t.interval_stop_run_flag ==0){
+         //if(gctl_t.interval_stop_run_flag ==0){
           
-           gctl_t.ultrasonic_flag =1;
-            Ultrasonic_Pwm_Output();
-             Disp_Ultrsonic_Icon();
+            gctl_t.ultrasonic_flag =1;
+            
+            Disp_Ultrsonic_Icon();
+
+            if(gctl_t.interval_stop_run_flag  ==0){
+                Ultrasonic_Pwm_Output();
+
+             }
 
              if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetUltrasonic(0x01);
@@ -190,7 +200,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
 
 
-          }
+        //}
 
         }
         else if(pdata[3] == 0x0){ //close 
@@ -247,11 +257,6 @@ void receive_data_fromm_display(uint8_t *pdata)
 
 
      break;
-
-
-
-     break;
-
 
      case 0x0A: //the second display board link state. dc power on the first link state
 

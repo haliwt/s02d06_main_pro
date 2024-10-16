@@ -524,6 +524,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
          gpro_t.gTimer_shut_off_backlight =0;
          wake_up_backlight_on();
+         
 	    if(ptc_error_state() ==0){
 			 gctl_t.manual_turn_off_ptc_flag= 0;
 	         Ptc_On();
@@ -826,9 +827,9 @@ void JsonParse_Tencent_Cmd_Handler(void)
 
 	  case APP_TIMER_POWER_ON_REF :
 
-		//   gpro_t.gTimer_gpro_temp_delay =0;
-		  
-        
+	
+		 gpro_t.gTimer_shut_off_backlight =0;
+          wake_up_backlight_on();
 		
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
           
