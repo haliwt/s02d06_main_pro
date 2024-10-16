@@ -25,6 +25,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x01: //表示开机指令
         wake_up_backlight_on();
+         gpro_t.gTimer_shut_off_backlight =0;
 
         if(pdata[3] == 0x01 ){ //open
              buzzer_sound();
@@ -49,6 +50,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
         buzzer_sound();
         wake_up_backlight_on();
+        gpro_t.gTimer_shut_off_backlight =0;
         if(gctl_t.interval_stop_run_flag  ==0){
           gctl_t.manual_turn_off_ptc_flag = 0;
           gctl_t.ptc_flag = 1;
@@ -66,6 +68,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         
           buzzer_sound();
           wake_up_backlight_on();
+          gpro_t.gTimer_shut_off_backlight =0;
 
           gctl_t.manual_turn_off_ptc_flag = 1;
        
@@ -84,6 +87,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x22: //notification :ccompare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
       wake_up_backlight_on();
+       gpro_t.gTimer_shut_off_backlight =0;
 
       if(pdata[3] == 0x01){
 
@@ -124,6 +128,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      
          wake_up_backlight_on();
+         gpro_t.gTimer_shut_off_backlight =0;
          
          buzzer_sound();
 
@@ -168,6 +173,7 @@ void receive_data_fromm_display(uint8_t *pdata)
          buzzer_sound();
 
         wake_up_backlight_on();
+       gpro_t.gTimer_shut_off_backlight =0;
             
        if(pdata[3] == 0x01){  //open 
 
@@ -207,6 +213,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           buzzer_sound();
 
           wake_up_backlight_on();
+          gpro_t.gTimer_shut_off_backlight =0;
          
 
        if(pdata[3] == 0x01){  // link wifi 
@@ -227,6 +234,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x06: //buzzer sound done
          wake_up_backlight_on();
+          gpro_t.gTimer_shut_off_backlight =0;
         if(pdata[3] == 0x01){  //
             buzzer_sound();
            
@@ -249,6 +257,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      case 0x0A: //the second display board link state. dc power on the first link state
 
         wake_up_backlight_on();
+         gpro_t.gTimer_shut_off_backlight =0;
         if(pdata[3] == 0x01){  //
           if(gkey_t.key_power==power_on){
             g_tDisp.disp_second_link_state_flag =1;
@@ -269,6 +278,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
       case 0x1A: //读取传感的温度数据
           wake_up_backlight_on();
+           gpro_t.gTimer_shut_off_backlight =0;
         if(pdata[3] == 0x0F){ //数据
           
           gpro_t.set_temperature_value_success=1;
@@ -325,6 +335,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x27: //AI mode 
       wake_up_backlight_on();
+       gpro_t.gTimer_shut_off_backlight =0;
 
       if(pdata[3] == 0x01){ //AI mode ,don't buzzer sound .
         
@@ -348,6 +359,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      case 0x4C: //display #1 or display #2  timer timing .
          wake_up_backlight_on();
+          gpro_t.gTimer_shut_off_backlight =0;
          if(pdata[4]==0x01){
 
             gkey_t.key_mode = mode_set_timer;

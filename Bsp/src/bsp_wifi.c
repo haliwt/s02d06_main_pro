@@ -76,9 +76,14 @@ void  wifi_get_beijing_time_handler(void)
 
              }
              else{
-                 
-                  gpro_t.get_beijing_step = 3;
-                  beijing_step=0;
+                  if(gpro_t.link_tencent_net_start_counter_flag ==0){
+                     gpro_t.get_beijing_step = 3;
+                     beijing_step=0;
+                  }
+                  else{
+                     gpro_t.get_beijing_step=0;
+
+                  }
 
              }
              gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
@@ -301,7 +306,7 @@ void  wifi_get_beijing_time_handler(void)
          if(gpro_t.tencent_link_success  ==0 && gkey_t.wifi_led_fast_blink_flag==0){
 
            gpro_t.linking_tencent_cloud_doing =1;
-        
+           gpro_t.link_tencent_net_start_counter_flag = 1;
 
             WIFI_IC_ENABLE();
        
@@ -360,7 +365,7 @@ void  wifi_get_beijing_time_handler(void)
        if(gpro_t.tencent_link_success==1){
        
          
-
+        gpro_t.link_tencent_net_start_counter_flag = 2;
         gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
 	    wifi_t.wifi_uart_rx_counter=0; //clear USART2 counter is zero
 		wifi_t.soft_ap_config_flag =0; 

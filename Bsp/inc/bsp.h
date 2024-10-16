@@ -104,7 +104,7 @@ typedef struct {
  
    //WIFI
 
-
+   uint8_t link_tencent_net_start_counter_flag ;
   
    uint8_t set_temperature_value_success;
  
@@ -161,6 +161,7 @@ typedef struct {
    uint8_t gTimer_power_off_run_times;
    uint8_t gTimer_update_data_to_tencent ;
    uint8_t gTimer_disp_works_time;
+   uint8_t gTimer_link_net_just_counter ;
   
 }BSP_process_t;
 

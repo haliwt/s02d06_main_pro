@@ -816,7 +816,8 @@ void link_wifi_net_handler(uint8_t link)
 
             gkey_t.wifi_led_fast_blink_flag =0;//gpro_t.wifi_led_fast_blink_flag =0;
            if(gpro_t.tencent_link_success==0){
-
+             gpro_t.link_tencent_net_start_counter_flag = 0;
+             //at once repeat link tencent net set reference 
              gpro_t.get_beijing_step = 10;
              wifi_t.gTimer_auto_detected_net_state_times = 120;
              gpro_t.linking_tencent_cloud_doing =1;
@@ -830,6 +831,7 @@ void link_wifi_net_handler(uint8_t link)
          
         }
         else{ //link wifi this is led fast blinking . 
+          gpro_t.link_tencent_net_start_counter_flag = 1;
           link_wifi_net_state_handler();
 
            if( gkey_t.wifi_led_fast_blink_flag== 1 && send_second_disp_flag==0){
@@ -863,7 +865,8 @@ void link_wifi_net_handler(uint8_t link)
 
               link_net_flag = 2 ; 
               send_second_disp_flag=0;
-
+              gpro_t.link_tencent_net_start_counter_flag = 2;
+              gpro_t.gTimer_link_net_just_counter =0;
                 gpro_t.link_net_step=0;
 			 
 				 MqttData_Publish_SetOpen(0x01);
@@ -882,7 +885,8 @@ void link_wifi_net_handler(uint8_t link)
 
            if(gpro_t.tencent_link_success==1){
                   link_net_flag = 3 ;     
-        
+                gpro_t.link_tencent_net_start_counter_flag = 2;
+                gpro_t.gTimer_link_net_just_counter =0;
                 Subscriber_Data_FromCloud_Handler();
                 osDelay(200);//HAL_Delay(200);
                 
@@ -898,6 +902,8 @@ void link_wifi_net_handler(uint8_t link)
         case 3:
         if(gpro_t.tencent_link_success==1){
                link_net_flag = 0;
+               gpro_t.link_tencent_net_start_counter_flag = 2;
+                gpro_t.gTimer_link_net_just_counter =0;
 		         Publish_Data_ToTencent_Initial_Data();
 				// HAL_Delay(200);
                   osDelay(200);
@@ -917,6 +923,9 @@ void link_wifi_net_handler(uint8_t link)
 
              link_net_flag = 0;
              send_second_disp_flag=0;
+
+             gpro_t.link_tencent_net_start_counter_flag = 2;
+             gpro_t.gTimer_link_net_just_counter =0;
             
               gpro_t.link_net_step=0;
              gpro_t.get_beijing_step = 11;

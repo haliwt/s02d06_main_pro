@@ -132,7 +132,7 @@ static void vTaskDecoder(void *pvParameters)
 
            gl_tMsg.usData[0]=0;
             
-      }
+    }
 
     if(gkey_t.wifi_led_fast_blink_flag ==1 && gkey_t.key_power==power_on ){
        link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
@@ -141,6 +141,17 @@ static void vTaskDecoder(void *pvParameters)
      else if(gkey_t.wifi_led_fast_blink_flag==0 ){
          wifi_get_beijing_time_handler();
          wifi_auto_detected_link_state();
+     }
+
+
+
+    if(gpro_t.link_tencent_net_start_counter_flag ==2 && gpro_t.gTimer_link_net_just_counter > 4){
+
+
+        gpro_t.link_tencent_net_start_counter_flag =0;
+        gpro_t.gTimer_link_net_just_counter =0;
+
+
      }
 
      clear_rx_copy_data();
