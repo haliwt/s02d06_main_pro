@@ -63,6 +63,7 @@ uint8_t add_flag,dec_flag,smart_phone_sound;
 */
 //static void vTaskTaskUserIF(void *pvParameters);
 //static void vTaskLED(void *pvParameters);
+static void vTaskDecoder(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
@@ -74,7 +75,7 @@ static void AppTaskCreate (void);
 **********************************************************************************************************
 */
 //static TaskHandle_t xHandleTaskUserIF = NULL;
-//static TaskHandle_t xHandleTaskLED = NULL;
+static TaskHandle_t xHandleTaskDecoder = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
@@ -97,20 +98,70 @@ void freeRTOS_Handler(void)
 }
 
 
-/*
-*********************************************************************************************************
+
+/*********************************************************************************************************
 *	函 数 名: vTaskMsgPro
 *	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
 *	形    参: pvParameters 是在创建该任务时传递的形参
 *	返 回 值: 无
 *   优 先 级: 3  
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
+static void vTaskDecoder(void *pvParameters)
+{
+
+   
+	while(1){
+
+     if( gpro_t.disp_rx_cmd_done_flag==1 )
+     {
+            gpro_t.disp_rx_cmd_done_flag = 0;
+
+
+            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
+
+           if(check_code == gl_tMsg.bcc_check_code ){
+           
+              receive_data_fromm_display(gl_tMsg.usData);
+              if(gpro_t.buzzer_sound_flag == 1){
+                  gpro_t.buzzer_sound_flag++ ;
+                  buzzer_sound();
+
+
+              }
+           }
+
+           gl_tMsg.usData[0]=0;
+            
+      }
+
+    if(gkey_t.wifi_led_fast_blink_flag ==1 && gkey_t.key_power==power_on ){
+       link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+
+     }
+     else if(gkey_t.wifi_led_fast_blink_flag==0 ){
+         wifi_get_beijing_time_handler();
+         wifi_auto_detected_link_state();
+     }
+
+     clear_rx_copy_data();
+         
+    vTaskDelay(30);
+
+    }
+
+}
+/*********************************************************************************************************
+*	函 数 名: vTaskMsgPro
+*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
+*	形    参: pvParameters 是在创建该任务时传递的形参
+*	返 回 值: 无
+*   优 先 级: 3  
+**********************************************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
-   // MSG_T *ptMsg;
+    
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为100ms */
 	uint32_t ulValue;
    
    
@@ -138,7 +189,7 @@ static void vTaskMsgPro(void *pvParameters)
 		xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间 */
+						          xMaxBlockTime);  /* 阻塞时间，放弃CPU的使用权 */
 		
 		if( xResult == pdPASS )
 		{
@@ -260,27 +311,6 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
-          else if( gpro_t.disp_rx_cmd_done_flag==1 )
-          {
-            gpro_t.disp_rx_cmd_done_flag = 0;
-
-
-            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
-
-           if(check_code == gl_tMsg.bcc_check_code ){
-           
-              receive_data_fromm_display(gl_tMsg.usData);
-              if(gpro_t.buzzer_sound_flag == 1){
-                  gpro_t.buzzer_sound_flag++ ;
-                  buzzer_sound();
-
-
-              }
-           }
-
-           gl_tMsg.usData[0]=0;
-            
-         }
          
              
       
@@ -399,7 +429,7 @@ static void vTaskStart(void *pvParameters)
          
           LCD_Timer_Colon_Flicker();
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
-          link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+         
           Disip_Wifi_Icon_State();
           if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
 
@@ -416,12 +446,7 @@ static void vTaskStart(void *pvParameters)
 
        }
         
-       if(gkey_t.wifi_led_fast_blink_flag==0 ){
-            wifi_get_beijing_time_handler();
-            wifi_auto_detected_link_state();
-        }
-
-         clear_rx_copy_data();
+      
         vTaskDelay(20);
        }
 
@@ -437,20 +462,28 @@ static void vTaskStart(void *pvParameters)
 static void AppTaskCreate (void)
 {
 
-	
-	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
+  xTaskCreate( vTaskDecoder,     		/* 任务函数  */
+                 "vTaskDecoder",   		/* 任务名    */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 NULL,           		/* 任务参数  */
+                 1,               		/* 任务优先级*/
+                 &xHandleTaskDecoder );  /* 任务句柄  */
+
+
+
+    xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
+                 3,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
                  "vTaskStart",   		/* 任务名    */
-                 256,            		/* 任务栈大小，单位word，也就是4字节 */
+                 128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,              		/* 任务优先级*/
+                 2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 

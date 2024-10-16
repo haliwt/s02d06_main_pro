@@ -1,4 +1,3 @@
-#include "bsp_sensor.h"
 #include "bsp.h"
 
 
