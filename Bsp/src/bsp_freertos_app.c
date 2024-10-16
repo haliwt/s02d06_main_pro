@@ -626,9 +626,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	    __HAL_UART_CLEAR_OREFLAG(&huart1);
 		HAL_UART_Receive_IT(&huart1,disp_inputBuf,1);//UART receive data interrupt 1 byte
 		
-	 }
-    
-    if(huart->Instance==USART2)  //wifi usart1 --wifi 
+	}
+    else if(huart->Instance==USART2)  //wifi usart1 --wifi 
     {
       // DISABLE_INT();    
 	  if(gpro_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL

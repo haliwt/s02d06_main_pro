@@ -423,6 +423,8 @@ void wifi_auto_detected_link_state(void)
     }
     if(gpro_t.tencent_link_success==1   && power_on_dc_power ==0){
               power_on_dc_power++;
+
+           wifi_t.get_rx_beijing_time_enable=0;
    
            gpro_t.gTimer_get_data_from_tencent_data=0; //don't send dato to tencent .waiting .
        
@@ -430,7 +432,7 @@ void wifi_auto_detected_link_state(void)
            gpro_t.linking_tencent_cloud_doing = 0;
 
            auto_link_tencent_step =0;
-           wifi_t.link_net_tencent_data_flag=1;
+           wifi_t.link_net_tencent_data_flag=1; //power on link tencet initial data flag ;
 
           
   
@@ -449,6 +451,7 @@ void wifi_auto_detected_link_state(void)
 
           Subscriber_Data_FromCloud_Handler();
           HAL_Delay(200);
+
           
         
      }
@@ -459,18 +462,25 @@ void wifi_auto_detected_link_state(void)
         
 
          auto_link_tencent_step  = 0xff;
-         SendData_Set_Command(0x1F,0x0);//has been link net OK
+         SendData_Set_Command(0x1F,0x0);//has been link net NG.
 
      }
 
     if(gpro_t.tencent_link_success==1 &&  power_on_dc_power==1){
 
         power_on_dc_power++;
+        wifi_t.get_rx_beijing_time_enable=0;
+        gpro_t.linking_tencent_cloud_doing = 0;
+        wifi_t.link_net_tencent_data_flag=1; //power on link tencet initial data flag ;
 
         SendData_Set_Command(0x1F,0x01);//has been link net OK
         osDelay(20);
         Subscriber_Data_FromCloud_Handler();
         HAL_Delay(200); //osDelay(200)
+
+        
+        
+      
 
     }
    
