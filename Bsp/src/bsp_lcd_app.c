@@ -170,19 +170,19 @@ static void disp_speical_works_timing_value(void)
 {
 
     glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
-    glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+    glcd_t.number5_high = glcd_t.number5_low;//gpro_t.disp_works_hours_value / 10;
     
     
    glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
-   glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+   glcd_t.number6_high = glcd_t.number6_low;//gpro_t.disp_works_hours_value % 10;
 
 
    glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-   glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+   glcd_t.number7_high = glcd_t.number7_low;//gpro_t.disp_works_minutes_value / 10;
 
 
    glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-   glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+   glcd_t.number8_high = glcd_t.number8_low ;//gpro_t.disp_works_minutes_value % 10;
    //Display_LCD_Works_Timing();
 
    display_works_times_handler();
@@ -330,19 +330,19 @@ void LCD_Disp_Timer_Timing_Init(void)
      LCD_Number_Ai_OneTwo_Humidity();
 //display hours timing
     glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
-    glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
+    glcd_t.number5_high = glcd_t.number5_low; //gpro_t.set_timer_timing_hours / 10;
 
 
     glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
-    glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10;
+    glcd_t.number6_high =  glcd_t.number6_low;//gpro_t.set_timer_timing_hours % 10;
 
     //display minutes 
     glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-    glcd_t.number7_high = gpro_t.set_timer_timing_minutes / 10;
+    glcd_t.number7_high = glcd_t.number7_low;//gpro_t.set_timer_timing_minutes / 10;
 
     				
     glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
-    glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
+    glcd_t.number8_high =  glcd_t.number8_low ;//gpro_t.set_timer_timing_minutes % 10;
 
     //LCD_Disp_Timer_Timing();
     display_works_times_handler();
@@ -383,11 +383,26 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
             gctl_t.ai_flag =0;
         
+            if(gpro_t.gTimer_disp_short_time < 19){
+                glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+                glcd_t.number5_high = glcd_t.number5_low; //gpro_t.set_timer_timing_hours / 10;
 
-            // LCD_Disp_Timer_Timing();
-            display_works_times_handler();
 
-            if(gpro_t.gTimer_disp_short_time > 19){
+                glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
+                glcd_t.number6_high =  glcd_t.number6_low;//gpro_t.set_timer_timing_hours % 10;
+
+                //display minutes 
+                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
+                glcd_t.number7_high = glcd_t.number7_low;//gpro_t.set_timer_timing_minutes / 10;
+
+                				
+                glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
+                glcd_t.number8_high =  glcd_t.number8_low ;//gpro_t.set_timer_timing_minutes % 10;
+
+                //LCD_Disp_Timer_Timing();
+                display_works_times_handler();
+            }
+            else if(gpro_t.gTimer_disp_short_time > 19){
                 gpro_t.gTimer_disp_short_time=0;
                 gkey_t.key_mode = disp_works_timing;
                 gctl_t.ai_flag =1;
