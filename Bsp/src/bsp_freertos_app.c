@@ -260,6 +260,7 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
+        #if 0
           else if( gpro_t.disp_rx_cmd_done_flag==1 )
           {
             gpro_t.disp_rx_cmd_done_flag = 0;
@@ -279,9 +280,10 @@ static void vTaskMsgPro(void *pvParameters)
            }
 
            gl_tMsg.usData[0]=0;
+          
             
          }
-         
+        #endif 
              
       
        }
@@ -420,6 +422,29 @@ static void vTaskStart(void *pvParameters)
             wifi_get_beijing_time_handler();
             wifi_auto_detected_link_state();
         }
+
+       if( gpro_t.disp_rx_cmd_done_flag==1 )
+          {
+            gpro_t.disp_rx_cmd_done_flag = 0;
+
+
+            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
+
+           if(check_code == gl_tMsg.bcc_check_code ){
+           
+              receive_data_fromm_display(gl_tMsg.usData);
+              if(gpro_t.buzzer_sound_flag == 1){
+                  gpro_t.buzzer_sound_flag++ ;
+                  buzzer_sound();
+
+
+              }
+           }
+
+           gl_tMsg.usData[0]=0;
+          
+            
+         }
 
          clear_rx_copy_data();
         vTaskDelay(20);
