@@ -260,30 +260,7 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
           }
-        #if 0
-          else if( gpro_t.disp_rx_cmd_done_flag==1 )
-          {
-            gpro_t.disp_rx_cmd_done_flag = 0;
-
-
-            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
-
-           if(check_code == gl_tMsg.bcc_check_code ){
-           
-              receive_data_fromm_display(gl_tMsg.usData);
-              if(gpro_t.buzzer_sound_flag == 1){
-                  gpro_t.buzzer_sound_flag++ ;
-                  buzzer_sound();
-
-
-              }
-           }
-
-           gl_tMsg.usData[0]=0;
-          
-            
-         }
-        #endif 
+   
              
       
        }
@@ -400,6 +377,7 @@ static void vTaskStart(void *pvParameters)
           mainboard_active_handler();
          
           LCD_Timer_Colon_Flicker();
+          
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
           Disip_Wifi_Icon_State();
