@@ -62,6 +62,7 @@ extern UART_HandleTypeDef huart1; //display board commnunication.
 
 extern UART_HandleTypeDef huart2; //wifi net for tencent 
 /* USER CODE BEGIN EV */
+extern DMA_HandleTypeDef hdma_usart1_tx;
 
 /* USER CODE END EV */
 
@@ -239,6 +240,20 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel 1 interrupt.
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
 }
 
 

@@ -34,12 +34,17 @@ void sendData_setTemp_value(uint8_t temp)
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
 	//outputBuf[i]=crc;
 	transferSize=8;
+	#if 0
 	if(transferSize)
 	{
 		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 		transOngoingFlag=1;
 		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
+	#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 
 
 
@@ -70,12 +75,17 @@ void sendData_Real_TimeHum(uint8_t hum,uint8_t temp)
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
 	//outputBuf[i]=crc;
 	transferSize=9;
+	#if 0
 	if(transferSize)
 	{
 		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 		transOngoingFlag=1;
 		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
+	#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 
 
 
@@ -103,12 +113,17 @@ void SendWifiData_To_PanelTime(uint8_t hours,uint8_t minutes,uint8_t seconds)
     outputBuf[9] = bcc_check(outputBuf,9);
 
 	transferSize=10;
+	#if 0
 	if(transferSize)
 	{
 	while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 	transOngoingFlag=1;
 	HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
+	#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 }
 /********************************************************************************
     **
@@ -133,12 +148,17 @@ void SendWifiData_To_SynTimerTime(uint8_t hours,uint8_t minutes,uint8_t seconds)
     outputBuf[9] = bcc_check(outputBuf,9);
 
 	transferSize=10;
+	#if 0
 	if(transferSize)
 	{
 	while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 	transOngoingFlag=1;
 	HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
+	#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 }
 
 /*********************************************************
@@ -159,12 +179,17 @@ void SendData_Set_Command(uint8_t cmd,uint8_t data)  //  SendData_Set_Command(0x
 
 
 		transferSize=7;
+	#if 0
 		if(transferSize)
 		{
 			while(transOngoingFlag);
 			transOngoingFlag=1;
 			HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 		}
+		#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 	
 }
 /*********************************************************
@@ -189,12 +214,17 @@ void SendData_Tx_Data(uint8_t dcmd,uint8_t ddata)
 
 
 		transferSize=8;
+	#if 0
 		if(transferSize)
 		{
 			while(transOngoingFlag);
 			transOngoingFlag=1;
 			HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 		}
+		#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 	
 }
 /********************************************************************************
@@ -221,12 +251,17 @@ void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra)
     outputBuf[10] = bcc_check(outputBuf,10);
 
 	transferSize=11;
+	#if 0
 	if(transferSize)
 	{
     	while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
     	transOngoingFlag=1;
     	HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
+	#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 }
 /********************************************************************************
     **
@@ -249,12 +284,17 @@ void SendWifiData_To_Data(uint8_t cmd,uint8_t data)
         outputBuf[7] = bcc_check(outputBuf,7);
         
         transferSize=8;
+		#if 0
         if(transferSize)
         {
             while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
             transOngoingFlag=1;
             HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
         }
+		#else
+     HAL_UART_Transmit_DMA(&huart1,outputBuf, transferSize);
+
+	#endif 
 	
 }
 

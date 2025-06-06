@@ -26,7 +26,7 @@ uint8_t check_code;
 #define RUN_POWER_4         (1 << 4)
 #define RUN_MODE_5          (1 << 5)
 #define RUN_DEC_6           (1 << 6)
-#define RUN_ADD_7           (1 << 7)
+#define DECODER_BIT_7           (1 << 7)
 
 #define PHONE_POWER_ON_RX_8       (1<<8)
 #define PHONE_POWER_ON_9         (1<<9)
@@ -110,22 +110,21 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 {
 
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
+	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
 	uint32_t ulValue;
-	xResult = xTaskNotifyWait(0x00000000,	   
-							   0xFFFFFFFF,	  
-							    &ulValue,		  /* 保存ulNotifiedValue到变量ulValue中 */
-								portMAX_DELAY);  /* 最大允许延迟时间 */
+	
+	while(1)
+	{
+		xResult = xTaskNotifyWait(0x00000000,	   
+							   		0xFFFFFFFF,	  
+							    	&ulValue,		  /* 保存ulNotifiedValue到变量ulValue中 */
+									portMAX_DELAY);  /* 最大允许延迟时间 */
 		   
 		if( xResult == pdPASS )
 		{
-            f((ulValue & DECODER_BIT_10) != 0){
+            if((ulValue & DECODER_BIT_7) != 0){
 
-		
-            
-
-     
-            gpro_t.disp_rx_cmd_done_flag = 0;
+	        gpro_t.disp_rx_cmd_done_flag = 0;
 
 
             check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
@@ -141,16 +140,16 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
               }
            }
 
-           gl_tMsg.usData[0]=0;
+          // gl_tMsg.usData[0]=0;
           
             
          }
 
-         clear_rx_copy_data();
+     //    clear_rx_copy_data();
 
 
 		}
-
+	}
 }
 /**********************************************************************************************************
 *	函 数 名: vTaskStart
@@ -179,7 +178,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           Backlight_Off();
           
           buzzer_sound();
-
+          gpro_t.shut_Off_backlight_flag == turn_on;
         }
 
 
@@ -322,11 +321,7 @@ static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvPara
              
 			if((ulValue & POWER_KEY_0) != 0)
 			{
-   
-                     
-               // xTaskNotify(xHandleTaskStart, /* 目标任务 */
-						///RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
-						///eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+  
 			   if(gpro_t.shut_Off_backlight_flag == turn_off){
 
                      gpro_t.gTimer_shut_off_backlight =0;
@@ -613,7 +608,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
                 gpro_t.disp_rx_cmd_done_flag = 1 ;
 
-                state=0;
+          
 
                  gl_tMsg.bcc_check_code=disp_inputBuf[0];
 
@@ -621,7 +616,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                 #if 1
 
                  xTaskNotifyFromISR(xHandleTaskUsartPro,  /* 目标任务 */
-                                    DECODER_BIT_10,     /* 设置目标任务事件标志位bit0  */
+                                    DECODER_BIT_7,     /* 设置目标任务事件标志位bit0  */
                                     eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
                                     &xHigherPriorityTaskWoken);
 
