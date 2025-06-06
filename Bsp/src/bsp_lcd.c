@@ -1034,146 +1034,68 @@ void LCD_Timer_Colon_Flicker(void)
 {
 
   static uint8_t disp_default5678 =0xff,disp_default5678_timer=0xff;
+  static uint8_t disp_switch;
    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
 
-   if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
+    if(glcd_t.gTimer_colon_blink > 2){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
+		 glcd_t.gTimer_colon_blink=0;
+
+	     disp_switch = disp_switch ^ 0x01;
 
          switch(gkey_t.key_mode){
 
          
          case disp_works_timing :
 
-         if(disp_default5678  !=gpro_t.display_number5678_flag){
-             disp_default5678  =gpro_t.display_number5678_flag;
 
           glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
 		  glcd_t.number7_high = glcd_t.number7_low ;
-          TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-         }
+		  if(disp_switch ==1)
+             TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+          else 
+		  	 TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+           
+		  	
+		 
          break;
 
          case disp_timer_timing:
 
-           if(disp_default5678_timer != gpro_t.display_number5678_flag){
-                disp_default5678_timer = gpro_t.display_number5678_flag;
+			
              if(gkey_t.set_timer_timing_success ==1){
-                   // gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
-                   // Display_Timer_Timing();
+             
                     glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
 		            glcd_t.number7_high =   glcd_t.number7_low;
-                    TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-             
+			        if(disp_switch ==1)
+                    	TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+                    else
+						TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
              
               }
               else if(gkey_t.set_timer_timing_success == 0){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
              
-             
-                        if(gpro_t.gTimer_disp_short_time < 20){
-                           glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-		                   glcd_t.number7_high =   glcd_t.number7_low;
-                           TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-
-
-                         }
-                         else if(gpro_t.gTimer_disp_short_time > 19){
-                            
-                            glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-		                    glcd_t.number7_high = glcd_t.number7_low ;
-                            TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-             
-             
-                         }
-             
-             
-              }
-            
-            // TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-            }
+                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
+				glcd_t.number7_high =   glcd_t.number7_low;
+				if(disp_switch ==1)
+				TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+				else
+				TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+			}
+      
          break;
 
          case mode_set_timer:
-            gpro_t.display_number5678_flag++;
             TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
          break;
 
          }
    }
-   else if(glcd_t.gTimer_colon_blink > 6  && glcd_t.gTimer_colon_blink < 9){
 
-    
-         switch(gkey_t.key_mode){
-
-         
-         case disp_works_timing :
-
-          if(disp_default5678  !=gpro_t.display_number5678_flag){
-             disp_default5678  =gpro_t.display_number5678_flag;
-       
-          glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-		  glcd_t.number7_high = glcd_t.number7_low ;
-            
-           TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-           }
-         break;
-
-         case disp_timer_timing:
-
-         if(disp_default5678_timer != gpro_t.display_number5678_flag){
-                disp_default5678_timer = gpro_t.display_number5678_flag;
-
-           if(gkey_t.set_timer_timing_success ==1){
-         
-             glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-             glcd_t.number7_high =   glcd_t.number7_low;
-            TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-            }
-            else if(gkey_t.set_timer_timing_success == 0){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
-             
-             
-                if(gpro_t.gTimer_disp_short_time < 20){
-                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-                glcd_t.number7_high =   glcd_t.number7_low;
-                TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-
-
-                }
-                else if(gpro_t.gTimer_disp_short_time > 19){
-
-                glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-                glcd_t.number7_high = glcd_t.number7_low ;
-                TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-
-                }
-             
-           }
-            }
-          break;
-
-        case mode_set_timer:
-            gpro_t.display_number5678_flag++;
-            TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-         break;
-          
-         }
   }
-   else if(glcd_t.gTimer_colon_blink > 8){
-
-      glcd_t.gTimer_colon_blink =0;
-      gpro_t.display_number5678_flag++;
-       
-
-   }
    
     TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
-}
-
-}
+ }
 
 /*************************************************************************************
 	*
