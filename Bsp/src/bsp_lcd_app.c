@@ -88,7 +88,7 @@ void Display_Works_Timing(void)
 	  gpro_t.gTimer_works_counter_sencods=0;
 
 	  gpro_t.disp_works_minutes_value++;
-      gpro_t.display_number5678_flag++ ;  //display works times by smg numbers 5678
+
 
 	if( gpro_t.disp_works_minutes_value > 59){ //1 hours
 		gpro_t.disp_works_minutes_value=0;
@@ -152,7 +152,7 @@ void Display_Works_Timing(void)
 		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
 		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
        // Display_LCD_Works_Timing();
-       gpro_t.display_number5678_flag++ ;  //display works times by smg numbers 5678
+ 
 
        display_works_times_handler();
 
@@ -256,7 +256,7 @@ void Display_Timer_Timing(void)
 	    gpro_t.gTimer_timer_Counter =0;
 		
 		gpro_t.set_timer_timing_minutes -- ;
-        gpro_t.display_number5678_flag++ ;  //display works times by smg numbers 5678
+
 	
 	    if(gpro_t.set_timer_timing_minutes <  0 ){
 			 
@@ -440,7 +440,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
                  }
                  
-               gpro_t.display_number5678_flag++ ;  //display works times by smg numbers 5678 
+            
             }
             else{
                 gkey_t.set_timer_timing_success = 1;
@@ -462,7 +462,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                     SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
 
                  }
-              gpro_t.display_number5678_flag++ ;  //display works times by smg numbers 5678 
+             
             }
         }
 

@@ -1037,7 +1037,7 @@ void LCD_Timer_Colon_Flicker(void)
   static uint8_t disp_switch;
    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
 
-    if(glcd_t.gTimer_colon_blink > 2){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
+    if(glcd_t.gTimer_colon_blink > 3){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
 		 glcd_t.gTimer_colon_blink=0;
 
 	     disp_switch = disp_switch ^ 0x01;
@@ -1090,11 +1090,12 @@ void LCD_Timer_Colon_Flicker(void)
          break;
 
          }
-   }
+     }
+   // TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
 
   }
    
-    TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
+    
  }
 
 /*************************************************************************************
