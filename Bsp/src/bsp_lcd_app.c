@@ -4,7 +4,7 @@
 
 //static void Display_Timer_Timing(int8_t hours,int8_t minutes);
 
-static void Display_LCD_Works_Timing(void);
+//static void Display_LCD_Works_Timing(void);
 static void disp_speical_works_timing_value(void);
 
 /**********************************************************************************************************
@@ -193,15 +193,15 @@ static void disp_speical_works_timing_value(void)
 }
 
 
-static void Display_LCD_Works_Timing(void)
-{
+//static void Display_LCD_Works_Timing(void)
+//{
 
 
-    LCD_Number_FiveSix_Hours();
-    LCD_Number_SevenEight_Minutes();
+//    LCD_Number_FiveSix_Hours();
+//    LCD_Number_SevenEight_Minutes();
 
 
-}
+//}
 
 
 

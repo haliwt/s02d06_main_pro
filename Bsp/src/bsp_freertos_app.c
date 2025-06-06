@@ -170,7 +170,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           Backlight_Off();
           
           buzzer_sound();
-          gpro_t.shut_Off_backlight_flag == turn_on;
+          gpro_t.shut_Off_backlight_flag = turn_on;
         }
 		
         if(smart_phone_sound == 1){
@@ -249,7 +249,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           
           mainboard_active_handler();
          
-          LCD_Timer_Colon_Flicker();
+          LCD_Timer_Colon_Blink();
           
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
@@ -559,7 +559,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   
      static uint8_t state;
-     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+   //  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     if(huart->Instance==USART1)//if(huart==&huart1) // Motor Board receive data (filter)
 	{

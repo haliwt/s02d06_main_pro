@@ -59,7 +59,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        gkey_t.gTimer_set_temp_blink++;
 
        //lcd timer 
-       glcd_t.gTimer_colon_blink++ ;
+      
        
        glcd_t.gTimer_error_times++;
        
@@ -69,12 +69,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm0>999){ //100 *10ms = 1000ms = 1s
 		tm0=0;
 		tm2++;
+
+		glcd_t.gTimer_colon_blink++ ;
       
           //control timer
         gctl_t.gTimer_wifi_blink++;
     
          //key timer
-	
+	 
          gkey_t.gTimer_power_off_run_times++;
         
         gkey_t.gTimer_disp_set_timer++;
