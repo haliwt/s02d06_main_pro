@@ -34,35 +34,26 @@ uint8_t check_code;
 
 
 
-typedef struct Msg
-{
-	uint8_t  ucMessageID;
-    uint8_t  uid;
-    uint8_t  bcc_check_code;
-	uint8_t usData[12];
-	
-}MSG_T;
-
-MSG_T   gl_tMsg; /* 定义丢�个结构体用于消息队列 */
+//typedef struct Msg
+//{
+//	uint8_t  ucMessageID;
+//    uint8_t  uid;
+//    uint8_t  bcc_check_code;
+//	uint8_t usData[12];
+//	
+//}MSG_T;
+//
+//MSG_T   gl_tMsg; /* 定义丢�个结构体用于消息队列 */
 
 
 uint8_t rx_data_counter,rx_end_flag;
-
-uint8_t  rx_end_counter,uid;
-
-
-uint8_t power_off_flag_recoder ;
-
 uint8_t add_flag,dec_flag,smart_phone_sound;
 
 
-/*
-**********************************************************************************************************
+/***********************************************************************************************************
 											函数声明
-**********************************************************************************************************
-*/
-//static void vTaskTaskUserIF(void *pvParameters);
-static void vTaskUsartPro(void *pvParameters);
+***********************************************************************************************************/
+//static void vTaskUsartPro(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
@@ -73,8 +64,7 @@ static void AppTaskCreate (void);
 											变量声明
 **********************************************************************************************************
 */
-//static TaskHandle_t xHandleTaskUserIF = NULL;
-static TaskHandle_t xHandleTaskUsartPro = NULL;
+//static TaskHandle_t xHandleTaskUsartPro = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
@@ -106,6 +96,7 @@ void freeRTOS_Handler(void)
 	*   优 先  
 	*
 **********************************************************************************************************/
+#if 0
 static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvParameters)
 {
 
@@ -151,6 +142,7 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 		}
 	}
 }
+#endif 
 /**********************************************************************************************************
 *	函 数 名: vTaskStart
 *	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
@@ -180,10 +172,8 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           buzzer_sound();
           gpro_t.shut_Off_backlight_flag == turn_on;
         }
-
-
-        
-         if(smart_phone_sound == 1){
+		
+        if(smart_phone_sound == 1){
             smart_phone_sound++;
            
             smartphone_power_on_handler();
@@ -238,7 +228,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
           }
           else if(gpro_t.send_data_power_on_flag == power_off){
-               power_off_flag_recoder ++ ;
+             
               gpro_t.send_data_power_on_flag =0xff;
           
                SendData_Set_Command(0X01,0X00);
@@ -287,8 +277,8 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
          }
         
        receive_message_displaybord_handler();
-        vTaskDelay(20);
-       }
+       vTaskDelay(20);
+      }
 
     }
 /**********************************************************************************************************
@@ -449,17 +439,17 @@ static void AppTaskCreate (void)
 {
 
 
-    xTaskCreate( vTaskUsartPro,     		/* 任务函数  */
-                 "vTaskUsartPro",   		/* 任务名    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
-                 &xHandleTaskUsartPro );  /* 任务句柄  */
+//    xTaskCreate( vTaskUsartPro,     		/* 任务函数  */
+//                 "vTaskUsartPro",   		/* 任务名    */
+//                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+//                 NULL,           		/* 任务参数  */
+//                 2,               		/* 任务优先级*/
+//                 &xHandleTaskUsartPro );  /* 任务句柄  */
 
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
@@ -469,7 +459,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,              		/* 任务优先级*/
+                 2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
