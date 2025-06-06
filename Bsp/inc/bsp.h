@@ -98,6 +98,8 @@ typedef struct {
    uint8_t fan_lower_speed;
    uint8_t fan_middle_speed;
 
+   uint8_t display_number5678_flag;
+
 
 
   
