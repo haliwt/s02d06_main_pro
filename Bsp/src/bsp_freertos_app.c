@@ -203,13 +203,13 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
                 if(add_flag ==1){
                      add_flag ++;
                      Buzzer_KeySound();
-                     osDelay(20);
+                  
 
                  }
                  else if(dec_flag ==1){
                      dec_flag ++;
                      Buzzer_KeySound();
-                     osDelay(20);
+                    
 
                  }
 
@@ -233,7 +233,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
                gpro_t.send_data_power_on_flag =0xff;
                
                SendData_Set_Command(0X01,0X01);
-               osDelay(30);
+               osDelay(5);
                 
 
           }
@@ -242,7 +242,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
               gpro_t.send_data_power_on_flag =0xff;
           
                SendData_Set_Command(0X01,0X00);
-               osDelay(30);
+               osDelay(5);
           }
        
 
@@ -286,7 +286,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
          }
         
-    
+       receive_message_displaybord_handler();
         vTaskDelay(20);
        }
 
@@ -579,7 +579,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		case 0:  //#0
 			if(disp_inputBuf[0] == 0xA5){  // 0xA5 --didplay command head
                rx_data_counter=0;
-               gl_tMsg.usData[rx_data_counter] = disp_inputBuf[0];
+               mess_t.mesData[rx_data_counter] = disp_inputBuf[0];
 			   state=1; //=1
 
              }
@@ -594,14 +594,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
               /* 初始化结构体指针 */
                rx_data_counter++;
 		     
-	         gl_tMsg.usData[rx_data_counter] = disp_inputBuf[0];
+	          mess_t.mesData[rx_data_counter] = disp_inputBuf[0];
               
 
               if(rx_end_flag == 1){
 
                 state = 0;
             
-                gl_tMsg.uid = rx_data_counter;
+                mess_t.mesLength = rx_data_counter;
                 rx_end_flag=0;
 
                 rx_data_counter =0;
@@ -610,10 +610,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
           
 
-                 gl_tMsg.bcc_check_code=disp_inputBuf[0];
+                 mess_t.bcc_check_code=disp_inputBuf[0];
 
           
-                #if 1
+                #if 0
 
                  xTaskNotifyFromISR(xHandleTaskUsartPro,  /* 目标任务 */
                                     DECODER_BIT_7,     /* 设置目标任务事件标志位bit0  */
@@ -628,7 +628,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
               }
 
-              if(gl_tMsg.usData[rx_data_counter] ==0xFE && rx_end_flag == 0 &&  rx_data_counter > 4){
+              if(mess_t.mesData[rx_data_counter] ==0xFE && rx_end_flag == 0 &&  rx_data_counter > 4){
                      
                        rx_end_flag = 1 ;
                }

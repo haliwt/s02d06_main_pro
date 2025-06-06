@@ -437,6 +437,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                 if(g_tDisp.second_disp_set_temp_flag == 0){
                     
                     SendData_Tx_Data(0x4C,0x0);
+				    osDelay(5);
 
                  }
                  
@@ -455,12 +456,12 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
                 if(gpro_t.tencent_link_success==1){
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
-                    HAL_Delay(200);
+                    osDelay(50);//HAL_Delay(200);
                 }
                 if(g_tDisp.second_disp_set_temp_flag == 0){
                     
                     SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
-
+                    osDelay(5);
                  }
              
             }

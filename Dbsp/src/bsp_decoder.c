@@ -1,7 +1,29 @@
 #include "bsp.h"
 
+message_disp mess_t;
+
+void receive_message_displaybord_handler(void)
+{
+    uint8_t check_code;
+	if(gpro_t.disp_rx_cmd_done_flag ==1){
+            gpro_t.disp_rx_cmd_done_flag = 0;
 
 
+		   check_code =  bcc_check(mess_t.mesData,mess_t.mesLength);
+
+		  if(check_code == mess_t.bcc_check_code ){
+		  
+			 receive_data_fromm_display(mess_t.mesData);
+			 if(gpro_t.buzzer_sound_flag == 1){
+				 gpro_t.buzzer_sound_flag++ ;
+				 buzzer_sound();
+
+
+			 }
+		  }
+
+      }
+}
 
 /**********************************************************************
     *
