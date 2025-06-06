@@ -133,7 +133,7 @@ void power_on_run_handler(void)
 
          if(gpro_t.tencent_link_success==1 ){
              MqttData_Publish_SetState(1);
-	         osDelay(10);//HAL_Delay(350);
+	         osDelay(50);//HAL_Delay(350);
            }
         }
         else if(g_tDisp.ai_mode_flag ==2 ){
@@ -146,7 +146,7 @@ void power_on_run_handler(void)
 
         if(gpro_t.tencent_link_success==1){
          MqttData_Publish_SetState(2);
-	     osDelay(10);//HAL_Delay(350);
+	     osDelay(50);//HAL_Delay(350);
 
          }
         }
@@ -779,11 +779,11 @@ static void power_on_init_function(void)
 ***************************************************************************/
 static void Detected_Fan_Error(void)
 {
-    if(gpro_t.gTimer_run_adc > 30 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
+    if(gpro_t.gTimer_run_adc > 5 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 		gpro_t.gTimer_run_adc=0;
         if(wifi_t.set_wind_speed_value ==0){ //max fan speed be detected if not defalut .
         if( gctl_t.interval_stop_run_flag  ==0){
-		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,10);
         }
         }
 				
@@ -792,9 +792,9 @@ static void Detected_Fan_Error(void)
 
 static void Detected_Ptc_Error(void)
 {
-    if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
+    if(gpro_t.gTimer_ptc_detected > 6 && gctl_t.interval_stop_run_flag==0){ //3 minutes 120s
 	   gpro_t.gTimer_ptc_detected =0;	
-	   Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
+	   Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,10);
     }
 
 }

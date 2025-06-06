@@ -238,9 +238,11 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
        if(gkey_t.key_power==power_on){
             
-          backlight_on_off_state();
+     
           power_on_run_handler();
+	   
           record_time_or_time_handler();
+		  
           key_add_dec_set_temp_value_fun();
 
           key_mode_be_pressed_send_data_wifi();
@@ -252,8 +254,11 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           LCD_Timer_Colon_Blink();
           
           LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+		  
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
+		  
           Disip_Wifi_Icon_State();
+		  
           if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
 
              gkey_t.key_mode_long_counter =0;
@@ -277,7 +282,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
          }
         
        receive_message_displaybord_handler();
-       vTaskDelay(20);
+       vTaskDelay(10);
       }
 
     }
@@ -312,20 +317,12 @@ static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvPara
 			if((ulValue & POWER_KEY_0) != 0)
 			{
   
-			   if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                     gpro_t.gTimer_shut_off_backlight =0;
-                     wake_up_backlight_on();
-                     buzzer_sound();
-
-                }
-                else{
-                    gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
+			
+                gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
                     
-                    gpro_t.gTimer_shut_off_backlight =0;
-                }
-            
-                gpro_t.gTimer_run_dht11=0;
+                gpro_t.gTimer_shut_off_backlight =0;
+                
+           
 				                                    
 			}
             else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)

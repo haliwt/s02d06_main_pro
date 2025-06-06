@@ -24,12 +24,12 @@ void power_long_short_key_fun(void)
 {
 
   
-    if(KEY_POWER_VALUE() == 1   && gkey_t.power_key_long_counter < 60){
+    if(KEY_POWER_VALUE() == KEY_DOWN   && gkey_t.power_key_long_counter < 100 && gkey_t.key_power==power_on){
 
 
         gkey_t.power_key_long_counter++;
-        if( gkey_t.power_key_long_counter > 15   && KEY_POWER_VALUE() == 1){
-             gkey_t.power_key_long_counter = 0;
+        if( gkey_t.power_key_long_counter > 79   && KEY_POWER_VALUE() == 1){
+             gkey_t.power_key_long_counter = 200;
              
              gkey_t.power_on_flag++;
          
@@ -53,7 +53,8 @@ void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter<15){ //short key of function
+	
+    if(KEY_POWER_VALUE() == KEY_UP && gkey_t.power_key_long_counter<80){ //short key of function
 
         gkey_t.power_key_long_counter=0;
 
@@ -71,7 +72,8 @@ void power_long_short_key_fun(void)
               gctl_t.step_process=0;
               gpro_t.power_off_flag =1;
               gpro_t.send_data_power_on_flag = power_on;
-            //  SendData_Set_Command(0x01, 0x01); // power on ->to second display 
+             // SendData_Set_Command(0x01, 0x01); // power on ->to second display 
+             // osDelay(5);
             }
            else{
               
@@ -89,6 +91,13 @@ void power_long_short_key_fun(void)
       
 
         }
+	    else if(KEY_POWER_VALUE() == KEY_UP && gkey_t.power_key_long_counter==200){
+
+		   gkey_t.power_key_long_counter =0;
+
+
+		}
+			
 }
 /*********************************************************************************
 *

@@ -146,7 +146,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
     #else
 
-	if(fan_detect_voltage >560 ){
+	if(fan_detect_voltage >510 ){
            detect_error_times=0;
 		   #ifdef DEBUG
              printf("adc= %d",run_t.fan_detect_voltage);
@@ -155,10 +155,10 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
     }
    #endif 
    else{
-
+         detect_error_times ++;
 	          
-		if(detect_error_times >0){
-			detect_error_times=0;
+		if(detect_error_times >1){
+			detect_error_times = 3;
 		  gctl_t.fan_warning = 1;
           gkey_t.key_mode = disp_fan_error_number; //disp_error_number;
 		  Buzzer_Fan_Error_Sound();
@@ -183,7 +183,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 			SendData_Set_Command(0x09,0x01); //fan error codes
 
           }
-		detect_error_times++;
+		
 
         
    }
