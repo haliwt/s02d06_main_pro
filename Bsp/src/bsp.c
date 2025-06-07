@@ -7,7 +7,7 @@ static void Mainboard_Action_Fun(void);
 
 static void Process_Dynamical_Action(void);
 static void power_off_function(void);
-static void power_on_init_function(void);
+
 
 
 
@@ -58,7 +58,7 @@ void power_on_run_handler(void)
 
 		  case 0:
 
-            power_on_init_function();
+          //  power_on_init_function();
 
              power_off_flag=0;
           
@@ -458,7 +458,7 @@ static void power_off_function(void)
 *Return Ref:NO
 *
 ************************************************************************/
-static void power_on_init_function(void)
+void power_on_init_function(void)
 {
      
 

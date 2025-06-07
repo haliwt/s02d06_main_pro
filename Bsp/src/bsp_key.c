@@ -9,7 +9,14 @@
 
 key_fun_t gkey_t;
 
-
+/************************************************************************************
+	*
+	*Funtion Name:void key_handler(void)
+	*Function:
+	*Input Ref:
+	*Return Ref:
+	*
+************************************************************************************/
 void key_handler(void)
 {
 	if(KEY_POWER_VALUE() == KEY_DOWN ){
@@ -60,14 +67,14 @@ void key_handler(void)
 
 }
 
-/*********************************************************************************
-*
-*	函 数 名:static void mode_long_short_key_fun(void)
-*	功能说明: 
-*	形    参: 
-*	返 回 值: 无
-*   
-*********************************************************************************/
+/************************************************************************************
+	*
+	*Funtion Name:void key_power_long_handler(void)
+	*Function:
+	*Input Ref:
+	*Return Ref:
+	*
+************************************************************************************/
 void key_power_long_handler(void)
 {
 
@@ -103,7 +110,14 @@ void key_power_long_handler(void)
     }
 
 }
-
+/************************************************************************************
+	*
+	*Funtion Name:void key_power_shot_handler(void)
+	*Function:
+	*Input Ref:
+	*Return Ref:
+	*
+************************************************************************************/
 void key_power_shot_handler(void)
 {
 	
@@ -124,12 +138,15 @@ void key_power_shot_handler(void)
                
               gctl_t.step_process=0;
               gpro_t.power_off_flag =1;
-        
+			   Buzzer_KeySound();
+
+			   power_on_init_function();
+         
                SendData_Set_Command(0X01,0X01);
                osDelay(5);
             }
            else{
-              
+               Buzzer_KeySound();
               gkey_t.power_on_flag++;
             
               gkey_t.key_power=power_off;
@@ -141,7 +158,7 @@ void key_power_shot_handler(void)
                osDelay(5);
 
            }
-           Buzzer_KeySound();
+         
        
       
 
@@ -222,7 +239,14 @@ void key_mode_long_handler(void)
 
     }
 }
-
+/************************************************************************************
+	*
+	*Funtion Name:void key_power_shot_handler(void)
+	*Function:
+	*Input Ref:
+	*Return Ref:
+	*
+************************************************************************************/
 void key_mode_short_handler(void)
 {
     

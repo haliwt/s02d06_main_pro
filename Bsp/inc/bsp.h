@@ -174,6 +174,8 @@ extern uint8_t disp_inputBuf[1];
 
 
 
+void power_on_init_function(void);
+
 void power_off_run_handler(void);
 
 
