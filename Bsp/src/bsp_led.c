@@ -9,7 +9,7 @@ static uint8_t Delay(int32_t count);
  uint32_t led_k;
 
 
-void LED_Power_On(void)
+void LED_POWER_ON(void)
 {
     LED_POWER_KEY_SetHigh() ;
 
@@ -65,113 +65,24 @@ static uint8_t  Delay(int32_t count)
 void Breath_Led(void)
 {
    
-    static uint8_t flag,switch_flag,dec_led_flag;
-    static uint8_t i,j;
-    led_k++;
+    static uint8_t breathing_time = 0;
+    static uint8_t led_state = 0;
     
-	
-    if(led_k <25 && dec_led_flag==1){
-        i++;
-     if(switch_flag ==1 || i > 4){
-        switch_flag =0;
-      
-        LED_POWER_OFF();
-        flag = Delay(25-i);
-       
-      }
-	  if(flag ==1){
-        flag =0;
-        LED_Power_On();
-         j=i;
-         if(j< 5){
-           switch_flag = Delay(j);
-
-         }
-         switch_flag =1;
-      
-
+    breathing_time++;
+    if(breathing_time >= 100)  // 呼吸周期1秒
+    {
+        breathing_time = 0;
+        led_state = !led_state;
+        
+        if(led_state)
+        {
+            LED_POWER_ON();
         }
-      
+        else
+        {
+            LED_POWER_OFF();
+        }
     }
-    else if(led_k < 25 && dec_led_flag==0){
-        i++;
-     if(switch_flag ==1 || i < 10){
-        switch_flag =0;
-        #if 0
-        LED_POWER_OFF();
-        LED_POWER_OFF();
-        LED_Power_On();
-        flag = Delay(30-i);
-        #endif 
-        LED_Power_On();
-        flag = Delay(25-i);
-        
-
-      }
-	  if(flag ==1){
-        flag =0;
-      
-           if(j< 20){
-           LED_POWER_OFF();
-           switch_flag = Delay(i);
-
-            }
-            else{
-             LED_POWER_OFF();
-             LED_POWER_OFF();
-             LED_POWER_OFF();
-             LED_POWER_OFF();
-             switch_flag = 1;
-
-
-            }
-        }
-     }
-    
-    if(led_k > 25 && dec_led_flag==0){
-
-    
-
-//          z++; 
-//      if(z<20){
-//         LED_POWER_OFF();
-//         
-//      }
-//      else{
-    
-		led_k=0;
-         i=0;
-   //      z=0;
-         dec_led_flag=1;
-        
-     //  }
-        
-      }
-      else if(led_k>25 && dec_led_flag==1){
-        
-     
-       
-        led_k=0;
-         i=0;
-      //   z=0;
-         dec_led_flag=0;
-        
-//        if(z<20){
-//         // LED_POWER_OFF();
-//         LED_Power_On();
-//         }
-//         else{
-//       
-//		led_k=0;
-//         i=0;
-//         z=0;
-//         dec_led_flag=0;
-//        }
-	}
-
-
-    
-	
 
 }
 	

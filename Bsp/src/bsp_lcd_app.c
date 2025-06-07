@@ -19,7 +19,7 @@ void PowerOn_Init(void)
 {
   
     LED_Mode_On();
-    LED_Power_On();
+    LED_POWER_ON();
     Backlight_On();
     Mainboard_Action_Fun();
 

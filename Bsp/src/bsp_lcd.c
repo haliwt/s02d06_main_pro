@@ -1049,8 +1049,8 @@ void Display_Wind_Icon_Inint(void)
 void LCD_Timer_Colon_Blink(void)
 {
 
-  static uint8_t disp_default5678 =0xff,disp_default5678_timer=0xff;
-  static uint8_t disp_switch;
+ 
+ 
    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
 
     if(glcd_t.gTimer_colon_blink > 0){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){

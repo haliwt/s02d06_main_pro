@@ -108,6 +108,7 @@ void power_on_run_handler(void)
           case 1:   //run dht11 display 
 
             read_senson_dht11_data();
+			LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 
           gctl_t.step_process=3;
 		  
@@ -202,6 +203,7 @@ void power_on_run_handler(void)
 	case 5: //check works times 
 
 	       works_two_hours_handler();
+		   LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 		   gctl_t.step_process=1;
     break;
 
@@ -508,7 +510,7 @@ static void power_on_init_function(void)
 
 
     LED_Mode_On();
-    LED_Power_On();
+    LED_POWER_ON();
     Backlight_On();
 
 
