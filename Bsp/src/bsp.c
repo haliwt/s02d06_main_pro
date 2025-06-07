@@ -521,7 +521,7 @@ static void power_on_init_function(void)
     sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
 
 
-    LCD_Wind_Run_Icon(0);
+    LCD_Fan_Run_Icon(0);
     Disp_HumidityTemp_Init();
 
 

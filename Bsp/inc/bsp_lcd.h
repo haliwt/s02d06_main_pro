@@ -146,7 +146,7 @@ void LCD_Number_ThreeFour_Temperature(void);
 void LCD_Number_FiveSix_Hours(void);
 void LCD_Number_SevenEight_Minutes(void);
 
-void LCD_Wind_Run_Icon(uint8_t speed_valu);
+void LCD_Fan_Run_Icon(uint8_t speed_valu);
 
 void Display_Wind_Icon_Inint(void);
 

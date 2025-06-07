@@ -929,7 +929,7 @@ void ptc_error_code_number(void)
  * Return Ref:
  * 
 *****************************************************************************/
-void LCD_Wind_Run_Icon(uint8_t wind_speed)
+void LCD_Fan_Run_Icon(uint8_t wind_speed)
 {
 
 
@@ -944,61 +944,48 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
    case 0: //max wind speed.
     
-        if(glcd_t.gTimer_fan_blink < 15){ //open 
+        if(glcd_t.gTimer_fan_blink > 10){ //open 
 
+			glcd_t.gTimer_fan_blink=0;
 
-            if(alternate_flag ==0){
-            alternate_flag ++;
+            alternate_flag = alternate_flag ^ 0x01;
+
+		    if(alternate_flag ==1){
             TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13) & 0xffff));//display  wind icon
             TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+ T11)& 0xff));//display  wind icon	
 
             }
-        }
-        else if(glcd_t.gTimer_fan_blink > 14 && glcd_t.gTimer_fan_blink   < 30){ //close
+            else { //close
 
-            if(alternate_flag == 1){
-            alternate_flag =0;
+          
             TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14)& 0xffff));//display  wind icon
             TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL)& 0xff));//display  wind icon	
 
             }
 
         }
-        else if(glcd_t.gTimer_fan_blink > 29){
-            glcd_t.gTimer_fan_blink=0;
-            alternate_flag =0;
-        
-            
-            TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
-        }
-
     break;
 
     
 
     case 1: //middle 
 
-         if(glcd_t.gTimer_fan_blink < 20){ //open 
-              if(alternate_flag == 0){
-        		alternate_flag ++;
-                  
+         if(glcd_t.gTimer_fan_blink  >11){ //open 
+         glcd_t.gTimer_fan_blink=0;
+              alternate_flag = alternate_flag ^ 0x01;
+        		
+               if(alternate_flag==1){ 
                TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13)&0xff));//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
                }
-        	}
-            else if(glcd_t.gTimer_fan_blink > 19 && glcd_t.gTimer_fan_blink   < 40){ //close
+               else{ //close
 
-               if(alternate_flag == 1){
-        		alternate_flag =0;
+             
         	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14) & 0xffff));//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,  0x00);//display  wind icon	
                }
 
-        	}
-        	else if(glcd_t.gTimer_fan_blink > 39){
-        		glcd_t.gTimer_fan_blink=0;
-                alternate_flag =0;
-                 TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
+        
         	}
 
 
@@ -1008,30 +995,25 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
     case 2: //lowd 
 
 
-        if(glcd_t.gTimer_fan_blink < 25){ //open 
+        if(glcd_t.gTimer_fan_blink > 15){ //open 
+			   glcd_t.gTimer_fan_blink=0;
 
-               if(alternate_flag == 0){
-        		alternate_flag ++;
+             alternate_flag = alternate_flag ^0x01;
+
+			   if(alternate_flag==1){
+        		
         	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T15+T9+T13)& 0xffff));//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
                 }
-        	}
-            else if(glcd_t.gTimer_fan_blink > 24 && glcd_t.gTimer_fan_blink   < 50){ //close
+               else { //close
 
-               if(alternate_flag == 1){
-        		alternate_flag =0;
         		
         	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T15 +T10+T12+T14)& 0xffff));//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,  0x0);//display  wind icon
                 }
 
         	}
-        	else if(glcd_t.gTimer_fan_blink > 49){
-        		glcd_t.gTimer_fan_blink=0;
-                alternate_flag =0;
-                TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
-        	}
-
+        	
        
 
 
@@ -1040,8 +1022,8 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
    }
 
    }
-	  
-}
+}  
+
 
 void Display_Wind_Icon_Inint(void)
 {
@@ -1350,7 +1332,7 @@ void OnlyDisp_Wind_Icon_Handler(void)
 
     wifi_t.set_wind_speed_value=0;
     
-    LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+    LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 
 
 }

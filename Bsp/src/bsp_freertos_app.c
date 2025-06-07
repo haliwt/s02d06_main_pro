@@ -253,7 +253,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
          
           LCD_Timer_Colon_Blink();
           
-          LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+          LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 		  
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 		  
