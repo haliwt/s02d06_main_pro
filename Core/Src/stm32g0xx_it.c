@@ -153,6 +153,7 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32g0xx.s).                    */
 /******************************************************************************/
+#if 0
 /**
   * @brief This function handles EXTI line 0 and line 1 interrupts.
   */
@@ -195,7 +196,7 @@ void EXTI4_15_IRQHandler(void)
 
   /* USER CODE END EXTI4_15_IRQn 1 */
 }
-
+#endif 
 
 /**
   * @brief This function handles TIM17 global interrupt.

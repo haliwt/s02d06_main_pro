@@ -61,42 +61,7 @@ void power_on_run_handler(void)
             power_on_init_function();
 
              power_off_flag=0;
-            gpro_t.power_off_flag=1;
-            
-      
-            //temperature value inti
-            gpro_t.set_temperature_value_success=0;
-
-            wifi_t.set_wind_speed_value=0; //init 
-            gctl_t.ptc_warning = 0;
-            gctl_t.fan_warning = 0;
-
-            //timig init
-            gpro_t.gTimer_run_total=0;
-
-            gpro_t.set_timer_timing_hours =0 ;
-            gpro_t.set_timer_timing_minutes =0;
-
-             gpro_t.gTimer_timer_Counter =0;
-        
-            gpro_t.gTimer_run_dht11=100;
-            wifi_t.link_net_tencent_data_flag=1;
-
-            gkey_t.set_timer_timing_success = 0;
-            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-            gkey_t.key_mode = disp_works_timing;
-
-            
-            if(gpro_t.tencent_link_success==1){
-            
-                  Publish_Data_Warning(fan_warning,no_warning);
-                  osDelay(100);
-            
-                  Publish_Data_Warning(ptc_temp_warning,no_warning);
-                  osDelay(100);
-            
-              }
-
+          
 
             gctl_t.step_process = 1;
 
@@ -108,15 +73,15 @@ void power_on_run_handler(void)
           case 1:   //run dht11 display 
 
             read_senson_dht11_data();
-			LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
+			//LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 
-          gctl_t.step_process=3;
+          gctl_t.step_process=2;
 		  
           break;
 
         
 
-	  case 3: //7
+	  case 2: //7
 
        
          
@@ -151,7 +116,8 @@ void power_on_run_handler(void)
 
        }
          gctl_t.step_process=3;
-      case 4: 
+	   
+      case 3: 
 	   
 	   if(gpro_t.tencent_link_success==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
              wifi_t.link_net_tencent_data_flag ++;
@@ -194,16 +160,33 @@ void power_on_run_handler(void)
 
        
 
-      gctl_t.step_process=5;
+      gctl_t.step_process=4;
 
 	 break;
 
+      case 4:
+
+    	mainboard_active_handler();
+    	gctl_t.step_process=5;
+     break;
+
+      case 5:
+
+    	 detected_ptc_fan_error_handler();
+    	 gctl_t.step_process=6;
+       break;
+
+      case 6:
+          Display_WorksTimingr_Handler(gkey_t.key_mode);
+    	  gctl_t.step_process=7;
+      break;
 
 
-	case 5: //check works times 
+
+	case 7: //check works times
 
 	       works_two_hours_handler();
-		   LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
+		  // LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
 		   gctl_t.step_process=1;
     break;
 
@@ -477,73 +460,93 @@ static void power_off_function(void)
 ************************************************************************/
 static void power_on_init_function(void)
 {
-     //led on 
-
-   
-  
-
-     if(gpro_t.get_beijing_time_success==0 ){
      
-         gpro_t.disp_works_minutes_value=0;
-         gpro_t.disp_works_hours_value =0;
-         gpro_t.gTimer_works_counter_sencods =0;
 
-     }
-    
-   
-    if(wifi_t.smartphone_app_power_on_flag==0){
-        main_fun_init();
+	if(gpro_t.get_beijing_time_success==0 ){
 
-    }
-    else{
-        MqttData_Publis_App_PowerOn_Ref();
-  
-		
-		osDelay(200);//HAL_Delay(50);//
+		gpro_t.disp_works_minutes_value=0;
+		gpro_t.disp_works_hours_value =0;
+		gpro_t.gTimer_works_counter_sencods =0;
 
-        SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
-		osDelay(100);//HAL_Delay(50);//
+	}
 
 
-    }
-   
+	if(wifi_t.smartphone_app_power_on_flag==0){
+	  main_fun_init();
 
+	}
+	else{
+		MqttData_Publis_App_PowerOn_Ref();
+	    osDelay(50);//HAL_Delay(50);//
 
-    LED_Mode_On();
-    LED_POWER_ON();
-    Backlight_On();
-
-
-    LCD_Numbers1234_Init();
-    Display_Wind_Icon_Inint();
-
-    Update_DHT11_Value();
-    
-     
-    sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
-
-
-    LCD_Fan_Run_Icon(0);
-    Disp_HumidityTemp_Init();
-
-
-    //fan on
-   // Mainboard_Action_Fun();
-
-    if(gpro_t.tencent_link_success==1){
-        MqttData_Publish_SetOpen(1);  
-        osDelay(20);//300
-
-        Subscriber_Data_FromCloud_Handler();
-        HAL_Delay(100);
-
+		SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
+		osDelay(10);//HAL_Delay(50);//
     }
 
-    
 
-  
-    
 
+	LED_Mode_On();
+	LED_POWER_ON();
+	Backlight_On();
+
+
+	LCD_Numbers1234_Init();
+	Display_Wind_Icon_Inint();
+
+	Update_DHT11_Value();
+
+
+	sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
+	osDelay(5);
+
+	LCD_Fan_Run_Icon(0);
+	Disp_HumidityTemp_Init();
+
+
+	if(gpro_t.tencent_link_success==1){
+		MqttData_Publish_SetOpen(1);  
+		osDelay(30);//300
+
+		Subscriber_Data_FromCloud_Handler();
+		HAL_Delay(30);
+
+	}
+
+    gpro_t.power_off_flag=1;
+
+
+	//temperature value inti
+	gpro_t.set_temperature_value_success=0;
+
+	wifi_t.set_wind_speed_value=0; //init 
+	gctl_t.ptc_warning = 0;
+	gctl_t.fan_warning = 0;
+
+	//timig init
+	gpro_t.gTimer_run_total=0;
+
+	gpro_t.set_timer_timing_hours =0 ;
+	gpro_t.set_timer_timing_minutes =0;
+
+	gpro_t.gTimer_timer_Counter =0;
+
+	gpro_t.gTimer_run_dht11=100;
+	wifi_t.link_net_tencent_data_flag=1;
+
+	gkey_t.set_timer_timing_success = 0;
+	gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+	gkey_t.key_mode = disp_works_timing;
+
+
+	if(gpro_t.tencent_link_success==1){
+
+		Publish_Data_Warning(fan_warning,no_warning);
+		osDelay(100);
+
+		Publish_Data_Warning(ptc_temp_warning,no_warning);
+		osDelay(100);
+
+	}
 
 }
 

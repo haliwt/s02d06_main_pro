@@ -91,8 +91,11 @@ typedef enum mode_key_t{
 
 
  extern key_fun_t gkey_t;
+ 
+ void key_handler(void);
 
-void power_long_short_key_fun(void);
+void key_power_long_handler(void);
+
 
 void mode_long_short_key_fun(void);
 
@@ -114,6 +117,7 @@ void set_temp_value_compare_dht11_temp_value(void);
 void  key_mode_be_pressed_send_data_wifi(void);
 
 
+void key_power_shot_handler(void);
 
 
 #endif 

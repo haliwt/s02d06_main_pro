@@ -180,11 +180,11 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
             
 
           }
-          else if(gkey_t.power_on_flag ==1){
-            power_long_short_key_fun();
+          else if(gkey_t.power_on_flag ==1 && KEY_POWER_VALUE() == KEY_UP){
+             key_power_shot_handler();//power_long_short_key_fun();
 
-          }
-          else if(gkey_t.key_mode_flag== 1){
+         }
+         else if(gkey_t.key_mode_flag== 1){
       
                mode_long_short_key_fun();
           }
@@ -216,9 +216,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
                  }
          }
-
-
-        if(gpro_t.send_data_power_on_flag == power_on){
+         else if(gpro_t.send_data_power_on_flag == power_on){
 
                gpro_t.send_data_power_on_flag =0xff;
                
@@ -238,7 +236,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
        if(gkey_t.key_power==power_on){
             
-     
+         
           power_on_run_handler();
 	   
           record_time_or_time_handler();
@@ -247,9 +245,9 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
           key_mode_be_pressed_send_data_wifi();
           
-          Display_WorksTimingr_Handler(gkey_t.key_mode);
+         
           
-          mainboard_active_handler();
+         
          
           LCD_Timer_Colon_Blink();
           
@@ -259,7 +257,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 		  
           Disip_Wifi_Icon_State();
 
-		  detected_ptc_fan_error_handler();
+		 
 		  
           if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
 
@@ -300,134 +298,19 @@ static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvPara
    // MSG_T *ptMsg;
     BaseType_t xResult;
 	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
-	uint32_t ulValue;
+	//uint32_t ulValue;
    
    
 	
     while(1)
     {
-	
-	   xResult = xTaskNotifyWait(0x00000000,      
-						          0xFFFFFFFF,      
-						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          portMAX_DELAY);  /* 最大允许延迟时间 */
-		
-		if( xResult == pdPASS )
-		{
-			/* 接收到消息，检测那个位被按下 */
-             
-			if((ulValue & POWER_KEY_0) != 0)
-			{
-  
-			
-                gkey_t.power_on_flag =1;//gkey_t.power_key_long_counter =1;
-                    
-                gpro_t.gTimer_shut_off_backlight =0;
-                
-           
-				                                    
-			}
-            else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
-            {
-                  gpro_t.gTimer_shut_off_backlight =0;
-                  wake_up_backlight_on();
-                  buzzer_sound();
-
-               
-                 smart_phone_sound = 1;
-                 gpro_t.gTimer_shut_off_backlight =0;
-                 gpro_t.gTimer_run_dht11=0;
-               
-            }
-            else if((ulValue & MODE_KEY_1) != 0){
-
-              if(gkey_t.key_power == power_on ){
-
-                  if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                     gpro_t.gTimer_shut_off_backlight =0;
-                     wake_up_backlight_on();
-                     buzzer_sound();
-
-                  }
-                  else{
-
-                  if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-                    
-                     gkey_t.key_mode_flag=1;
-                     gpro_t.gTimer_shut_off_backlight =0;
-
-                    }
-
-                 }
-
-                }
-               
-             
-                 gpro_t.gTimer_run_dht11=0;
-               
-            }   
-            else if((ulValue & DEC_KEY_2) != 0){
-
-                 if(gkey_t.key_power==power_on){
-
-                   if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                     gpro_t.gTimer_shut_off_backlight =0;
-                     wake_up_backlight_on();
-                     buzzer_sound();
-
-                  }
-                  else{
-                    if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-                        dec_flag =1;
-                        gpro_t.gTimer_shut_off_backlight =0;
-                    }
-
-                   }
-                  }
-                
-                  gpro_t.gTimer_run_dht11=0;
-               
-
-               
-            }
-            else if((ulValue & ADD_KEY_3) != 0){
-
-              if(gkey_t.key_power==power_on){
-
-                 if(gpro_t.shut_Off_backlight_flag == turn_off){
-
-                     gpro_t.gTimer_shut_off_backlight =0;
-                     wake_up_backlight_on();
-                     buzzer_sound();
-
-                  }
-                  else{
-                   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0){
-                       add_flag =1;
-                       gpro_t.gTimer_shut_off_backlight =0;
-
-                   }
-
-                }
-                
-              }
-                
-                gpro_t.gTimer_run_dht11=0;
-            }
-
-              
-                    
-          }
+	  
+	    key_power_long_handler();
    
              
-      
-       }
-   }
-
-
- 
+        vTaskDelay(20);
+    }
+}
 /**********************************************************************************************************
 *	函 数 名: AppTaskCreate
 *	功能说明: 创建应用任务
@@ -462,7 +345,7 @@ static void AppTaskCreate (void)
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
-
+#if 0
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 
@@ -472,25 +355,25 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
  
    switch(GPIO_Pin){
 
-   case KEY_POWER_Pin:
-       // DISABLE_INT(); //WT.EDIT 2024.08.15 modify.
-        if(KEY_POWER_VALUE()==KEY_DOWN){
-
-       
-      
-        xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
-        POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
-        eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-        &xHigherPriorityTaskWoken);
-
-        /* Èç¹ûxHigherPriorityTaskWoken = pdTRUE£¬ÄÇÃ´ÍË³öÖÐ¶ÏºóÇÐµ½µ±Ç°×î¸ßÓÅÏÈ¼¶ÈÎÎñÖ´ÐÐ */
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
-
-        }
-            
-     //  ENABLE_INT();
-   break;
+//   case KEY_POWER_Pin:
+//       // DISABLE_INT(); //WT.EDIT 2024.08.15 modify.
+//        if(KEY_POWER_VALUE()==KEY_DOWN){
+//
+//       
+//      
+//        xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
+//        POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
+//        eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+//        &xHigherPriorityTaskWoken);
+//
+//        /* Èç¹ûxHigherPriorityTaskWoken = pdTRUE£¬ÄÇÃ´ÍË³öÖÐ¶ÏºóÇÐµ½µ±Ç°×î¸ßÓÅÏÈ¼¶ÈÎÎñÖ´ÐÐ */
+//        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//
+//
+//        }
+//            
+//     //  ENABLE_INT();
+//   break;
 
    case KEY_MODE_Pin:
      // DISABLE_INT();
@@ -544,7 +427,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
     }
 }
 
-
+#endif 
 
 /********************************************************************************
 	**
