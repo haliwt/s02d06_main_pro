@@ -30,7 +30,7 @@ uint8_t power_off_flag;
 void power_off_run_handler(void)
 {
 
-  
+  gkey_t.power_key_long_counter=0;
   if( gkey_t.key_sound_flag == key_sound){
 		gkey_t.key_sound_flag =0;
 		Buzzer_KeySound();
@@ -40,7 +40,7 @@ void power_off_run_handler(void)
   
   
 
-   power_off_function();
+  // power_off_init_function();
 		
    Breath_Led();
 
@@ -365,7 +365,7 @@ static void Process_Dynamical_Action(void)
 *Return Ref:NO
 *
 ************************************************************************/
-static void power_off_function(void)
+void power_off_init_function(void)
 {
 
   if(gpro_t.power_off_flag == 1){

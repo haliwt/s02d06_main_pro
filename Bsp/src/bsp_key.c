@@ -152,7 +152,7 @@ void key_power_shot_handler(void)
               gkey_t.key_power=power_off;
               gctl_t.step_process=0;
               
-        
+              power_off_init_function();
   
 			 SendData_Set_Command(0X01,0X0);
                osDelay(5);

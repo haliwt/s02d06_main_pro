@@ -195,6 +195,7 @@ void read_senson_dht11_data(void);
 
 void record_time_or_time_handler(void);
 
+void power_off_init_function(void);
 
 
 #endif 
