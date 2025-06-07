@@ -191,40 +191,21 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
       
                key_mode_short_handler();
           }
-          else if(add_flag==1 ||dec_flag ==1){
+          else if(gkey_t.key_add_flag == 1 && KEY_ADD_VALUE()== KEY_UP){
+					 gkey_t.key_add_flag++;
 
-                if(add_flag ==1){
-                     add_flag ++;
+                     Add_Key_Fun(gkey_t.key_add_dec_mode);
                      Buzzer_KeySound();
                   
 
-                 }
-                 else if(dec_flag ==1){
-                     dec_flag ++;
-                     Buzzer_KeySound();
-                    
+           }
+           else if(gkey_t.key_dec_flag == 1 && KEY_DEC_VALUE()== KEY_UP){
+					  gkey_t.key_dec_flag++;
 
-                 }
-
-                 
-                 if(add_flag ==2){
-                    add_flag ++;
-                    Add_Key_Fun(gkey_t.key_add_dec_mode);
-                 
-
-                 }
-                 else if(dec_flag ==2){
-
-                       dec_flag ++;
-                       Dec_Key_Fun(gkey_t.key_add_dec_mode);
-                 }
-         }
-     
-      
-
-
-
-		  if(gkey_t.key_power==power_on){
+                      Dec_Key_Fun(gkey_t.key_add_dec_mode);
+					  Buzzer_KeySound();
+            }
+           else if(gkey_t.key_power==power_on){
             
          
           power_on_run_handler();

@@ -16,21 +16,47 @@ void key_handler(void)
        key_power_long_handler();
 
 	}	
-	if(KEY_MODE_VALUE() == KEY_DOWN){
+	if(KEY_MODE_VALUE() == KEY_DOWN && gkey_t.key_power==power_on){
 
        key_mode_long_handler();
 	}
-	else if(KEY_DEC_VALUE()==KEY_DOWN){
+	else if(KEY_DEC_VALUE()==KEY_DOWN && gkey_t.key_power==power_on){
 
+          gkey_t.key_dec_flag =1;
 
+//      if(gkey_t.key_dec_flag < 6 ){
+//
+//    	  gkey_t.key_dec_flag ++;
+//
+//      }
+
+    }
+	else if(KEY_ADD_VALUE()==KEY_DOWN && gkey_t.key_power==power_on ){
+		
+           gkey_t.key_add_flag =1;
+
+//        if(gkey_t.key_add_flag< 6){
+//		   gkey_t.key_add_flag++;
+//
+//        }
 
 	}
-	else if(KEY_ADD_VALUE()==KEY_DOWN){
+	
+  #if 0
+	if(gkey_t.key_dec_flag ==6 ){
+ 
+    	  Dec_Key_Fun(gkey_t.key_add_dec_mode);
+    	  Buzzer_KeySound();
+    	  gkey_t.key_dec_flag=0;
+     }
+	 else if(gkey_t.key_add_flag==6){
 
+         Add_Key_Fun(gkey_t.key_add_dec_mode);
+         Buzzer_KeySound();
+	      gkey_t.key_add_flag=0;
 
-
-	}
-
+	 }
+   #endif 
 
 }
 
@@ -338,6 +364,8 @@ void Dec_Key_Fun(uint8_t cmd)
     	    glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
             glcd_t.number4_high = glcd_t.number4_low; //gctl_t.gSet_temperature_value   % 10; //
 
+			 LCD_Number_ThreeFour_Temperature();
+
             gkey_t.set_temp_value_be_pressed =1;
             gpro_t.gTimer_set_temp_temp=0;
            
@@ -394,10 +422,10 @@ void Add_Key_Fun(uint8_t cmd)
         glcd_t.number4_low  =gctl_t.gSet_temperature_value   % 10; //
         glcd_t.number4_high = gctl_t.gSet_temperature_value  % 10; //
 
-     
+         LCD_Number_ThreeFour_Temperature();
     
     
-     //   Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+        //Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
