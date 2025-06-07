@@ -233,9 +233,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 		  
           key_add_dec_set_temp_value_fun();
 
-          key_mode_be_pressed_send_data_wifi();
-          
-         
+
           LCD_Timer_Colon_Blink();
           
           LCD_Fan_Run_Icon(wifi_t.set_wind_speed_value);
