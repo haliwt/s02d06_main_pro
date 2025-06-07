@@ -2,6 +2,11 @@
 #include "bsp.h"
 #include "adc.h"
 
+
+static void Detected_Fan_Error(void);
+static void Detected_Ptc_Error(void);
+
+
 static uint16_t Get_Adc_Channel(uint32_t ch) ;
 
 static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times);
@@ -79,12 +84,6 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 
     #endif 
 
-//    times_flag++;
-//    if(times_flag > 3){
-//        ptc_temp_voltage = 200; //unit test .
-//
-//    }
-
 	if(ptc_temp_voltage < 373 || ptc_temp_voltage ==373){ //87 degree
   
 	    gctl_t.ptc_flag = 0; //turn off
@@ -132,7 +131,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
     fan_detect_voltage  =(uint16_t)((adc_fan_hex * 3300)/4096); //amplification 1000 ,3.111V -> 3111
 	
    
-
+     #if 0
 
     #if BALL_FAN
       if(fan_detect_voltage >   520  &&  fan_detect_voltage < 1400){ //
@@ -146,7 +145,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
     #else
 
-	if(fan_detect_voltage >510 ){
+	if(fan_detect_voltage < 510 ){
            detect_error_times=0;
 		   #ifdef DEBUG
              printf("adc= %d",run_t.fan_detect_voltage);
@@ -154,7 +153,9 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
            gctl_t.fan_warning = 0;
     }
    #endif 
-   else{
+   #endif 
+   
+   if(fan_detect_voltage < 510 ){
          detect_error_times ++;
 	          
 		if(detect_error_times >1){
@@ -187,8 +188,71 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
         
    }
+   else{
+      detect_error_times=0;
+
+
+   }
 }
 
+/***************************************************************************
+    *
+    *Function Name:vvoid detected_error_handler(void)
+    *Function : 
+    *Input Ref: NO
+    *Return Ref : NO
+    *
+***************************************************************************/
+static void Detected_Fan_Error(void)
+{
+     //2 minute 180s
+		
+        if(wifi_t.set_wind_speed_value ==0){ //max fan speed be detected if not defalut .
+        if( gctl_t.interval_stop_run_flag  ==0){
+		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,10);
+        }
+        }
+				
+	
+}
+
+static void Detected_Ptc_Error(void)
+{
+   
+	  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,10);
     
+
+}
+
+
+/***************************************************************************
+    *
+    *Function Name:vvoid detected_error_handler(void)
+    *Function : 
+    *Input Ref: NO
+    *Return Ref : NO
+    *
+***************************************************************************/
+void detected_ptc_fan_error_handler(void)
+{
+    static uint8_t adc_switch_flag;
+	if(gpro_t.gTimer_ptc_detected > 3 && gctl_t.interval_stop_run_flag==0){ //3 minutes 120s
+
+	    gpro_t.gTimer_ptc_detected=0;
+
+	    adc_switch_flag = adc_switch_flag ^ 0x01;
+
+		if(adc_switch_flag==1){
+		   Detected_Fan_Error();
+
+		}
+		else{
+		    Detected_Ptc_Error();
+
+		}
+       
+      }
+}
+
 
 

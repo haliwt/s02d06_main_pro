@@ -43,6 +43,7 @@
 #include "bsp_plasma.h"
 #include "bsp_ptc.h"
 #include "bsp_usart.h"
+#include "bsp_time.h"
 #include "bsp_lcd_app.h"
 #include "bsp_sensor.h"//#include "bsp_dht11.h"
 #include "bsp_freertos_app.h"
@@ -138,13 +139,13 @@ typedef struct {
    int8_t set_timer_timing_minutes;
 
  //TIMER OF TIMES 
-   uint8_t gTimer_run_adc;
+
    uint8_t gTimer_run_dht11;
 
    uint8_t gTimer_run_one_mintue ;
    
    uint8_t gTimer_run_total;
-   uint16_t gTimer_run_time_out;
+ 
 
    uint8_t gTimer_works_counter_sencods;
   

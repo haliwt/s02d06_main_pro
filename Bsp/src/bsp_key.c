@@ -41,10 +41,7 @@ void power_long_short_key_fun(void)
 			gpro_t.tencent_link_success =0;
 			gpro_t.get_beijing_time_success =0;
 			
-		
-            
-		
-			wifi_t.gTimer_linking_tencent_duration=0; //120s
+		    wifi_t.gTimer_linking_tencent_duration=0; //120s
 
             Buzzer_KeySound();
             

@@ -2,25 +2,22 @@
 
 
 BSP_process_t gpro_t;
-static uint8_t Works_Time_Out(void);
+
 static void Mainboard_Action_Fun(void);
 
 static void Process_Dynamical_Action(void);
 static void power_off_function(void);
 static void power_on_init_function(void);
 
-static void interval_continuce_works_fun(void);
 
-static void interval_two_hours_stop_action(void);
 
-static void Detected_Fan_Error(void);
-static void Detected_Ptc_Error(void);
+
 
 
 
 uint8_t power_off_flag;
 
-uint8_t  fan_continue_flag;
+
 
 /*******************************************************************************************************
 *	函 数 名: void mainboard_process_handler(void)
@@ -55,7 +52,7 @@ void power_off_run_handler(void)
 void power_on_run_handler(void)
 {
 
-
+    uint8_t works_flag;
      switch(gctl_t.step_process){
 
 
@@ -203,50 +200,17 @@ void power_on_run_handler(void)
 
 
 	case 5: //check works times 
-			  if(gpro_t.gTimer_run_total > 9){//119 //120 minutes //be testing is 9
-			       gpro_t.gTimer_run_total =0;
-				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
-				   gpro_t.gTimer_run_one_mintue =0;
-				   fan_continue_flag=0;
-                   gctl_t.step_process=7;
-			       gctl_t.interval_stop_run_flag  =1 ;
-                   gpro_t.wind_speed_init_flag = 1;
-                   gpro_t.fan_lower_speed++;
-                   gpro_t.fan_middle_speed ++ ;
-		         
-			    }
-                else if(gctl_t.interval_stop_run_flag  ==1){
-                    gctl_t.step_process=7;
-                
-                }
-			    else{
-				 gctl_t.step_process=1;
 
-                 }
+	       works_two_hours_handler();
+		   gctl_t.step_process=1;
+    break;
 
-		  break;
+	default:
 
-		  case 7: //works have a rest ten minutes
-              if(gctl_t.interval_stop_run_flag  ==1){
+	break;
 
-		            Works_Time_Out();
-
-                
-                  gctl_t.step_process=1;
-
-			   }
-               else 
-                   gctl_t.step_process=1;
-                   
-			 
-
-
-		  break;
-
-		  
-
-
-	     }
+	
+   }
 
  }      
 
@@ -267,9 +231,7 @@ void mainboard_active_handler(void)
         if(gctl_t.interval_stop_run_flag  ==0){
             Process_Dynamical_Action();
         }
-        else{
-            interval_two_hours_stop_action();
-         }
+
 
         link_second_disp_board_handler();
     }
@@ -284,117 +246,8 @@ void mainboard_active_handler(void)
     
 
 }
-/**********************************************************************************************************
-*	函 数 名: static uint8_t Works_Time_Out(void)
-*	功能说明: 主板工作2小时，停止工作10分钟
-*			 
-*	形    参: 无
-*	返 回 值: 无
-**********************************************************************************************************/
-static uint8_t Works_Time_Out(void)
-{
-	if(gpro_t.gTimer_run_time_out < 4){  //test for 4 minutes.
-		
-		interval_two_hours_stop_action();//Mainboard_Fun_Stop();
-		 
-    }
-    
-
-	if(gpro_t.gTimer_run_one_mintue < 60 && ( fan_continue_flag ==0)){
-
-		Fan_Run();
-
-	}
-
-	if(gpro_t.gTimer_run_one_mintue > 60){
-
-	     fan_continue_flag=1;
-
-         Fan_Stop();
-	 }
-
-	if(gpro_t.gTimer_run_time_out > 4){ //10 minutes,test for 4 minutes .
-		gpro_t.gTimer_run_time_out=0;
-		gpro_t.gTimer_run_total=0;
-
-        gctl_t.interval_stop_run_flag= 0;
-		
-        interval_continuce_works_fun();
-		
-
-		return 1;
 
 
-	}
-	else{
-      
-	  return 0;
-
-	}
-
-}
-/********************************************************************************************************
-*
-*	函 数 名: static void interval_two_hours_stop_action(void)
-*	功能说明: 主板工作：功能动作输出			 
-*	形    参: 无
-*	返 回 值: 无
-*
-**********************************************************************************************************/
-static void interval_two_hours_stop_action(void)
-{
-   Ptc_Off();
-
-   Ultrasonic_Pwm_Stop();
-  // Fan_Stop();
-   Plasma_Off();
-
-   if(ptc_state() ==1){
-
-
-      
-       Disp_Dry_Icon();
-
-
-     }
-    else{
-
-           
- 
-     Disp_Dry_Icon();
-    }
-            
-
-    if(plasma_state() ==1){
-		
- 
-       Disp_Kill_Icon();
-
-    }
-	else{
-
-	 
-       Disp_Kill_Icon();
-
-	}
-
-    if(ultrasonic_state() ==1){
-
-
-         Disp_Ultrsonic_Icon();
-
-    }
-    else{
-
- 
-    Disp_Ultrsonic_Icon();
-
-
-    }
-
-  
- 
- }
 
 
 /**********************************************************************************************************
@@ -517,84 +370,6 @@ static void Process_Dynamical_Action(void)
 }
 
 
-static void interval_continuce_works_fun(void)
-{
-  
-    if(ptc_state() ==1){
-    
-    
-          Ptc_On();
-          Disp_Dry_Icon();
-    
-    
-        }
-       else{
-    
-              
-        Ptc_Off();
-        Disp_Dry_Icon();
-       }
-               
-    
-       
-    
-       
-    
-       if(plasma_state() ==1){
-           
-          Plasma_On();
-    
-       }
-       else{
-    
-          Plasma_Off();
-    
-       }
-    
-       if(ultrasonic_state() ==1){
-    
-            Ultrasonic_Pwm_Output();
-    
-    
-       }
-       else{
-    
-       Ultrasonic_Pwm_Stop();
-    
-    
-       }
-    
-     
-       switch(wifi_t.set_wind_speed_value){
-       
-            case 0: //full speed
-       
-       
-              Fan_Run();
-       
-            break;
-       
-            case 1 : //middle speed
-             Fan_Run_Middle();
-       
-            break;
-       
-            case 2: //lower speed
-             if(gpro_t.wind_speed_init_flag ==1){
-                   gpro_t.wind_speed_init_flag++;
-                   gpro_t.fan_lower_speed++;
-                     Fan_Run();
-                     osDelay(1000);
-             }
-             else
-                Fan_Run_Lower();
-            break;
-       
-       
-          }
-
-
-}
 
 
 /***********************************************************************
@@ -769,35 +544,7 @@ static void power_on_init_function(void)
 
 
 }
-/***************************************************************************
-    *
-    *Function Name:vvoid detected_error_handler(void)
-    *Function : 
-    *Input Ref: NO
-    *Return Ref : NO
-    *
-***************************************************************************/
-static void Detected_Fan_Error(void)
-{
-    if(gpro_t.gTimer_run_adc > 5 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
-		gpro_t.gTimer_run_adc=0;
-        if(wifi_t.set_wind_speed_value ==0){ //max fan speed be detected if not defalut .
-        if( gctl_t.interval_stop_run_flag  ==0){
-		   Get_Fan_Adc_Fun(ADC_CHANNEL_0,10);
-        }
-        }
-				
-	}
-}
 
-static void Detected_Ptc_Error(void)
-{
-    if(gpro_t.gTimer_ptc_detected > 6 && gctl_t.interval_stop_run_flag==0){ //3 minutes 120s
-	   gpro_t.gTimer_ptc_detected =0;	
-	   Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,10);
-    }
-
-}
 /***************************************************************************
     *
     *Function Name:void link_wifi_net_handler(uint8_t link)
@@ -852,10 +599,10 @@ void link_wifi_net_handler(uint8_t link)
 
        case 0:
 
-           Detected_Fan_Error();
-           Detected_Ptc_Error();
+          // Detected_Fan_Error();
+           //Detected_Ptc_Error();
 
-       break;
+      // break;
 
         case 1:
       
@@ -869,6 +616,7 @@ void link_wifi_net_handler(uint8_t link)
 				 MqttData_Publish_SetOpen(0x01);
 		         osDelay(200);//HAL_Delay(200);
                  SendData_Set_Command(0x1F,0x01);//has been link net OK
+                 osDelay(5);
                   
            }
            else{
@@ -921,7 +669,7 @@ void link_wifi_net_handler(uint8_t link)
               gpro_t.link_net_step=0;
              gpro_t.get_beijing_step = 11;
               SendData_Set_Command(0x1F,0x0);
-              
+              osDelay(5);
 
            }
 
@@ -936,6 +684,9 @@ void link_wifi_net_handler(uint8_t link)
 
      }
  }
+
+
+
 /********************************************************
  * 
  * Function Name:void read_senson_dht11_data(void)

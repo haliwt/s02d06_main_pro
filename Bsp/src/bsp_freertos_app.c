@@ -258,6 +258,8 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           link_wifi_net_handler(gkey_t.wifi_led_fast_blink_flag);
 		  
           Disip_Wifi_Icon_State();
+
+		  detected_ptc_fan_error_handler();
 		  
           if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
 

@@ -85,7 +85,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_ptc_detected++;
         gpro_t.gTimer_works_counter_sencods ++;
         gpro_t.gTimer_timer_Counter++;
-		gpro_t.gTimer_run_adc++ ;
+	
 		gpro_t.gTimer_run_dht11++;
         
         gpro_t.gTimer_run_one_mintue ++;
@@ -120,7 +120,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
 			gpro_t.gTimer_run_total++;
-			gpro_t.gTimer_run_time_out ++ ;
+		
             gpro_t.gTimer_shut_off_backlight++;
 			
 
