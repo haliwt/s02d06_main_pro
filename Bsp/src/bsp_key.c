@@ -31,7 +31,7 @@ void power_long_short_key_fun(void)
         if( gkey_t.power_key_long_counter > 79   && KEY_POWER_VALUE() == 1){
              gkey_t.power_key_long_counter = 200;
              
-             gkey_t.power_on_flag++;
+            // gkey_t.power_on_flag++;
          
           
              	//WIFI CONNCETOR process
@@ -61,7 +61,7 @@ void power_long_short_key_fun(void)
       
            if(gkey_t.key_power==power_off){
               
-              gkey_t.power_on_flag++; 
+             gkey_t.power_on_flag++; 
           
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
@@ -92,6 +92,7 @@ void power_long_short_key_fun(void)
 
         }
 	    else if(KEY_POWER_VALUE() == KEY_UP && gkey_t.power_key_long_counter==200){
+		   gkey_t.power_on_flag++; 
 
 		   gkey_t.power_key_long_counter =0;
 
