@@ -53,7 +53,7 @@ uint8_t add_flag,dec_flag,smart_phone_sound;
 /***********************************************************************************************************
 											函数声明
 ***********************************************************************************************************/
-//static void vTaskUsartPro(void *pvParameters);
+static void vTaskUsartPro(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
@@ -64,7 +64,7 @@ static void AppTaskCreate (void);
 											变量声明
 **********************************************************************************************************
 */
-//static TaskHandle_t xHandleTaskUsartPro = NULL;
+static TaskHandle_t xHandleTaskUsartPro = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
@@ -96,20 +96,25 @@ void freeRTOS_Handler(void)
 	*   优 先  
 	*
 **********************************************************************************************************/
-#if 0
+#if 1
 static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvParameters)
 {
 
     BaseType_t xResult;
-	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(6000); /* 设置最大等待时间为100ms */
 	uint32_t ulValue;
 	
 	while(1)
 	{
+
+    // receive_message_displaybord_handler();
+
+	// vTaskDelay(50);
+        #if 1
 		xResult = xTaskNotifyWait(0x00000000,	   
 							   		0xFFFFFFFF,	  
 							    	&ulValue,		  /* 保存ulNotifiedValue到变量ulValue中 */
-									portMAX_DELAY);  /* 最大允许延迟时间 */
+									xMaxBlockTime );  /* 最大允许延迟时间 */
 		   
 		if( xResult == pdPASS )
 		{
@@ -118,11 +123,11 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 	        gpro_t.disp_rx_cmd_done_flag = 0;
 
 
-            check_code =  bcc_check(gl_tMsg.usData,gl_tMsg.uid);
+           check_code =  bcc_check(mess_t.mesData,mess_t.mesLength);
 
-           if(check_code == gl_tMsg.bcc_check_code ){
+           if(check_code == mess_t.bcc_check_code ){
            
-              receive_data_fromm_display(gl_tMsg.usData);
+              receive_data_fromm_display(mess_t.mesData);
               if(gpro_t.buzzer_sound_flag == 1){
                   gpro_t.buzzer_sound_flag++ ;
                   buzzer_sound();
@@ -131,15 +136,13 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
               }
            }
 
-          // gl_tMsg.usData[0]=0;
-          
-            
-         }
+		}
 
-     //    clear_rx_copy_data();
+   
 
 
 		}
+		#endif 
 	}
 }
 #endif 
@@ -184,9 +187,9 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
              key_power_shot_handler();//power_long_short_key_fun();
 
          }
-         else if(gkey_t.key_mode_flag== 1){
+         else if(gkey_t.key_mode_flag== 1 && KEY_MODE_VALUE() == KEY_UP){
       
-               mode_long_short_key_fun();
+               key_mode_short_handler();
           }
           else if(add_flag==1 ||dec_flag ==1){
 
@@ -216,25 +219,12 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
                  }
          }
-         else if(gpro_t.send_data_power_on_flag == power_on){
+     
+      
 
-               gpro_t.send_data_power_on_flag =0xff;
-               
-               SendData_Set_Command(0X01,0X01);
-               osDelay(5);
-                
 
-          }
-          else if(gpro_t.send_data_power_on_flag == power_off){
-             
-              gpro_t.send_data_power_on_flag =0xff;
-          
-               SendData_Set_Command(0X01,0X00);
-               osDelay(5);
-          }
-       
 
-       if(gkey_t.key_power==power_on){
+		  if(gkey_t.key_power==power_on){
             
          
           power_on_run_handler();
@@ -245,9 +235,6 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
           key_mode_be_pressed_send_data_wifi();
           
-         
-          
-         
          
           LCD_Timer_Colon_Blink();
           
@@ -281,7 +268,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
          }
         
-       receive_message_displaybord_handler();
+      // receive_message_displaybord_handler();
        vTaskDelay(10);
       }
 
@@ -305,7 +292,7 @@ static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvPara
     while(1)
     {
 	  
-	    key_power_long_handler();
+	    key_handler();
    
              
         vTaskDelay(20);
@@ -321,12 +308,12 @@ static void AppTaskCreate (void)
 {
 
 
-//    xTaskCreate( vTaskUsartPro,     		/* 任务函数  */
-//                 "vTaskUsartPro",   		/* 任务名    */
-//                 128,             		/* 任务栈大小，单位word，也就是4字节 */
-//                 NULL,           		/* 任务参数  */
-//                 2,               		/* 任务优先级*/
-//                 &xHandleTaskUsartPro );  /* 任务句柄  */
+    xTaskCreate( vTaskUsartPro,     		/* 任务函数  */
+                 "vTaskUsartPro",   		/* 任务名    */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 NULL,           		/* 任务参数  */
+                 2,               		/* 任务优先级*/
+                 &xHandleTaskUsartPro );  /* 任务句柄  */
 
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
@@ -341,7 +328,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级*/
+                 3,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
@@ -441,7 +428,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   
      static uint8_t state;
-   //  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     if(huart->Instance==USART1)//if(huart==&huart1) // Motor Board receive data (filter)
 	{
@@ -485,7 +472,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                  mess_t.bcc_check_code=disp_inputBuf[0];
 
           
-                #if 0
+                #if 1
 
                  xTaskNotifyFromISR(xHandleTaskUsartPro,  /* 目标任务 */
                                     DECODER_BIT_7,     /* 设置目标任务事件标志位bit0  */

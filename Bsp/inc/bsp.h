@@ -88,7 +88,7 @@ typedef struct {
 
    uint8_t power_off_flag;
    uint8_t shut_Off_backlight_flag;
-   uint8_t send_data_power_on_flag;
+
 
    uint8_t tencent_link_success;
    uint8_t linking_tencent_cloud_doing ;

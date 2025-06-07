@@ -96,8 +96,9 @@ typedef enum mode_key_t{
 
 void key_power_long_handler(void);
 
+void key_mode_long_handler(void);
 
-void mode_long_short_key_fun(void);
+void key_mode_short_handler(void);
 
 
 void Dec_Key_Fun(uint8_t cmd);
