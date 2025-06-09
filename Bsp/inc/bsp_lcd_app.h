@@ -42,11 +42,13 @@ void Set_Timer_Timing_Lcd_Blink(void );
 
 void Mainboard_Action_Fun(void);
 
-
-
-
-
 void Disp_HumidityTemp_Value(void);
+
+
+
+
+
+
 #endif
 
 

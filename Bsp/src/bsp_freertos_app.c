@@ -195,7 +195,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 					 gkey_t.key_add_flag++;
 
                      Add_Key_Fun(gkey_t.key_add_dec_mode);
-                     Buzzer_KeySound();
+                    
                   
 
            }
@@ -203,9 +203,13 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 					  gkey_t.key_dec_flag++;
 
                       Dec_Key_Fun(gkey_t.key_add_dec_mode);
-					  Buzzer_KeySound();
+					 
             }
-           else if(gkey_t.key_power==power_on){
+          
+
+
+
+	     if(gkey_t.key_power==power_on){
             
          
           power_on_run_handler();
@@ -213,6 +217,8 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           record_time_or_time_handler();
 		  
           key_add_dec_set_temp_value_fun();
+
+		  set_timer_value_handler();
 
 
           LCD_Timer_Colon_Blink();

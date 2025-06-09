@@ -69,7 +69,7 @@ typedef enum mode_key_t{
 
    uint8_t set_temp_value_be_pressed;
   
-
+   uint8_t  key_mode_shot_flag ;
 
    uint8_t   key_mode_times;
    uint8_t   set_temp_value;
@@ -121,6 +121,9 @@ void  key_mode_be_pressed_send_data_wifi(void);
 
 
 void key_power_shot_handler(void);
+
+void set_timer_value_handler(void);
+
 
 
 #endif 

@@ -419,6 +419,8 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
 
     case mode_set_timer:
+
+	    #if 0
     
         Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
        
@@ -466,7 +468,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
              
             }
         }
-
+           #endif 
        break;
 
        case disp_fan_error_number:
@@ -506,6 +508,13 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 void Set_Timer_Timing_Lcd_Blink(void)
 {
 
+   // static uint8_t switch_timer_flag;
+   //  if(gpro_t.gTimer_set_timer_value > 9){ //90x10ms= 90ms
+	//   gpro_t.gTimer_set_timer_value=0;
+
+	// switch_timer_flag = switch_timer_flag ^ 0x01;
+
+	// if(switch_timer_flag ==1){
       glcd_t.number5_low =  0x0A ;
       glcd_t.number5_high =  0x0A ;
 
@@ -522,6 +531,7 @@ void Set_Timer_Timing_Lcd_Blink(void)
       display_works_times_handler();
       osDelay(100);//HAL_Delay(100);
 
+	
       glcd_t.number5_low =  gpro_t.set_timer_timing_hours  / 10 ;
       glcd_t.number5_high =  gpro_t.set_timer_timing_hours  / 10 ;
 
@@ -536,8 +546,10 @@ void Set_Timer_Timing_Lcd_Blink(void)
       glcd_t.number8_high =   0;
       LCD_Disp_Timer_Timing();
       osDelay(100);//HAL_Delay(100);
+
+ }
     
-}
+
 
 
 /*************************************************************************************

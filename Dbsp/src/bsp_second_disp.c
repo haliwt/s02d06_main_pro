@@ -26,6 +26,7 @@ void second_disp_power_on_fun(void)
     gctl_t.step_process=0;
     gpro_t.power_off_flag =1;
     g_tDisp.second_disp_power_on =1;
+	gctl_t.step_process=0;
 
 }
 /**********************************************************************

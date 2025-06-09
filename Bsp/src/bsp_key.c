@@ -9,6 +9,8 @@
 
 key_fun_t gkey_t;
 
+uint8_t set_timer_blink_counter;
+
 /************************************************************************************
 	*
 	*Funtion Name:void key_handler(void)
@@ -225,17 +227,16 @@ void key_mode_long_handler(void)
         if(gkey_t.key_mode_long_counter >  50 ){
             gkey_t.key_mode_long_counter = 150;
            
-
+            gkey_t.key_mode_shot_flag = 0;
             gkey_t.key_mode = mode_set_timer;
            gkey_t.key_add_dec_mode = mode_set_timer;
            gctl_t.ai_flag = 0; //timer tiiming model
            gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
-          
-           buzzer_sound();
-           Set_Timer_Timing_Lcd_Blink();
            
-
-        }
+           Buzzer_KeySound();//buzzer_sound();
+           Set_Timer_Timing_Lcd_Blink();
+		 
+          }
 
     }
 }
@@ -260,7 +261,7 @@ void key_mode_short_handler(void)
          if(gkey_t.key_mode  == disp_works_timing){
              gkey_t.key_mode  = disp_timer_timing;
 
-		  
+		     gkey_t.key_mode_shot_flag = 1;
            
                gctl_t.ai_flag = 0; // DON'T DISP AI ICON
                
@@ -282,10 +283,11 @@ void key_mode_short_handler(void)
 
         }
         else{
+			 gkey_t.key_mode_shot_flag = 1;
 			 gctl_t.ai_flag = 1;
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_mode  = disp_works_timing;
-            gkey_t.key_add_dec_mode = set_temp_value_item;
+            gkey_t.key_add_dec_mode = disp_works_timing;
 
             //gkey_t.key_mode_be_pressed = 1;
 			//g_tDisp.ai_mode_flag =1; //WT.EDIT 2025.06.07
@@ -372,7 +374,10 @@ void Dec_Key_Fun(uint8_t cmd)
 
     switch(cmd){
 
+	     case disp_works_timing:
+
          case set_temp_value_item: //set temperature 
+			Buzzer_KeySound();
 
             gpro_t.gTimer_run_main_fun =0;
             gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
@@ -396,7 +401,7 @@ void Dec_Key_Fun(uint8_t cmd)
          break;
 
          case mode_set_timer: //set timer timing value 
-
+               Buzzer_KeySound();
               g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
               gkey_t.gTimer_disp_set_timer = 0; 
 
@@ -408,8 +413,23 @@ void Dec_Key_Fun(uint8_t cmd)
     			 gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
     				
     		  }
-             Set_Timer_Timing_Lcd_Blink();
-       
+             //Set_Timer_Timing_Lcd_Blink();
+
+			   glcd_t.number5_high = gpro_t.set_timer_timing_hours /10;
+			   glcd_t.number5_low =  gpro_t.set_timer_timing_hours /10;
+
+			   glcd_t.number6_high= gpro_t.set_timer_timing_hours %10;
+                glcd_t.number6_low= gpro_t.set_timer_timing_hours %10;
+
+                   //dispaly minutes 
+			      glcd_t.number7_low =  0;
+			      glcd_t.number7_high =  0;
+
+			      glcd_t.number8_low = 0;
+			      glcd_t.number8_high =   0;
+			   
+              // LCD_Disp_Timer_Timing();
+                LCD_Number_FiveSix_Hours();
 
          break;
  
@@ -430,8 +450,10 @@ void Add_Key_Fun(uint8_t cmd)
   //static uint8_t add_key;
    switch(cmd){
         
-    case set_temp_value_item:  //set temperature value 
+   case disp_works_timing:
 
+	case set_temp_value_item:  //set temperature value 
+          Buzzer_KeySound();
          gpro_t.gTimer_run_main_fun=0;
          gpro_t.gTimer_run_dht11=0;
         gctl_t.gSet_temperature_value   ++;
@@ -460,22 +482,34 @@ void Add_Key_Fun(uint8_t cmd)
 
     case mode_set_timer: //set timer timing value 
 
-        // gkey_t.key_sound_flag = key_sound;
+       Buzzer_KeySound();
          g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
          gkey_t.gTimer_disp_set_timer = 0; 
          gpro_t.set_timer_timing_minutes=0;
-
-
-        	gpro_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
+         gpro_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
 		   if(gpro_t.set_timer_timing_hours > 24){ //if(run_t.dispTime_minutes > 59){
 
 		          gpro_t.set_timer_timing_hours=0;//run_t.dispTime_hours =0;
 		                
              }
-	
-        Set_Timer_Timing_Lcd_Blink();
 
-      
+		   glcd_t.number5_high = gpro_t.set_timer_timing_hours /10;
+		   glcd_t.number5_low =  gpro_t.set_timer_timing_hours /10;
+
+		   glcd_t.number6_high= gpro_t.set_timer_timing_hours %10;
+
+		   glcd_t.number6_low= gpro_t.set_timer_timing_hours %10;
+	
+       // Set_Timer_Timing_Lcd_Blink();
+
+	     //dispaly minutes 
+	      glcd_t.number7_low =  0;
+	      glcd_t.number7_high =  0;
+
+	      glcd_t.number8_low = 0;
+	      glcd_t.number8_high =   0;
+
+       LCD_Disp_Timer_Timing();
         
      break;
         
@@ -695,5 +729,68 @@ void set_temp_value_compare_dht11_temp_value(void)
     }
 }
 
+
+void set_timer_value_handler(void)
+{
+
+ 
+  // if( gkey_t.key_add_dec_mode == mode_set_timer && gkey_t.gTimer_disp_set_timer < 2){
+
+	//Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
+       
+        if(gkey_t.gTimer_disp_set_timer > 1 && gkey_t.key_add_dec_mode == mode_set_timer &&  gkey_t.key_mode_shot_flag ==0){
+
+            if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
+
+                gkey_t.set_timer_timing_success = 0;
+
+                gctl_t.ai_flag = 1;
+                gkey_t.key_mode =disp_works_timing;
+            
+                gkey_t.key_add_dec_mode = set_temp_value_item;
+                LCD_Disp_Works_Timing_Init();
+
+                if(g_tDisp.second_disp_set_temp_flag == 0){
+                    
+                    SendData_Tx_Data(0x4C,0x0);
+				    osDelay(5);
+
+                 }
+                 
+            
+            }
+            else{
+                gkey_t.set_timer_timing_success = 1;
+                gpro_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
+
+                gctl_t.ai_flag = 0;
+              
+                gkey_t.key_mode = disp_timer_timing;
+                gkey_t.key_add_dec_mode = set_temp_value_item;
+                
+                LCD_Disp_Timer_Timing_Init();
+
+                if(gpro_t.tencent_link_success==1){
+                    MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+                    osDelay(50);//HAL_Delay(200);
+                }
+                if(g_tDisp.second_disp_set_temp_flag == 0){
+                    
+                    SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
+                    osDelay(5);
+                 }
+             
+            }
+        }
+   
+//    if(gkey_t.gTimer_disp_set_timer > 1 && gkey_t.key_add_dec_mode == mode_set_timer){
+//
+//
+//	    gkey_t.key_add_dec_mode = set_temp_value_item;
+//
+//	}
+//    
+
+}
 
 

@@ -23,8 +23,10 @@ void power_off_run_handler(void)
 
   
   
+   if(gpro_t.disp_power_on_flag ==2 || gpro_t.wifi_power_on_flag==2){
+      power_off_init_function();
 
-  // power_off_init_function();
+   }
 		
    Breath_Led();
 
@@ -41,8 +43,10 @@ void power_on_run_handler(void)
 
 
 		  case 0:
+           if(gpro_t.disp_power_on_flag == 1 || gpro_t.wifi_power_on_flag==2){
+                power_on_init_function();
 
-          //  power_on_init_function();
+           }
 
              power_off_flag=0;
           
@@ -107,7 +111,7 @@ void power_on_run_handler(void)
              wifi_t.link_net_tencent_data_flag ++;
 		  
 		      MqttData_Publish_Update_Data();//MqttData_Publish_SetOpen(0x01);
-		     osDelay(100);//HAL_Delay(20);
+		     osDelay(30);//HAL_Delay(20);
           
             
 
@@ -119,7 +123,7 @@ void power_on_run_handler(void)
 		    //MqttData_Publish_Update_Data();
 		    /// osDelay(20);//HAL_Delay(20);
 		    Subscriber_Data_FromCloud_Handler();
-            osDelay(100);
+            osDelay(30);
 		     
 
 		}
@@ -133,10 +137,10 @@ void power_on_run_handler(void)
        else if(gpro_t.tencent_link_success==1 && wifi_t.link_net_tencent_data_flag ==4 ){
                  wifi_t.link_net_tencent_data_flag++ ;
                    Publish_Data_Warning(fan_warning,no_warning);
-                      osDelay(100);
+                      osDelay(30);
                 
                       Publish_Data_Warning(ptc_temp_warning,no_warning);
-                      osDelay(100);
+                      osDelay(30);
                 
        }
 
@@ -197,7 +201,7 @@ void power_off_init_function(void)
     		gpro_t.power_off_flag ++;
     	    
            //key set ref 
-
+           gpro_t.disp_power_on_flag = 1;
            gkey_t.gTimer_power_off_run_times=0;
            gkey_t.wifi_led_fast_blink_flag=0;
             gctl_t.ptc_flag =0;
@@ -359,6 +363,7 @@ void power_on_init_function(void)
 	wifi_t.link_net_tencent_data_flag=1;
 
 	gkey_t.set_timer_timing_success = 0;
+	gkey_t.key_add_dec_mode = disp_works_timing;
 	gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
 	gkey_t.key_mode = disp_works_timing;
 

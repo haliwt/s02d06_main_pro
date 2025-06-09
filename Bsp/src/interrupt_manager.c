@@ -46,6 +46,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   
     
 	glcd_t.gTimer_fan_blink++;
+	gpro_t.gTimer_set_timer_value++;
 
    
        

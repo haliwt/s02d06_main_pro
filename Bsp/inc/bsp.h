@@ -91,7 +91,7 @@ typedef struct {
 
    uint8_t power_off_flag;
    uint8_t shut_Off_backlight_flag;
-
+   uint8_t disp_power_on_flag ;
 
    uint8_t tencent_link_success;
    uint8_t linking_tencent_cloud_doing ;
@@ -103,7 +103,7 @@ typedef struct {
    uint8_t fan_middle_speed;
 
 
-
+   uint8_t wifi_power_on_flag;
 
 
   
@@ -167,6 +167,7 @@ typedef struct {
    uint8_t gTimer_power_off_run_times;
    uint8_t gTimer_update_data_to_tencent ;
    uint8_t gTimer_disp_works_time;
+   uint8_t gTimer_set_timer_value;
   
 }BSP_process_t;
 

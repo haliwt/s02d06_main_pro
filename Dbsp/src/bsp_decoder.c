@@ -46,12 +46,13 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
      case 0x01: //表示开机指令
-        wake_up_backlight_on();
+        //wake_up_backlight_on();
         gpro_t.gTimer_shut_off_backlight =0;
 
         if(pdata[3] == 0x01 ){ //open
              buzzer_sound();
-             
+			gctl_t.step_process=0;
+            gpro_t.disp_power_on_flag = 1;
             second_disp_power_on_fun();
 
 
