@@ -332,18 +332,18 @@ void read_senson_dht11_data(void)
 {
 
   static uint8_t power_on_run_dht11_times ;
-  if(gpro_t.gTimer_run_dht11 > 5  ||  power_on_run_dht11_times < 20){
-        gpro_t.gTimer_run_dht11=0;
-        power_on_run_dht11_times ++;
+  if(gkey_t.set_temp_value_be_pressed !=1){
+	  if(gpro_t.gTimer_run_dht11 > 5  ||  power_on_run_dht11_times < 20){
+	        gpro_t.gTimer_run_dht11=0;
+	        power_on_run_dht11_times ++;
 
-        Update_DHT11_Value();
+	        Update_DHT11_Value();
 
-        Disp_HumidityTemp_Value();
+	        Disp_HumidityTemp_Value();
 
-        
-
-        
-    }
+	        
+       }
+  }
 
   if(gpro_t.gTImer_send_disp_board > 7 ){
 
@@ -352,8 +352,6 @@ void read_senson_dht11_data(void)
             set_temp_value_compare_dht11_temp_value();//SetTemp_Compare_SensoTemp();
 
         }
-      
-
         sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
         osDelay(10);
 

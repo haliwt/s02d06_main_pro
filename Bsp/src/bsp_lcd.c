@@ -65,7 +65,7 @@ lcd_ref glcd_t;
 
 
 
-#define LUM_VALUE      0X94//0x94//0x92//0x93//0x95//0x94//0x97(max)
+
 
 #define MAX_LUM_VALUE  0x9F
 
@@ -148,7 +148,7 @@ lcd_ref glcd_t;
 static void TM1723_Start(void);
 static void TM1723_Stop(void);
 static void TM1723_Write_OneByte(uint8_t data);
-static void TIM1723_Write_Cmd(uint8_t cmd);
+
 static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 
 
@@ -212,7 +212,7 @@ static void TM1723_Write_OneByte(uint8_t data)
  }
 
 }
-static void TIM1723_Write_Cmd(uint8_t cmd)
+void TIM1723_Write_Cmd(uint8_t cmd)
 {
     TM1723_CLK_SetHigh();
 	TM1723_Start();

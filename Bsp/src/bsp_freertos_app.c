@@ -183,33 +183,14 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
             
 
           }
-          else if(gkey_t.power_on_flag ==1 && KEY_POWER_VALUE() == KEY_UP){
+		  if(gkey_t.power_on_flag ==1 && KEY_POWER_VALUE() == KEY_UP){
              key_power_shot_handler();//power_long_short_key_fun();
 
          }
-         else if(gkey_t.key_mode_flag== 1 && KEY_MODE_VALUE() == KEY_UP){
-      
-               key_mode_short_handler();
-          }
-          else if(gkey_t.key_add_flag == 1 && KEY_ADD_VALUE()== KEY_UP){
-					 gkey_t.key_add_flag++;
-
-                     Add_Key_Fun(gkey_t.key_add_dec_mode);
-                    
-                  
-
-           }
-           else if(gkey_t.key_dec_flag == 1 && KEY_DEC_VALUE()== KEY_UP){
-					  gkey_t.key_dec_flag++;
-
-                      Dec_Key_Fun(gkey_t.key_add_dec_mode);
-					 
-            }
-          
-
-
-
-	     if(gkey_t.key_power==power_on){
+     
+         
+         
+           if(gkey_t.key_power==power_on){
             
          
           power_on_run_handler();
@@ -303,7 +284,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 256,             		/* 任务栈大小，单位word，也就是4字节 */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */

@@ -50,16 +50,19 @@ void receive_data_fromm_display(uint8_t *pdata)
         gpro_t.gTimer_shut_off_backlight =0;
 
         if(pdata[3] == 0x01 ){ //open
-             buzzer_sound();
+             Buzzer_KeySound();// buzzer_sound();
 			gctl_t.step_process=0;
             gpro_t.disp_power_on_flag = 1;
-            second_disp_power_on_fun();
+			gkey_t.key_power=power_on;
+          //  second_disp_power_on_fun();
 
 
         }
         else if(pdata[3] == 0x0){
-           buzzer_sound();
-           second_disp_power_off_fun();
+           Buzzer_KeySound();//buzzer_sound();
+		   gpro_t.disp_power_on_flag = 2;
+		   gkey_t.key_power=power_off;
+          // second_disp_power_off_fun();
 
           
         }
@@ -307,10 +310,13 @@ void receive_data_fromm_display(uint8_t *pdata)
           wake_up_backlight_on();
           gpro_t.gTimer_shut_off_backlight =0;
         if(pdata[3] == 0x0F){ //数据
-          
+          if(gkey_t.set_temp_value_be_pressed !=1){
           gpro_t.set_temperature_value_success=1;
           gkey_t.set_temp_value_be_pressed = 1;     //send data to tencent flag.
+          
           gctl_t.gSet_temperature_value  = pdata[5] ;
+
+          }
 
         }
       break;
@@ -319,13 +325,14 @@ void receive_data_fromm_display(uint8_t *pdata)
 
          wake_up_backlight_on();
         if(pdata[4] == 0x01){ //数据
+        if(gkey_t.set_temp_value_be_pressed !=1){
            gpro_t.gTimer_set_temp_temp=0;
-          g_tDisp.disp_set_temp_value_flag =1;
+           g_tDisp.disp_set_temp_value_flag =1;
         //  gpro_t.set_temperature_value_success=1;
           gctl_t.gSet_temperature_value  = pdata[5] ;
 
         }
-
+        }
 
       break;
 

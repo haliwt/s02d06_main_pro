@@ -38,6 +38,7 @@
 #define TM1723Default          	0x87
 #define CloseDispTM1723		    0x80//  
 
+#define LUM_VALUE      0X97//0x94//0x92//0x93//0x95//0x94//0x97(max)
 
 
  //Display Address 
@@ -110,6 +111,10 @@ typedef struct _LCD_Ref{
 
 
 extern lcd_ref glcd_t; 
+
+
+void TIM1723_Write_Cmd(uint8_t cmd);
+
 
 void LcdDisp_Init(void);
 

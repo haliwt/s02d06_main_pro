@@ -104,6 +104,7 @@ typedef struct {
 
 
    uint8_t wifi_power_on_flag;
+   
 
 
   

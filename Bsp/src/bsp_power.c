@@ -25,6 +25,8 @@ void power_off_run_handler(void)
   
    if(gpro_t.disp_power_on_flag ==2 || gpro_t.wifi_power_on_flag==2){
       power_off_init_function();
+	  if(gpro_t.disp_power_on_flag ==2)gpro_t.disp_power_on_flag++;
+      if(gpro_t.wifi_power_on_flag==2)gpro_t.wifi_power_on_flag++;
 
    }
 		
@@ -143,12 +145,7 @@ void power_on_run_handler(void)
                       osDelay(30);
                 
        }
-
-
-
-       
-
-      gctl_t.step_process=4;
+		gctl_t.step_process=4;
 
 	 break;
 
@@ -165,7 +162,9 @@ void power_on_run_handler(void)
        break;
 
       case 6:
-          Display_WorksTimingr_Handler(gkey_t.key_mode);
+	  	  
+           Display_WorksTimingr_Handler(gkey_t.key_mode);
+	  	  
     	  gctl_t.step_process=7;
       break;
 
@@ -377,6 +376,7 @@ void power_on_init_function(void)
 		osDelay(100);
 
 	}
+	 TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
 
 }
 

@@ -50,6 +50,29 @@ void key_handler(void)
 //        }
 
 	}
+
+	 if(gkey_t.key_mode_flag== 1 && KEY_MODE_VALUE() == KEY_UP){
+      
+               key_mode_short_handler();
+      }
+      else if(gkey_t.key_add_flag == 1 && KEY_ADD_VALUE()== KEY_UP){
+					 gkey_t.key_add_flag++;
+					 Buzzer_KeySound();
+
+                     Add_Key_Fun(gkey_t.key_add_dec_mode);
+		            
+                    
+                  
+
+           }
+           else if(gkey_t.key_dec_flag == 1 && KEY_DEC_VALUE()== KEY_UP){
+					  gkey_t.key_dec_flag++;
+					  Buzzer_KeySound();
+										  
+
+                      Dec_Key_Fun(gkey_t.key_add_dec_mode);
+		             
+            }
 	
   #if 0
 	if(gkey_t.key_dec_flag ==6 ){
@@ -377,16 +400,18 @@ void Dec_Key_Fun(uint8_t cmd)
 	     case disp_works_timing:
 
          case set_temp_value_item: //set temperature 
-			Buzzer_KeySound();
+
+			gkey_t.set_temp_value_be_pressed =1;
+			gpro_t.gTimer_set_temp_temp=0;
 
             gpro_t.gTimer_run_main_fun =0;
-            gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
+            gpro_t.gTimer_run_dht11=0; //不显示设置的温度
              
             gctl_t.gSet_temperature_value  --;
-    		if( gctl_t.gSet_temperature_value  <20)gctl_t.gSet_temperature_value  =40;
-    	    else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
+    		if( gctl_t.gSet_temperature_value  <20)gctl_t.gSet_temperature_value  =20;
+    	    
 
-            if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
+    
     				
     	    glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
             glcd_t.number3_high = glcd_t.number3_low;// gctl_t.gSet_temperature_value   / 10 ;
@@ -395,13 +420,12 @@ void Dec_Key_Fun(uint8_t cmd)
 
 			 LCD_Number_ThreeFour_Temperature();
 
-            gkey_t.set_temp_value_be_pressed =1;
-            gpro_t.gTimer_set_temp_temp=0;
+            
            
          break;
 
          case mode_set_timer: //set timer timing value 
-               Buzzer_KeySound();
+             
               g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
               gkey_t.gTimer_disp_set_timer = 0; 
 
@@ -447,13 +471,16 @@ void Dec_Key_Fun(uint8_t cmd)
 void Add_Key_Fun(uint8_t cmd)
 {
 
-  //static uint8_t add_key;
+ 
    switch(cmd){
         
    case disp_works_timing:
 
 	case set_temp_value_item:  //set temperature value 
-          Buzzer_KeySound();
+
+         gkey_t.set_temp_value_be_pressed = 1;
+        gpro_t.gTimer_set_temp_temp=0;
+     
          gpro_t.gTimer_run_main_fun=0;
          gpro_t.gTimer_run_dht11=0;
         gctl_t.gSet_temperature_value   ++;
@@ -461,7 +488,7 @@ void Add_Key_Fun(uint8_t cmd)
             gctl_t.gSet_temperature_value  =20;
         }
 
-        if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
+        if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 40;
 
         glcd_t.number3_low = gctl_t.gSet_temperature_value   / 10 ;
         glcd_t.number3_high = gctl_t.gSet_temperature_value   / 10 ;
@@ -470,19 +497,13 @@ void Add_Key_Fun(uint8_t cmd)
 
          LCD_Number_ThreeFour_Temperature();
     
-    
-        //Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
-
-        //add_key = 1;
-        gkey_t.set_temp_value_be_pressed = 1;
-        gpro_t.gTimer_set_temp_temp=0;
-      //  g_tDisp.disp_set_temp_value_flag =0;
+       gpro_t.gTimer_set_temp_temp=0;
       
     break;
 
     case mode_set_timer: //set timer timing value 
 
-       Buzzer_KeySound();
+    
          g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
          gkey_t.gTimer_disp_set_timer = 0; 
          gpro_t.set_timer_timing_minutes=0;
@@ -528,25 +549,19 @@ void Add_Key_Fun(uint8_t cmd)
 void key_add_dec_set_temp_value_fun(void)
 {
 
-   
 
-    if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1)&& gpro_t.gTimer_set_temp_temp < 2){
+    if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1 || gpro_t.smart_phone_set_tmep_value_flag == 1) && gpro_t.gTimer_set_temp_temp > 2){
 
-        gpro_t.gTimer_run_dht11=0; 
-        Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
-     
-    }
-    else if((gkey_t.set_temp_value_be_pressed == 1 || g_tDisp.disp_set_temp_value_flag==1 || gpro_t.smart_phone_set_tmep_value_flag == 1)&& gpro_t.gTimer_set_temp_temp > 2){
-      
-       gpro_t.gTimer_run_dht11=0; 
+	   gpro_t.gTimer_run_dht11=0; 
        gpro_t.gTImer_send_disp_board =0;
+
       if(gkey_t.set_temp_value_be_pressed ==1 || gpro_t.smart_phone_set_tmep_value_flag == 1){
 
-          gkey_t.set_temp_value_be_pressed ++;
+          if(gkey_t.set_temp_value_be_pressed ==1)gkey_t.set_temp_value_be_pressed++;
           if(gpro_t.smart_phone_set_tmep_value_flag == 1) gpro_t.smart_phone_set_tmep_value_flag ++;
           
-           lcd_donot_disp_number_34_temperature();
-            osDelay(400);
+           //lcd_donot_disp_number_34_temperature();
+           // osDelay(400);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
             
             gpro_t.set_temperature_value_success =1;
@@ -554,16 +569,17 @@ void key_add_dec_set_temp_value_fun(void)
             //sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
            
              sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
+             osDelay(5);
              set_temp_value_compare_dht11_temp_value();
 
 
       }
-       else if(g_tDisp.disp_set_temp_value_flag == 1){ //this is the second display board  to the first display baord displa numbers.
+      else if(g_tDisp.disp_set_temp_value_flag == 1){ //this is the second display board  to the first display baord displa numbers.
 
           g_tDisp.disp_set_temp_value_flag++;
 
-           lcd_donot_disp_number_34_temperature();
-            osDelay(400);
+          // lcd_donot_disp_number_34_temperature();
+           // osDelay(400);
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
             gpro_t.set_temperature_value_success =1;
 

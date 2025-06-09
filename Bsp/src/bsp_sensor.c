@@ -171,7 +171,7 @@ void Update_DHT11_Value(void)
 	
 
    sendData_Real_TimeHum(gctl_t.dht11_humidity_value,gctl_t.dht11_temp_value);
-
+   osDelay(5);
 }
 
 
