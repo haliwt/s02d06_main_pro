@@ -36,6 +36,9 @@
 #include "bsp_buzzer.h"
 #include "bsp_key.h"
 
+
+#include "bsp_power.h"
+
 #include "bsp_ultrasonic.h"
 #include "bsp_delay.h"
 #include "bsp_ctl.h"
@@ -174,12 +177,7 @@ extern uint8_t disp_inputBuf[1];
 
 
 
-void power_on_init_function(void);
 
-void power_off_run_handler(void);
-
-
-void power_on_run_handler(void);
 
 void mainboard_active_handler(void);
 
