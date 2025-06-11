@@ -365,6 +365,7 @@ void power_on_init_function(void)
 	gkey_t.key_add_dec_mode = disp_works_timing;
 	gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
 	gkey_t.key_mode = disp_works_timing;
+	gctl_t.gSet_temperature_value =40;
 
 
 	if(gpro_t.tencent_link_success==1){

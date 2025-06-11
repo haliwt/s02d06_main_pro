@@ -426,7 +426,7 @@ void Dec_Key_Fun(uint8_t cmd)
 
          case mode_set_timer: //set timer timing value 
              
-              g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
+            
               gkey_t.gTimer_disp_set_timer = 0; 
 
               gpro_t.set_timer_timing_minutes =0;
@@ -504,7 +504,7 @@ void Add_Key_Fun(uint8_t cmd)
     case mode_set_timer: //set timer timing value 
 
     
-         g_tDisp.second_disp_set_temp_flag=0; //send data to the second display board .
+    
          gkey_t.gTimer_disp_set_timer = 0; 
          gpro_t.set_timer_timing_minutes=0;
          gpro_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
@@ -566,7 +566,7 @@ void key_add_dec_set_temp_value_fun(void)
             
             gpro_t.set_temperature_value_success =1;
 
-            //sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
+        
            
              sendData_setTemp_value(gctl_t.gSet_temperature_value ); //to send data the second display board
              osDelay(5);
@@ -635,7 +635,8 @@ void set_temp_value_compare_dht11_temp_value(void)
 
                 gpro_t.gTimer_run_dht11=2;  //at once display sensor of temperature value 
 
-                
+                sendDisplayCommand(0x02,0x1); // 关闭干燥功能
+	            osDelay(5);
                   if(send_1_on !=send_1_on_flag){
                        send_1_on = send_1_on_flag;
                        send_1_off_flag ++;
@@ -653,6 +654,8 @@ void set_temp_value_compare_dht11_temp_value(void)
             gctl_t.ptc_flag = 0;
             Ptc_Off();
             Disp_Dry_Icon();
+			sendDisplayCommand(0x02,0); // 关闭干燥功能
+	        osDelay(5);
              if(send_1_off !=send_1_off_flag ){
                  send_1_off = send_1_off_flag;
                  send_1_on_flag ++;
@@ -680,7 +683,8 @@ void set_temp_value_compare_dht11_temp_value(void)
           gctl_t.ptc_flag = 0;
           Ptc_Off();
           Disp_Dry_Icon();
-
+          sendDisplayCommand(0x02,0); // 关闭干燥功能
+	      osDelay(5);
           if(send_2_off !=send_2_off_flag ){
              send_2_off = send_2_off_flag;
              send_2_on_flag ++;
@@ -700,6 +704,8 @@ void set_temp_value_compare_dht11_temp_value(void)
 
          Ptc_On();
          Disp_Dry_Icon();
+		 sendDisplayCommand(0x02,0x1); // 关闭干燥功能
+	        osDelay(5);
 
          if(send_2_on !=send_2_on_flag ){
              send_2_on = send_2_on_flag;
@@ -722,6 +728,8 @@ void set_temp_value_compare_dht11_temp_value(void)
     
              Ptc_On();
              Disp_Dry_Icon();
+			 sendDisplayCommand(0x02,0x1); // 关闭干燥功能
+	            osDelay(5);
 
             if(send_2_on !=send_2_on_flag ){
                  send_2_on = send_2_on_flag;
@@ -765,13 +773,11 @@ void set_timer_value_handler(void)
             
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
-
-                if(g_tDisp.second_disp_set_temp_flag == 0){
                     
                     SendData_Tx_Data(0x4C,0x0);
 				    osDelay(5);
 
-                 }
+                 
                  
             
             }
@@ -790,11 +796,11 @@ void set_timer_value_handler(void)
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
                     osDelay(50);//HAL_Delay(200);
                 }
-                if(g_tDisp.second_disp_set_temp_flag == 0){
+              
                     
-                    SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
+                    SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours); //set up timer timing value .
                     osDelay(5);
-                 }
+                 
              
             }
         }

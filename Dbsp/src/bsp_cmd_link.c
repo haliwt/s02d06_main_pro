@@ -2,12 +2,129 @@
 
 #define MAX_BUFFER_SIZE  12
 
+#define MAX_BUFFER_SIZE  12
+
+#define USART1_IT_FLAG   0
+
+#define FRAME_HEADER 0x5A
+#define FRAME_END 0xFE
+
+
 
 static uint8_t transferSize;
 static uint8_t outputBuf[MAX_BUFFER_SIZE];
 
 volatile uint8_t transOngoingFlag;
 volatile uint8_t usart2_transOngoingFlag;
+
+/********************************************************************************
+	**
+	*Function Name:void FillFrame(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen) 
+	*Function :
+	*Input Ref: humidity value and temperature value
+	*Return Ref:NO
+	*
+*******************************************************************************/
+void FillFrame(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen) 
+{
+    buf[0] = FRAME_HEADER;
+    buf[1] = 0x10; // Mainboard device number
+    buf[2] = cmd;
+    buf[3] = (dataLen > 0) ? 0x0F : 0x00; // Data or command
+
+	if(buf[3] ==0){
+       buf[4] = data[0];
+       buf[5] = FRAME_END;
+	   buf[6] = bcc_check(buf, 6 );
+	}
+	else{
+	      buf[4] = dataLen;
+	
+		   for (uint8_t i = 0; i < dataLen; i++) {
+			   buf[5 + i] = data[i];
+		   }
+	
+		   buf[5 + dataLen] = FRAME_END;
+		   buf[6 + dataLen] = bcc_check(buf, 6 + dataLen);
+
+
+	}
+}
+
+// 发
+
+void FillFrame_Response(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen) 
+{
+    buf[0] = FRAME_HEADER;          // 帧头
+    buf[1] = 0x10;                  // 主板设备号
+    buf[2] = 0xFF;                  // 应答信号标志
+    buf[3] = cmd;                   // 命令类型
+    buf[4] = (dataLen > 0) ? 0x0F : 0x00; // 数据标志：0x0F 表示有数据，0x00 表示无数据
+
+    if (buf[4] == 0x00) {           // 无数据的情况
+        buf[5] = data[0];           // 具体指令
+        buf[6] = FRAME_END;         // 帧尾
+        buf[7] = bcc_check(buf, 7); // 校验码
+    } else {                        // 有数据的情况
+        buf[5] = dataLen;           // 数据长度
+        if (data != NULL) {         // 检查数据指针是否有效
+            for (uint8_t i = 0; i < dataLen; i++) {
+                buf[6 + i] = data[i]; // 填充数据
+            }
+        }
+        buf[6 + dataLen] = FRAME_END;         // 帧尾
+        buf[7 + dataLen] = bcc_check(buf, 7 + dataLen); // 校验码
+    }
+}
+// 公共函数：发送数据
+void TransmitData(uint8_t *buf, uint8_t size) 
+{
+    transferSize = size;
+
+    #if 0
+    if (transferSize) {
+        while (transOngoingFlag); // 等待传输完成
+        transOngoingFlag = 1;
+        HAL_UART_Transmit_IT(&huart1, buf, transferSize);
+    }
+    #else
+    	HAL_UART_Transmit_DMA(&huart1, buf, transferSize);
+    #endif
+}
+//送命令响应
+void SendWifiData_Answer_Cmd(uint8_t cmd, uint8_t cmdata) 
+{
+    uint8_t cmdData[1] = {cmdata};
+    FillFrame_Response(outputBuf, cmd,cmdData ,0);
+    TransmitData(outputBuf,8);
+}
+
+
+/******************************************************************************
+	*
+	*Function Name:void set_timer_timing_value_handler(void)
+	*Funcion: // 发送显示命令
+	*Input Ref: NO
+	*Return Ref:NO
+	*
+******************************************************************************/
+// 发送命令数据
+void SendData_Set_Command(uint8_t cmd, uint8_t data) 
+{
+    uint8_t cmdData[1] = {data};
+    FillFrame(outputBuf, cmd, cmdData, 0);
+    TransmitData(outputBuf, 7);
+}
+
+void sendDisplayCommand(uint8_t command,uint8_t data) 
+{
+    
+	SendData_Set_Command(command, data);
+    
+}
+
+
+
 /********************************************************************************
 	**
 	*Function Name:
@@ -167,6 +284,7 @@ void SendWifiData_To_SynTimerTime(uint8_t hours,uint8_t minutes,uint8_t seconds)
  * Function:send temperature value 
  * 
 *********************************************************/
+#if 0
 void SendData_Set_Command(uint8_t cmd,uint8_t data)  //  SendData_Set_Command(0x21, 0x01); //smart phone power on command .
 {
     outputBuf[0]=0x5A; //main board head = 0x5A
@@ -192,6 +310,7 @@ void SendData_Set_Command(uint8_t cmd,uint8_t data)  //  SendData_Set_Command(0x
 	#endif 
 	
 }
+#endif 
 /*********************************************************
  * 
  * Function Name:void SendData_Tx_Data(uint8_t dcmd,uint8_t ddata)

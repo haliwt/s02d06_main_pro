@@ -45,6 +45,7 @@
 #include "bsp_fan.h"
 #include "bsp_plasma.h"
 #include "bsp_ptc.h"
+#include "bsp_message.h"
 #include "bsp_usart.h"
 #include "bsp_time.h"
 #include "bsp_lcd_app.h"

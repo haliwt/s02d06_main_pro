@@ -25,6 +25,10 @@ void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra);
 void SendWifiData_To_SynTimerTime(uint8_t hours,uint8_t minutes,uint8_t seconds);
 
 
+void SendWifiData_Answer_Cmd(uint8_t cmd, uint8_t cmdata) ;
+
+void sendDisplayCommand(uint8_t command,uint8_t data) ;
+
 
 #endif 
 

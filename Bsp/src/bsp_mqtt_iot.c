@@ -68,14 +68,14 @@ static serviceInfo    sg_info;
 void Mqtt_Value_Init(void)
 {
     wifi_t.set_wind_speed_value=100;
-    gctl_t.gSet_temperature_value =40;
+    //gctl_t.gSet_temperature_value =40;
    	sg_info.open=1;
     sg_info.state=1;
     sg_info.ptc=1; 
     sg_info.anion=1;  //灭菌
 	sg_info.sonic =1;  //驱虫
     sg_info.find= wifi_t.set_wind_speed_value;
-	sg_info.set_temperature = gctl_t.gSet_temperature_value ;
+	sg_info.set_temperature = 40;
 	
 }
 static void Mqtt_Value_update_data(void)

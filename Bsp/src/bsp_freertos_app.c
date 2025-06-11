@@ -49,6 +49,7 @@ uint8_t check_code;
 uint8_t rx_data_counter,rx_end_flag;
 uint8_t add_flag,dec_flag,smart_phone_sound;
 
+uint8_t recoder_flag;
 
 /***********************************************************************************************************
 											函数声明
@@ -128,12 +129,13 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
            if(check_code == mess_t.bcc_check_code ){
            
               receive_data_fromm_display(mess_t.mesData);
-              if(gpro_t.buzzer_sound_flag == 1){
-                  gpro_t.buzzer_sound_flag++ ;
-                  buzzer_sound();
-
-
-              }
+			  recoder_flag++;
+//              if(gpro_t.buzzer_sound_flag == 1){
+//                  gpro_t.buzzer_sound_flag++ ;
+//                  buzzer_sound();
+//
+//
+//              }
            }
 
 		}
@@ -284,7 +286,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
@@ -404,6 +406,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		case 0:  //#0
 			if(disp_inputBuf[0] == 0xA5){  // 0xA5 --didplay command head
                rx_data_counter=0;
+			     mess_t.mesLength=0;
                mess_t.mesData[rx_data_counter] = disp_inputBuf[0];
 			   state=1; //=1
 
