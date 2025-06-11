@@ -184,6 +184,7 @@ void ptc_error_code_number(void);
 void display_works_times_handler(void);
 
 
+void display_timer_times_handler(void);
 
 #endif 
 

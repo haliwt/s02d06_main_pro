@@ -38,7 +38,7 @@ void bsp_ctl_init(void)
 {
 
    
-   
+   gpro_t.receive_disp_mode=0xff;	
    //dht11_init();
    gctl_t.fan_warning =0;
    gctl_t.ptc_warning = 0;

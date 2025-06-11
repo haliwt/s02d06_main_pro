@@ -51,28 +51,25 @@ void key_handler(void)
 
 	}
 
-	 if(gkey_t.key_mode_flag== 1 && KEY_MODE_VALUE() == KEY_UP){
-      
-               key_mode_short_handler();
-      }
-      else if(gkey_t.key_add_flag == 1 && KEY_ADD_VALUE()== KEY_UP){
-					 gkey_t.key_add_flag++;
-					 Buzzer_KeySound();
+	if(gkey_t.key_mode_flag== 1 && KEY_MODE_VALUE() == KEY_UP){
 
-                     Add_Key_Fun(gkey_t.key_add_dec_mode);
-		            
-                    
-                  
+		key_mode_short_handler();
+	}
+	else if(gkey_t.key_add_flag == 1 && KEY_ADD_VALUE()== KEY_UP){
+		gkey_t.key_add_flag++;
+		Buzzer_KeySound();
 
-           }
-           else if(gkey_t.key_dec_flag == 1 && KEY_DEC_VALUE()== KEY_UP){
-					  gkey_t.key_dec_flag++;
-					  Buzzer_KeySound();
-										  
+		Add_Key_Fun(gkey_t.key_add_dec_mode);
 
-                      Dec_Key_Fun(gkey_t.key_add_dec_mode);
-		             
-            }
+	}
+	else if(gkey_t.key_dec_flag == 1 && KEY_DEC_VALUE()== KEY_UP){
+			gkey_t.key_dec_flag++;
+			Buzzer_KeySound();
+					  
+
+			Dec_Key_Fun(gkey_t.key_add_dec_mode);
+
+	}
 	
   #if 0
 	if(gkey_t.key_dec_flag ==6 ){
@@ -301,7 +298,7 @@ void key_mode_short_handler(void)
 			LCD_Disp_Timer_Timing_Init();
             disp_ai_iocn();
             Buzzer_KeySound();
-			SendData_Set_Command(0x27,0x02); //timer timing.
+			SendData_Set_Command(0x07,0x02); //timer timing.
             osDelay(5);//HAL_Delay(10);
 
         }
@@ -319,7 +316,7 @@ void key_mode_short_handler(void)
 			LCD_Disp_Works_Timing_Init();
             disp_ai_iocn();
             Buzzer_KeySound();
-			SendData_Set_Command(0x27,0x01); 
+			SendData_Set_Command(0x07,0x01); 
             osDelay(5);//HAL_Delay(10);
          }
 

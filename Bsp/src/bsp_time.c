@@ -41,12 +41,7 @@ void  works_two_hours_handler(void)
 		Works_Time_Out();
 
 	}
-	
-
-
 }
-
-
 
 /**********************************************************************************************************
 *	函 数 名: static uint8_t Works_Time_Out(void)
@@ -108,12 +103,7 @@ static void  Works_Time_Out(void)
         interval_continuce_works_fun();
 		
       }
-
-
 }
-
-
-
 /********************************************************************************************************
 *
 *	函 数 名: static void interval_two_hours_stop_action(void)
@@ -254,6 +244,72 @@ static void interval_continuce_works_fun(void)
        
        
           }
+
+
+}
+
+
+void Display_modeKey_switchTime_Handler(void)
+{
+
+	// static uint8_t switch_counter;
+	 
+		switch(gpro_t.receive_disp_mode){
+	  
+		case disp_works_timing :
+		     if(gpro_t.gTimer_disp_short_time <6 && gkey_t.set_timer_timing_success ==1){
+	
+				 gctl_t.ai_flag = 1; //  DISPLAY AI ICON
+				 disp_ai_symbol();
+				 display_works_times_handler(); //Display_Works_Timing();
+	
+			}
+			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success ==1){
+					gpro_t.gTimer_disp_short_time=0;
+					gkey_t.key_mode = disp_timer_timing;
+					gctl_t.ai_flag =0;
+					donot_disp_ai_symbol();
+					display_works_times_handler();//Display_Timer_Timing();
+					gpro_t.receive_disp_mode=0xff	;
+			}
+			
+			
+		break;
+		
+		case disp_timer_timing:
+	   
+		    if(gkey_t.set_timer_timing_success == 0 && gpro_t.gTimer_disp_short_time < 6){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+	
+				 gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
+				 donot_disp_ai_symbol();
+				 display_timer_times_handler();
+			  
+			}
+			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success == 0){
+					gpro_t.gTimer_disp_short_time=0;
+					gkey_t.key_mode = disp_works_timing;
+					gctl_t.ai_flag =1;
+					disp_ai_symbol();
+					display_works_times_handler();
+					gpro_t.receive_disp_mode=0xff;	
+	
+	
+			}
+	
+		break;
+
+		default:
+
+		break;
+	
+	
+		
+	
+		 
+		 
+		}
+
+
 
 
 }

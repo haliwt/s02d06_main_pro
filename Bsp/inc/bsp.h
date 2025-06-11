@@ -131,6 +131,7 @@ typedef struct {
 
    uint8_t disp_works_minutes_value;
    uint8_t  disp_works_hours_value;
+   uint8_t receive_disp_mode;
 
    //the second display ref 
 
@@ -194,7 +195,7 @@ void link_wifi_net_handler(uint8_t link);
 
 void read_senson_dht11_data(void);
 
-void record_time_or_time_handler(void);
+void  record_time_or_timer_handler(void);
 
 void power_off_init_function(void);
 

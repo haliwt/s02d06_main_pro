@@ -306,7 +306,7 @@ void Display_Timer_Timing(void)
          send_timer_times_flag++;
          
         SendWifiData_To_SynTimerTime(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes,gpro_t.gTimer_timer_Counter);
-
+        osDelay(5);
      }
      
  
@@ -366,8 +366,28 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
     switch(sel_item){
 
     case disp_works_timing :
-   
-        Display_Works_Timing();
+        if(gkey_t.set_timer_timing_success ==0){
+            gctl_t.ai_flag = 1; //  DISPLAY AI ICON
+            
+		   Display_Works_Timing();
+
+
+        }
+		else if(gpro_t.gTimer_disp_short_time <6 && gkey_t.set_timer_timing_success ==1){
+
+		     gctl_t.ai_flag = 1; //  DISPLAY AI ICON
+		     disp_ai_symbol();
+             Display_Works_Timing();
+
+		}
+		else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success ==1){
+                gpro_t.gTimer_disp_short_time=0;
+                gkey_t.key_mode = disp_timer_timing;
+                gctl_t.ai_flag =0;
+				donot_disp_ai_symbol();
+                Display_Timer_Timing();
+        }
+        
             
     break;
     
@@ -379,38 +399,19 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
 
         }
-        else if(gkey_t.set_timer_timing_success == 0){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+        else if(gkey_t.set_timer_timing_success == 0 && gpro_t.gTimer_disp_short_time < 6){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-
-            gctl_t.ai_flag =0;
-        
-            if(gpro_t.gTimer_disp_short_time < 19){
-                glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
-                glcd_t.number5_high = glcd_t.number5_low; //gpro_t.set_timer_timing_hours / 10;
-
-
-                glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
-                glcd_t.number6_high =  glcd_t.number6_low;//gpro_t.set_timer_timing_hours % 10;
-
-                //display minutes 
-                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-                glcd_t.number7_high = glcd_t.number7_low;//gpro_t.set_timer_timing_minutes / 10;
-
-                				
-                glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
-                glcd_t.number8_high =  glcd_t.number8_low ;//gpro_t.set_timer_timing_minutes % 10;
-
-                //LCD_Disp_Timer_Timing();
-                display_works_times_handler();
-            }
-            else if(gpro_t.gTimer_disp_short_time > 19){
+             gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
+             donot_disp_ai_symbol();
+             display_timer_times_handler();
+          
+        }
+        else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success == 0){
                 gpro_t.gTimer_disp_short_time=0;
                 gkey_t.key_mode = disp_works_timing;
                 gctl_t.ai_flag =1;
-               disp_speical_works_timing_value();
-
-
-            }
+				disp_ai_symbol();
+                display_works_times_handler();
 
 
         }

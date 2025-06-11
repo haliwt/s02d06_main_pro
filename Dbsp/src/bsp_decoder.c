@@ -277,12 +277,70 @@ void receive_data_fromm_display(uint8_t *pdata)
 	        if(pdata[4] == 0x01){  //
 	           
 	             Buzzer_KeySound()  ;
+	             gkey_t.key_mode_shot_flag = 1;
+				 gctl_t.ai_flag = 1;
+				gkey_t.key_mode_switch_flag = 1;
+				gkey_t.key_mode  = disp_works_timing;
+
+
+				gpro_t.gTimer_disp_short_time=0;
+
+				LCD_Disp_Works_Timing_Init();
+				disp_ai_iocn();
 
 	        }
+	        else if(pdata[4] == 0x02){
+
+			 gkey_t.key_mode  = disp_timer_timing;
+
+			 gkey_t.key_mode_shot_flag = 1;
+
+			   gctl_t.ai_flag = 0; // DON'T DISP AI ICON
+
+
+			// g_tDisp.ai_mode_flag =2; //WT.EDIT 2025.06.07
+
+			gkey_t.key_mode_switch_flag = 1;
+			gkey_t.key_add_dec_mode = set_temp_value_item;
+            gkey_t.key_mode_be_pressed = 2;
+			gpro_t.gTimer_disp_short_time=0;
+			LCD_Disp_Timer_Timing_Init();
+			disp_ai_iocn();
+	        }
+
         }
 
 
      break;
+
+	 case 0x07: //switch display by has been set up timer value or works timing value
+
+	      if(pdata[3]==0){
+	        if(pdata[4] == 0x02 || pdata[4] ==0x01){  //display AI =2,disp_timer_item.
+	           Buzzer_KeySound();
+
+			  if(gctl_t.ai_flag ==1){
+                  gpro_t.receive_disp_mode = disp_timer_timing;//gkey_t.key_mode=disp_timer_timing;
+				  gpro_t.gTimer_disp_short_time =0;
+			      gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
+			      donot_disp_ai_symbol();
+
+			  
+		      }
+			  else{ //display don't AI MODE ,disp_works_item
+			  	 
+				  gpro_t.receive_disp_mode= disp_works_timing ;//gkey_t.key_mode=disp_works_timing;
+				  gpro_t.gTimer_disp_short_time =0;
+
+				  gctl_t.ai_flag = 1; // DISPLAY AI ICON
+			      disp_ai_symbol();
+
+			  }
+           
+	      } 
+	  }
+
+	 break;
 
      case 0x0A: //the second display board link state. dc power on the first link state
 

@@ -162,8 +162,9 @@ void power_on_run_handler(void)
        break;
 
       case 6:
-	  	  
-           Display_WorksTimingr_Handler(gkey_t.key_mode);
+	  	   if(gpro_t.receive_disp_mode==0xff){	
+              Display_WorksTimingr_Handler(gkey_t.key_mode);
+	  	   }
 	  	  
     	  gctl_t.step_process=7;
       break;

@@ -366,7 +366,7 @@ void read_senson_dht11_data(void)
 
 }
 
-void record_time_or_time_handler(void)
+void record_time_or_timer_handler(void)
 {
     if(gkey_t.key_mode == disp_timer_timing ){
     if(gpro_t.gTimer_works_counter_sencods > 59 ){

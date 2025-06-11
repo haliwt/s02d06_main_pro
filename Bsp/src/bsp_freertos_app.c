@@ -197,11 +197,13 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
          
           power_on_run_handler();
 	   
-          record_time_or_time_handler();
+          record_time_or_timer_handler();
 		  
           key_add_dec_set_temp_value_fun();
 
 		  set_timer_value_handler();
+
+		  Display_modeKey_switchTime_Handler();
 
 
           LCD_Timer_Colon_Blink();

@@ -7,6 +7,7 @@
 void works_two_hours_handler(void);
 
 
+void Display_modeKey_switchTime_Handler(void);
 
 
 
