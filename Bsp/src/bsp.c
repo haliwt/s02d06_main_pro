@@ -227,6 +227,9 @@ void link_wifi_net_handler(uint8_t link)
        
 
     }
+}
+
+#if 0
     else{
 
        switch(link_net_flag ){
@@ -321,7 +324,7 @@ void link_wifi_net_handler(uint8_t link)
      }
  }
 
-
+#endif 
 
 /********************************************************
  * 
