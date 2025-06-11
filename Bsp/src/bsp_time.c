@@ -265,6 +265,7 @@ void Display_modeKey_switchTime_Handler(void)
 	
 			}
 			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success ==1){
+				 
 					gpro_t.gTimer_disp_short_time=0;
 					gkey_t.key_mode = disp_timer_timing;
 					gctl_t.ai_flag =0;
@@ -286,12 +287,13 @@ void Display_modeKey_switchTime_Handler(void)
 			  
 			}
 			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success == 0){
+				    
 					gpro_t.gTimer_disp_short_time=0;
 					gkey_t.key_mode = disp_works_timing;
 					gctl_t.ai_flag =1;
 					disp_ai_symbol();
 					display_works_times_handler();
-					gpro_t.receive_disp_mode=0xff;	
+			        gpro_t.receive_disp_mode=0xff	;
 	
 	
 			}

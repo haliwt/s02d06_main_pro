@@ -70,6 +70,30 @@
 #define Addr0FH         0xCF//??0DH
 
 
+//wind symbol 0xCE
+/****run wind 1******/
+#define T8                       0X01
+#define T9                       0x01      //addr 0xCE --> high word
+#define T11                      0x01    //address:0xCF
+#define T13                      0X04     //address: 0xCE
+/**run wind 2*******/
+#define T10                      0x10     // addr 0xCE -> high word
+#define T12                      0x40     //addr 0xCE -->high word
+#define T14                      0x02     //address: 0xCE
+/****************/
+#define T15                      0x20      //address: 0xCE
+
+
+//display wid stronger icon
+#define T16_WIND_SPEED_LOW       0x08     // high LOW
+//high middle
+
+#define T17_WIND_SPEED_MID       0x80//addr 0xCE
+//wind symbol 0xCF
+#define T18_WIND_SPEED_FULL      0x02   //addr 0xCF
+
+
+
 
 
 typedef struct _LCD_Ref{
@@ -112,6 +136,8 @@ typedef struct _LCD_Ref{
 
 extern lcd_ref glcd_t; 
 
+void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
+
 
 void TIM1723_Write_Cmd(uint8_t cmd);
 
@@ -151,9 +177,9 @@ void LCD_Number_ThreeFour_Temperature(void);
 void LCD_Number_FiveSix_Hours(void);
 void LCD_Number_SevenEight_Minutes(void);
 
-void LCD_Fan_Run_Icon(uint8_t speed_valu);
+//void LCD_Fan_Run_Icon(uint8_t speed_valu);
 
-void Display_Wind_Icon_Inint(void);
+//void Display_Wind_Icon_Inint(void);
 
 void Disip_Wifi_Icon_State(void  );
 

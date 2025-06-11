@@ -152,6 +152,7 @@ void power_on_run_handler(void)
       case 4:
 
     	mainboard_active_handler();
+	  
     	gctl_t.step_process=5;
      break;
 
@@ -236,7 +237,7 @@ void power_off_init_function(void)
     	    //stop main board function ref.
     	    PowerOff_Off_Led();
             SendData_Set_Command(0X01,0X00);
-            osDelay(30);
+            osDelay(5);
     	  
 		
 	  }

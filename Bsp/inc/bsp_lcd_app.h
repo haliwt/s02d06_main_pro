@@ -44,9 +44,13 @@ void Mainboard_Action_Fun(void);
 
 void Disp_HumidityTemp_Value(void);
 
+void Display_Wind_Icon_Inint(void);
 
+//void LCD_Wind_Run_Icon(uint8_t wind_speed);
 
+void LCD_Fan_Run_Icon(uint8_t wind_speed);
 
+void LCD_fanRun_switchTimer_handle(void);
 
 
 #endif

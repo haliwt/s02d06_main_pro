@@ -25,27 +25,7 @@ lcd_ref glcd_t;
 
 #define HUMI_Symbol              0x01     //addr  0xC3 ->T6  high word
 
-//wind symbol 0xCE
-/****run wind 1******/
-#define T8                       0X01
-#define T9                       0x01      //addr 0xCE --> high word
-#define T11                      0x01    //address:0xCF
-#define T13                      0X04     //address: 0xCE
-/**run wind 2*******/
-#define T10                      0x10     // addr 0xCE -> high word
-#define T12                      0x40     //addr 0xCE -->high word
-#define T14                      0x02     //address: 0xCE
-/****************/
-#define T15                      0x20      //address: 0xCE
 
-
-//display wid stronger icon
-#define T16_WIND_SPEED_LOW       0x08     // high LOW
-//high middle
-
-#define T17_WIND_SPEED_MID       0x80//addr 0xCE
-//wind symbol 0xCF
-#define T18_WIND_SPEED_FULL      0x02   //addr 0xCF
 
 
 
@@ -149,7 +129,7 @@ static void TM1723_Start(void);
 static void TM1723_Stop(void);
 static void TM1723_Write_OneByte(uint8_t data);
 
-static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
+
 
 
 
@@ -221,7 +201,8 @@ void TIM1723_Write_Cmd(uint8_t cmd)
 	TM1723_Stop();
  
 }
-static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat)
+
+void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat)
 {
   
    TM1723_CLK_SetHigh();
@@ -982,6 +963,7 @@ void ptc_error_code_number(void)
  * Return Ref:
  * 
 *****************************************************************************/
+#if 0
 void LCD_Fan_Run_Icon(uint8_t wind_speed)
 {
 
@@ -1090,7 +1072,7 @@ void Display_Wind_Icon_Inint(void)
 
      TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
 }
-
+#endif 
 /*****************************************************************************
  * 
  * Function Name:  static LCD_Timer_Colon_Blink(void)
