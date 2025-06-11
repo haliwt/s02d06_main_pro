@@ -1,7 +1,7 @@
 #include "bsp.h"
 
 
-uint8_t power_off_flag;
+uint8_t power_off_flag,fan_run_one_flag;
 
 /*******************************************************************************************************
 *	函 数 名: void mainboard_process_handler(void)
@@ -29,6 +29,27 @@ void power_off_run_handler(void)
       if(gpro_t.wifi_power_on_flag==2)gpro_t.wifi_power_on_flag++;
 
    }
+
+   
+   
+   if(fan_run_one_flag==1){
+		  if(gkey_t.gTimer_power_off_run_times < 61){
+			   Fan_Run();
+			   OnlyDisp_Wind_Icon_Handler();
+			   
+   
+		  }
+		  else{
+		  	 fan_run_one_flag++;
+			 gpro_t.power_off_flag++;
+			  Fan_Stop();
+			  Backlight_Off();
+			  Lcd_Display_Off();
+			
+			  
+		 }
+   
+   }
 		
    Breath_Led();
 
@@ -51,7 +72,7 @@ void power_on_run_handler(void)
            }
 
              power_off_flag=0;
-          
+             fan_run_one_flag=1;
 
             gctl_t.step_process = 1;
 
@@ -260,24 +281,6 @@ void power_off_init_function(void)
     }
    
 	
-    if(	gpro_t.power_off_flag ==2){
-           if(gkey_t.gTimer_power_off_run_times < 61){
-                Fan_Run();
-				OnlyDisp_Wind_Icon_Handler();
-				
-
-		   }
-		   else{
-              gpro_t.power_off_flag++;
-			   Fan_Stop();
-		       Backlight_Off();
-               Lcd_Display_Off();
-		     
-			   
-		  }
-
-	}
-
 }
 
 /***********************************************************************

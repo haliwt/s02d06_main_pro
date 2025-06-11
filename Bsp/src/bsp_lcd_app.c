@@ -692,7 +692,7 @@ void Display_Wind_Icon_Inint(void)
 void LCD_fanRun_switchTimer_handle(void)
 {
 
-	 if(glcd_t.gTimer_fan_blink > 4){ //open 
+	 if(glcd_t.gTimer_fan_blink > 9){ //open 
 
 		glcd_t.gTimer_fan_blink=0;
 		fanSwitch_timeFlag= fanSwitch_timeFlag ^ 0x01;
