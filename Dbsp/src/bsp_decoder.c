@@ -385,15 +385,13 @@ void receive_data_fromm_display(uint8_t *pdata)
        //  wake_up_backlight_on();
         if(pdata[4] == 0x01){ 
 
-		   Buzzer_KeySound();
+		  gpro_t.gTimer_set_temp_temp=0;
+          g_tDisp.disp_set_temp_value_flag =1;
+        //  gpro_t.set_temperature_value_success=1;
+          gctl_t.gSet_temperature_value  = pdata[5] ;  
           
        
-           gpro_t.gTimer_set_temp_temp=0;
-           g_tDisp.disp_set_temp_value_flag =1;
-       
-          gctl_t.gSet_temperature_value  = pdata[5] ;
-
-        }
+         }
         
 
       break;

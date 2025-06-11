@@ -363,33 +363,11 @@ void LCD_Disp_Timer_Timing_Init(void)
 void Display_WorksTimingr_Handler(uint8_t sel_item)
 {
 
-  // static uint8_t switch_counter;
- 
-    switch(sel_item){
+   switch(sel_item){
 
     case disp_works_timing :
-        if(gkey_t.set_timer_timing_success ==0){
-            gctl_t.ai_flag = 1; //  DISPLAY AI ICON
-            
-		   Display_Works_Timing();
-
-
-        }
-		else if(gpro_t.gTimer_disp_short_time <6 && gkey_t.set_timer_timing_success ==1){
-
-		     gctl_t.ai_flag = 1; //  DISPLAY AI ICON
-		     disp_ai_symbol();
-             Display_Works_Timing();
-
-		}
-		else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success ==1){
-                gpro_t.gTimer_disp_short_time=0;
-                gkey_t.key_mode = disp_timer_timing;
-                gctl_t.ai_flag =0;
-				donot_disp_ai_symbol();
-                Display_Timer_Timing();
-        }
-        
+   
+        Display_Works_Timing();
             
     break;
     
@@ -401,19 +379,38 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
 
         }
-        else if(gkey_t.set_timer_timing_success == 0 && gpro_t.gTimer_disp_short_time < 6){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+        else if(gkey_t.set_timer_timing_success == 0){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-             gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
-             donot_disp_ai_symbol();
-             display_timer_times_handler();
-          
-        }
-        else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success == 0){
+
+            gctl_t.ai_flag =0;
+        
+            if(gpro_t.gTimer_disp_short_time < 19){
+                glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+                glcd_t.number5_high = glcd_t.number5_low; //gpro_t.set_timer_timing_hours / 10;
+
+
+                glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
+                glcd_t.number6_high =  glcd_t.number6_low;//gpro_t.set_timer_timing_hours % 10;
+
+                //display minutes 
+                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
+                glcd_t.number7_high = glcd_t.number7_low;//gpro_t.set_timer_timing_minutes / 10;
+
+                				
+                glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
+                glcd_t.number8_high =  glcd_t.number8_low ;//gpro_t.set_timer_timing_minutes % 10;
+
+                //LCD_Disp_Timer_Timing();
+                display_works_times_handler();
+            }
+            else if(gpro_t.gTimer_disp_short_time > 19){
                 gpro_t.gTimer_disp_short_time=0;
                 gkey_t.key_mode = disp_works_timing;
                 gctl_t.ai_flag =1;
-				disp_ai_symbol();
-                display_works_times_handler();
+               disp_speical_works_timing_value();
+
+
+            }
 
 
         }
@@ -422,8 +419,6 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
 
     case mode_set_timer:
-
-	    #if 0
     
         Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
        
@@ -439,14 +434,14 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
 
-                if(g_tDisp.second_disp_set_temp_flag == 0){
+          
                     
-                    SendData_Tx_Data(0x4C,0x0);
-				    osDelay(5);
+                  SendData_Tx_Data(0x4C,0x0);
+				   osDelay(5);
 
-                 }
                  
-            
+                 
+                 //display works times by smg numbers 5678 
             }
             else{
                 gkey_t.set_timer_timing_success = 1;
@@ -461,17 +456,18 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
                 if(gpro_t.tencent_link_success==1){
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
-                    osDelay(50);//HAL_Delay(200);
+                    HAL_Delay(200);
                 }
-                if(g_tDisp.second_disp_set_temp_flag == 0){
+               
                     
                     SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours);
-                    osDelay(5);
-                 }
-             
+					osDelay(5);
+
+                 
+                //display works times by smg numbers 5678 
             }
         }
-           #endif 
+
        break;
 
        case disp_fan_error_number:
