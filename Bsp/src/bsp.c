@@ -250,8 +250,8 @@ void link_wifi_net_handler(uint8_t link)
 			 
 				// MqttData_Publish_SetOpen(0x01);
 		        // osDelay(200);//HAL_Delay(200);
-                 SendData_Set_Command(0x1F,0x01);//has been link net OK
-                 osDelay(5);
+               //  SendData_Set_Command(0x1F,0x01);//has been link net OK
+                // osDelay(5);
                   
            }
            else{
@@ -266,8 +266,8 @@ void link_wifi_net_handler(uint8_t link)
            if(gpro_t.tencent_link_success==1){
                   link_net_flag = 3 ;     
         
-                Subscriber_Data_FromCloud_Handler();
-                osDelay(300);//HAL_Delay(200);
+              //  Subscriber_Data_FromCloud_Handler();
+              //  osDelay(50);//HAL_Delay(200);
                 
                
            }

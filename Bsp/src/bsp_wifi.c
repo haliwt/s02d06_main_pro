@@ -43,10 +43,10 @@ void  wifi_get_beijing_time_handler(void)
        
              gpro_t.gTimer_get_data_from_tencent_data =0;
 			alternate_flag++;
-            if(alternate_flag > 1 ){
+            if(alternate_flag > 3 ){
                 alternate_flag=0;
                 Subscriber_Data_FromCloud_Handler();
-                osDelay(300);
+                osDelay(50);
                 gpro_t.get_beijing_step = 1;
             }
             else{
