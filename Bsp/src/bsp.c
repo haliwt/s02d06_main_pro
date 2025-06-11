@@ -227,7 +227,7 @@ void link_wifi_net_handler(uint8_t link)
        
 
     }
-    else{ //don't link wifi net .
+    else{
 
        switch(link_net_flag ){
 
@@ -248,8 +248,8 @@ void link_wifi_net_handler(uint8_t link)
 
                 gpro_t.link_net_step=0;
 			 
-				 MqttData_Publish_SetOpen(0x01);
-		         osDelay(200);//HAL_Delay(200);
+				// MqttData_Publish_SetOpen(0x01);
+		        // osDelay(200);//HAL_Delay(200);
                  SendData_Set_Command(0x1F,0x01);//has been link net OK
                  osDelay(5);
                   
@@ -267,7 +267,7 @@ void link_wifi_net_handler(uint8_t link)
                   link_net_flag = 3 ;     
         
                 Subscriber_Data_FromCloud_Handler();
-                osDelay(200);//HAL_Delay(200);
+                osDelay(300);//HAL_Delay(200);
                 
                
            }
@@ -281,9 +281,9 @@ void link_wifi_net_handler(uint8_t link)
         case 3:
         if(gpro_t.tencent_link_success==1){
                link_net_flag = 0;
-		         Publish_Data_ToTencent_Initial_Data();
+		       //  Publish_Data_ToTencent_Initial_Data();
 				// HAL_Delay(200);
-                  osDelay(200);
+                //  osDelay(200);
                
          }
           else{
@@ -307,6 +307,7 @@ void link_wifi_net_handler(uint8_t link)
               osDelay(5);
 
            }
+		  link_net_flag = 0xff ;
 
         break;
        

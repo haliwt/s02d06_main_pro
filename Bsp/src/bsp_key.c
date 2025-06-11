@@ -639,7 +639,7 @@ void set_temp_value_compare_dht11_temp_value(void)
                        send_1_off_flag ++;
                     if(gpro_t.tencent_link_success==1){
                        MqttData_Publish_SetPtc(0x01);
-                       osDelay(10);
+                       osDelay(100);
                      }
                   }
             }
@@ -658,7 +658,7 @@ void set_temp_value_compare_dht11_temp_value(void)
                  send_1_on_flag ++;
                  if(gpro_t.tencent_link_success==1){
                      MqttData_Publish_SetPtc(0x0);
-                     osDelay(10);
+                     osDelay(100);
                    }
                   
 
@@ -733,7 +733,7 @@ void set_temp_value_compare_dht11_temp_value(void)
                  send_2_off_flag ++;
         	     if(gpro_t.tencent_link_success==1){
                    MqttData_Publish_SetPtc(0x01);
-                   osDelay(10);
+                   osDelay(100);
                   }
               }
     

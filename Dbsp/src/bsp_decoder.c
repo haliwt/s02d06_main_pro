@@ -92,15 +92,15 @@ void receive_data_fromm_display(uint8_t *pdata)
           
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x01);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
            }
        }
        else if(pdata[3] == 0x0){
         
-          buzzer_sound();
-          wake_up_backlight_on();
-          gpro_t.gTimer_shut_off_backlight =0;
-
+          //buzzer_sound();
+          //wake_up_backlight_on();
+          //gpro_t.gTimer_shut_off_backlight =0;
+          Buzzer_KeySound();
           gctl_t.manual_turn_off_ptc_flag = 1;
        
           gctl_t.ptc_flag = 0;
@@ -109,7 +109,7 @@ void receive_data_fromm_display(uint8_t *pdata)
           
          if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x0);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
           }
         }
      
@@ -117,24 +117,23 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
      case 0x22: //notification :ccompare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
-      wake_up_backlight_on();
-      gpro_t.gTimer_shut_off_backlight =0;
+     // wake_up_backlight_on();
+     // gpro_t.gTimer_shut_off_backlight =0;
 
       if(pdata[4] == 0x01){
 
          
-          gctl_t.manual_turn_off_ptc_flag =0;  //at last set is active.
-            
-          gctl_t.ptc_flag = 1;
          
-          Disp_Dry_Icon();
-          if(gctl_t.interval_stop_run_flag  ==0){
+        if(gctl_t.interval_stop_run_flag  ==0 && gctl_t.manual_turn_off_ptc_flag ==0){
+		  	     gctl_t.ptc_flag = 1;
+         
+                  Disp_Dry_Icon();
 
                  Ptc_On();
           }
-         if(gpro_t.tencent_link_success==1){
+         if(gpro_t.tencent_link_success==1 && gctl_t.manual_turn_off_ptc_flag==0){
               MqttData_Publish_SetPtc(0x01);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
            }
           
          
@@ -143,13 +142,13 @@ void receive_data_fromm_display(uint8_t *pdata)
        else if(pdata[4] == 0x0){
 
        
-          gctl_t.manual_turn_off_ptc_flag =0;
+         
           gctl_t.ptc_flag = 0;
           Ptc_Off();
           Disp_Dry_Icon();
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPtc(0x0);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
            }
 
        }
@@ -177,7 +176,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPlasma(0x01);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
           }
           
          
@@ -192,7 +191,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
           if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetPlasma(0x0);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
           }
          
 
@@ -204,13 +203,13 @@ void receive_data_fromm_display(uint8_t *pdata)
 
       case 0x04: //ultrasonic  打开关闭指令
 
-         buzzer_sound();
+         //buzzer_sound();
 
-        wake_up_backlight_on();
-      gpro_t.gTimer_shut_off_backlight =0;
+        //wake_up_backlight_on();
+        //gpro_t.gTimer_shut_off_backlight =0;
             
        if(pdata[4] == 0x01){  //open 
-
+           Buzzer_KeySound();
          //if(gctl_t.interval_stop_run_flag ==0){
           
             gctl_t.ultrasonic_flag =1;
@@ -224,7 +223,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
              if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetUltrasonic(0x01);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
              }
 
 
@@ -233,14 +232,15 @@ void receive_data_fromm_display(uint8_t *pdata)
 
         }
         else if(pdata[4] == 0x0){ //close 
+			 Buzzer_KeySound();
 
              gctl_t.ultrasonic_flag =0;
-            Ultrasonic_Pwm_Stop();
-             Disp_Ultrsonic_Icon();
+            	Ultrasonic_Pwm_Stop();
+             	Disp_Ultrsonic_Icon();
 
               if(gpro_t.tencent_link_success==1){
               MqttData_Publish_SetUltrasonic(0x0);
-	  	      osDelay(100);//HAL_Delay(350);
+	  	      osDelay(50);//HAL_Delay(350);
              }
 
         }

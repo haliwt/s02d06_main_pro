@@ -186,7 +186,7 @@ void link_wifi_net_state_handler(void)
 				 HAL_Delay(50);
                   //osDelay(100);
                  Subscriber_Data_FromCloud_Handler();
-				 HAL_Delay(50);
+				 osDelay(200);//HAL_Delay(50);
 
 			
 	             //osDelay(100);

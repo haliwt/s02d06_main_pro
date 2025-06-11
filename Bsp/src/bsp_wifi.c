@@ -7,6 +7,7 @@ uint8_t get_rx_beijing_time_enable;
 uint8_t beijing_step;
 uint8_t auto_det_flag;
 uint8_t auto_link_tencent_step;
+uint8_t power_on_dc_power;
 
 
 static void auto_link_tencent_cloud_fun(void);
@@ -41,14 +42,15 @@ void  wifi_get_beijing_time_handler(void)
       if(gpro_t.gTimer_get_data_from_tencent_data > 10 && gpro_t.tencent_link_success==1){
        
              gpro_t.gTimer_get_data_from_tencent_data =0;
-            if(alternate_flag ==0){
-                alternate_flag++;
+			alternate_flag++;
+            if(alternate_flag > 1 ){
+                alternate_flag=0;
                 Subscriber_Data_FromCloud_Handler();
-                osDelay(200);
+                osDelay(300);
                 gpro_t.get_beijing_step = 1;
             }
-            else if(alternate_flag > 0){
-                alternate_flag=0;
+            else{
+              
                gpro_t.get_beijing_step = 1;
                 wifi_t.get_rx_beijing_time_enable=0;
 
@@ -83,7 +85,7 @@ void  wifi_get_beijing_time_handler(void)
              }
              gpro_t.linking_tencent_cloud_doing  =0; //receive from tencent command state .
              SendWifiData_To_Data(0x1F,0x01);
-               
+             osDelay(5);
 
          }
          else if(gpro_t.get_beijing_time_success ==1){
@@ -391,7 +393,7 @@ void  wifi_get_beijing_time_handler(void)
       case 14:
                 
          Subscriber_Data_FromCloud_Handler();
-         osDelay(100);//HAL_Delay(200);
+         osDelay(200);//HAL_Delay(200);
 
          SendWifiData_To_Data(0x1F,0x01); //0x1F: wifi link net is succes 
 
@@ -412,7 +414,7 @@ void  wifi_get_beijing_time_handler(void)
 **********************************************************************/
 void wifi_auto_detected_link_state(void)
 {
-    static uint8_t power_on_dc_power;
+   
 	if(auto_link_tencent_step    < 0xf2 && gpro_t.tencent_link_success==0 && power_on_dc_power ==0){
         
        gpro_t.gTimer_get_data_from_tencent_data=0;
@@ -450,7 +452,7 @@ void wifi_auto_detected_link_state(void)
           }
 
           Subscriber_Data_FromCloud_Handler();
-          HAL_Delay(200);
+          osDelay(200);//HAL_Delay(200);
 
           
         
@@ -474,9 +476,9 @@ void wifi_auto_detected_link_state(void)
         wifi_t.link_net_tencent_data_flag=1; //power on link tencet initial data flag ;
 
         SendData_Set_Command(0x1F,0x01);//has been link net OK
-        osDelay(20);
+        osDelay(5);
         Subscriber_Data_FromCloud_Handler();
-        HAL_Delay(200); //osDelay(200)
+        osDelay(200);//HAL_Delay(200); //osDelay(200)
 
         
         

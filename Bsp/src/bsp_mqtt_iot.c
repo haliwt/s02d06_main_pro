@@ -28,7 +28,7 @@ static void mqtt_smart_phone_power_on_ref(void);
 
 
 
-static void property_report_state(void);
+static void property_report_power_on_init_state(void);
 
 
 static void property_report_ReadTempHum(uint8_t tempvalue,uint8_t humvalue);
@@ -153,14 +153,14 @@ void property_topic_publish(void)
 }
 /********************************************************************************
 	*
-	*Function Name:static void property_report_state(void)
+	*Function Name:static void property_report_power_on_init_state(void)
 	*Function : publis to tencent cloud data 
 	*Input Ref: 
 	*           
 	*Return Ref:
 	*
 ********************************************************************************/
-static void property_report_state(void)
+static void property_report_power_on_init_state(void)
 {
     char       message[256]    = {0};
     int        message_len     = 0;
@@ -416,7 +416,7 @@ void MqttData_Publish_Init(void)
 {
 	 property_topic_publish();
 
-	 property_report_state();
+	 property_report_power_on_init_state();
 
 }
 

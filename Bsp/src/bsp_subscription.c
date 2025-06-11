@@ -502,7 +502,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 		HAL_Delay(200);//300
         buzzer_sound();
         // gkey_t.key_power = power_on;
-        SendData_Set_Command(0x01, 0x01); //power on command
+        SendData_Set_Command(0x01, 0x01); //power on comman
+        osDelay(5);
         //smartphone_turn_on_handler();
       
 
@@ -517,8 +518,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case PTC_ON_ITEM:
 	  if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 
-         gpro_t.gTimer_shut_off_backlight =0;
-         wake_up_backlight_on();
+         //gpro_t.gTimer_shut_off_backlight =0;
+         //wake_up_backlight_on();
          
 	    if(ptc_error_state() ==0){
 			 gctl_t.manual_turn_off_ptc_flag= 0;
@@ -526,9 +527,11 @@ void JsonParse_Tencent_Cmd_Handler(void)
              gctl_t.ptc_flag=1;
              Disp_Dry_Icon();
              MqttData_Publish_SetPtc(0x01);
-             osDelay(200);//HAL_Delay(350);//350ms
-             buzzer_sound()	;
+             osDelay(100);//HAL_Delay(350);//350ms
+            
              SendData_Set_Command(0x02, 0x01); //ptc turn on command
+             osDelay(5);
+			 Buzzer_KeySound();//buzzer_sound()	;
         }
 		
           
@@ -543,20 +546,22 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  	if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 		
 		 gpro_t.gTimer_shut_off_backlight =0;
-         wake_up_backlight_on();
+         //wake_up_backlight_on();
          MqttData_Publish_SetPtc(0);
-		 HAL_Delay(350);
+		 osDelay(100);//HAL_Delay(350);
 
 		
 		 Ptc_Off();
 		 gctl_t.ptc_flag=0;
          Disp_Dry_Icon();
-         buzzer_sound()	;
+         
          gctl_t.manual_turn_off_ptc_flag= 1;
          
         SendData_Set_Command(0x02, 0x0); //ptc turn off command
-	
+	    osDelay(5);
+	    Buzzer_KeySound();//buzzer_sound()	;
 	    
+		
 
 		wifi_t.response_wifi_signal_label = 0xff;
 		wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -574,13 +579,14 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	    
 			
             MqttData_Publish_SetPlasma(0);
-			HAL_Delay(200);
+			osDelay(100);//HAL_Delay(200);
            gctl_t.plasma_flag=0;
            Disp_Kill_Icon();
 
            
             SendData_Set_Command(0x03, 0x00); //plasma turn off command
-           	buzzer_sound();
+            osDelay(5);
+            Buzzer_KeySound();
            
 		  
 		}
@@ -597,12 +603,13 @@ void JsonParse_Tencent_Cmd_Handler(void)
 			Plasma_On();
 	  
             MqttData_Publish_SetPlasma(1);
-		    HAL_Delay(200);
+		    osDelay(50);//HAL_Delay(200);
            gctl_t.plasma_flag=1;
             Disp_Kill_Icon();
 
             SendData_Set_Command(0x03, 0x01); //plasma turn on command
-            buzzer_sound();
+            osDelay(5);
+            Buzzer_KeySound();
 		   
 			}
         wifi_t.gTimer_auto_detected_net_state_times=0;
@@ -617,12 +624,13 @@ void JsonParse_Tencent_Cmd_Handler(void)
 			Ultrasonic_Pwm_Stop();
 	    
             MqttData_Publish_SetUltrasonic(0);
-			HAL_Delay(200);
+			osDelay(50);//HAL_Delay(200);
             gctl_t.ultrasonic_flag=0;
              Disp_Ultrsonic_Icon();
 
-            SendData_Set_Command(0x04, 0x00); //ultrasonic turn off command
-            buzzer_sound();
+            SendData_Set_Command(0x04, 0x0); //ultrasonic turn off command
+            osDelay(5);
+             Buzzer_KeySound();
             
 		}
         wifi_t.gTimer_auto_detected_net_state_times=0;
