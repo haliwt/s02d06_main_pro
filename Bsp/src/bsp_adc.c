@@ -132,7 +132,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 	
    
    
-   if(fan_detect_voltage < 390 ){
+   if(fan_detect_voltage < 320 ){
          detect_error_times ++;
 	          
 		if(detect_error_times >2){
@@ -214,7 +214,7 @@ static void Detected_Ptc_Error(void)
 void detected_ptc_fan_error_handler(void)
 {
     static uint8_t adc_switch_flag;
-	if(gpro_t.gTimer_ptc_detected > 3 && gctl_t.interval_stop_run_flag==0){ //3 minutes 120s
+	if(gpro_t.gTimer_ptc_detected > 5 && gctl_t.interval_stop_run_flag==0){ //3 minutes 120s
 
 	    gpro_t.gTimer_ptc_detected=0;
 

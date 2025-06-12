@@ -322,8 +322,8 @@ void receive_data_fromm_display(uint8_t *pdata)
 			  if(gctl_t.ai_flag ==1){
                   gpro_t.receive_disp_mode = disp_timer_timing;//gkey_t.key_mode=disp_timer_timing;
 				  gpro_t.gTimer_disp_short_time =0;
-			      gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
-			      donot_disp_ai_symbol();
+			      dispLCD_worksTimer_fun();
+				  gkey_t.key_mode = disp_timer_timing;
 
 			  
 		      }
@@ -334,6 +334,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
 				  gctl_t.ai_flag = 1; // DISPLAY AI ICON
 			      disp_ai_symbol();
+				  gkey_t.key_mode = disp_works_timing;
 
 			  }
            

@@ -253,24 +253,41 @@ void Display_modeKey_switchTime_Handler(void)
 {
 
 	// static uint8_t switch_counter;
+
+	  if(gctl_t.ptc_warning == 0 && gctl_t.fan_warning ==0){
 	 
 		switch(gpro_t.receive_disp_mode){
 	  
 		case disp_works_timing :
-		     if(gpro_t.gTimer_disp_short_time <4 && gkey_t.set_timer_timing_success ==1){
+		     if(gpro_t.gTimer_disp_short_time <4 ){
 	
 				 gctl_t.ai_flag = 1; //  DISPLAY AI ICON
 				 disp_ai_symbol();
-				 display_works_times_handler(); //Display_Works_Timing();
+
+				  
+				    glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
+					glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+
+
+					glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
+					glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+
+
+			        glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
+					glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+
+
+					glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
+					glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+				 	display_works_times_handler(); //Display_Works_Timing();
 	
 			}
-			else if(gpro_t.gTimer_disp_short_time > 3 && gkey_t.set_timer_timing_success ==1){
+			else if(gpro_t.gTimer_disp_short_time > 3 ){
 				 
 					gpro_t.gTimer_disp_short_time=0;
-					gkey_t.key_mode = disp_timer_timing;
-					gctl_t.ai_flag =0;
-					donot_disp_ai_symbol();
-					display_works_times_handler();//Display_Timer_Timing();
+					gkey_t.key_mode = disp_works_timing;
+					gctl_t.ai_flag =1;
+			
 					gpro_t.receive_disp_mode=0xff	;
 			}
 			
@@ -289,13 +306,39 @@ void Display_modeKey_switchTime_Handler(void)
 			else if(gpro_t.gTimer_disp_short_time > 3 && gkey_t.set_timer_timing_success == 0){
 				    
 					gpro_t.gTimer_disp_short_time=0;
-					gkey_t.key_mode = disp_works_timing;
 					gctl_t.ai_flag =1;
 					disp_ai_symbol();
 					display_works_times_handler();
+					gkey_t.key_mode = disp_works_timing;
 			        gpro_t.receive_disp_mode=0xff	;
 	
 	
+			}
+			else if(gpro_t.gTimer_disp_short_time > 3 && gkey_t.set_timer_timing_success == 1){
+
+                 gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
+				 donot_disp_ai_symbol();
+
+                    glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+					glcd_t.number5_high = 	glcd_t.number6_low / 10;
+
+
+					glcd_t.number6_low = gpro_t.set_timer_timing_hours  % 10;
+					glcd_t.number6_high = 	glcd_t.number6_low;
+
+
+			        glcd_t.number7_low = 	gpro_t.set_timer_timing_minutes / 10;
+					glcd_t.number7_high = glcd_t.number7_low;
+
+
+					glcd_t.number8_low = gpro_t.set_timer_timing_minutes % 10;
+					glcd_t.number8_high = glcd_t.number8_low;
+				 	display_works_times_handler(); //Display_Works_Timing();
+
+				 
+				 gkey_t.key_mode = disp_timer_timing;
+			      gpro_t.receive_disp_mode=0xff	;
+
 			}
 	
 		break;
@@ -312,7 +355,33 @@ void Display_modeKey_switchTime_Handler(void)
 		}
 
 
-
+	  }
 
 }
 
+
+
+void dispLCD_worksTimer_fun(void)
+{
+       gctl_t.ai_flag = 1; //  DISPLAY AI ICON
+	   disp_ai_symbol();
+
+	  
+	    glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
+		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+
+
+		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
+		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+
+
+        glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
+		glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+
+
+		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
+		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+	 	display_works_times_handler(); //Display_Works_Timing();
+
+
+}
