@@ -33,7 +33,7 @@ void LED_Mode_Off(void)
 
 }
 
-
+#if 0
 static uint8_t  Delay(int32_t count)
 {
    
@@ -52,7 +52,7 @@ static uint8_t  Delay(int32_t count)
   
 
 }
-
+#endif 
 
 /***************************************************************
 *

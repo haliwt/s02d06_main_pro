@@ -104,7 +104,7 @@ typedef struct {
    uint8_t fan_middle_speed;
 
 
-   uint8_t wifi_power_on_flag;
+   uint8_t wifi_power_on_normal_flag;
    
 
 

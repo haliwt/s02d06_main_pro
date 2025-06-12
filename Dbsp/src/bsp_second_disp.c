@@ -170,6 +170,7 @@ void link_second_disp_board_handler(void)
 *	返 回 值: 无
 *
 **********************************************************************************************************/
+#if 0
 static void second_disp_ref_data(void)
 {
 
@@ -202,4 +203,4 @@ static void second_disp_ref_data(void)
 
     
 }
-
+#endif 

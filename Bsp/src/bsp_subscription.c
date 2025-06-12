@@ -475,7 +475,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
        
 	case OPEN_OFF_ITEM:
 
-       gpro_t.wifi_power_on_flag=2;
+       gpro_t.wifi_power_on_normal_flag=2;
        gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
         MqttData_Publish_SetOpen(0);  
         HAL_Delay(350);//350
@@ -493,7 +493,7 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  break;
 
 	  case OPEN_ON_ITEM:
-       gpro_t.wifi_power_on_flag=1;
+       gpro_t.wifi_power_on_normal_flag=1;
 	   gkey_t.key_power = power_on; 
 	 
 	   //  gkey_t.power_key_long_counter=1;
@@ -831,8 +831,8 @@ void JsonParse_Tencent_Cmd_Handler(void)
 	  case APP_TIMER_POWER_ON_REF :
 
 	
-		 gpro_t.gTimer_shut_off_backlight =0;
-          wake_up_backlight_on();
+		 //gpro_t.gTimer_shut_off_backlight =0;
+          //wake_up_backlight_on();
 		
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
           
@@ -887,7 +887,7 @@ static void smartphone_app_timer_power_on_handler(void)
 		app_step=1;
 		if(strstr((char *)wifi_t.wifi_data_rx,"open\":1")){
 		    wifi_t.smartphone_app_power_on_flag=1;
-		    gpro_t.wifi_power_on_flag=1;
+		    gkey_t.key_power=power_on;
             
 		}
         if(strstr((char *)wifi_t.wifi_data_rx,"ptc\":1")){

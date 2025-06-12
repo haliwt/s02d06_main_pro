@@ -100,7 +100,7 @@ void key_handler(void)
 void key_power_long_handler(void)
 {
 
-    static uint8_t power_onoff_flag;
+  //  static uint8_t power_onoff_flag;
     if(KEY_POWER_VALUE() == KEY_DOWN ){
 		
 		gkey_t.power_on_flag=1;

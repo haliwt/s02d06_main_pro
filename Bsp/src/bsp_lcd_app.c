@@ -708,7 +708,7 @@ void LCD_Fan_Run_Icon(uint8_t wind_speed)
 {
 
 
-   static uint8_t alternate_flag;
+ //  static uint8_t alternate_flag;
 
    LCD_fanRun_switchTimer_handle();
 

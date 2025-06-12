@@ -6,21 +6,7 @@ BSP_process_t gpro_t;
 static void Mainboard_Action_Fun(void);
 
 static void Process_Dynamical_Action(void);
-static void power_off_function(void);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//static void power_off_function(void);
 /**********************************************************************************************************
 *
 *	函 数 名: void mainboard_active_handler(void)
@@ -191,7 +177,7 @@ static void Process_Dynamical_Action(void)
 void link_wifi_net_handler(uint8_t link)
 {
 
-   static uint8_t link_net_flag,send_second_disp_flag;
+   static uint8_t send_second_disp_flag;
     if(link == 1){
 
          if(wifi_t.gTimer_linking_tencent_duration > 119){
@@ -205,7 +191,7 @@ void link_wifi_net_handler(uint8_t link)
              wifi_t.soft_ap_config_flag =1; 
            }
    
-         link_net_flag = 1;
+        // link_net_flag = 1;
          send_second_disp_flag=0;
      
          gpro_t.link_net_step=0;
