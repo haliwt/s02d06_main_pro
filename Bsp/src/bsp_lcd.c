@@ -1081,19 +1081,23 @@ void Display_Wind_Icon_Inint(void)
  * Return Ref:
  * 
 *****************************************************************************/
-void LCD_Timer_Colon_Blink(void)
+void dispLCD_timeColon_handler(void)
 {
 
- 
- 
-   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
-
-    if(glcd_t.gTimer_colon_blink > 0){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
+   if(glcd_t.gTimer_colon_blink > 0){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
 		 glcd_t.gTimer_colon_blink=0;
 
 	     glcd_t.gtime_colon_symbol_flag= glcd_t.gtime_colon_symbol_flag ^ 0x01;
+   	}
 
-         switch(gkey_t.key_mode){
+
+   
+ 
+   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
+
+   
+
+        switch(gkey_t.key_mode){
 
          
          case disp_works_timing :
@@ -1124,22 +1128,18 @@ void LCD_Timer_Colon_Blink(void)
 						TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
              
               }
-              else if(gkey_t.set_timer_timing_success == 0){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+              else if(gkey_t.set_timer_timing_success == 0 && gpro_t.receive_disp_mode == disp_timer_timing){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
              
-                glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-				glcd_t.number7_high =   glcd_t.number7_low;
-			    if(gpro_t.receive_disp_mode == disp_timer_timing){
-
-				     glcd_t.number7_low=0;
+                     glcd_t.number7_low=0;
 				     glcd_t.number7_high=0;
 
-				}
+				
 				
 				if(glcd_t.gtime_colon_symbol_flag ==0)
 				TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 				else
 				TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-			}
+			 }
       
          break;
 
@@ -1154,19 +1154,10 @@ void LCD_Timer_Colon_Blink(void)
      }
    // TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
 
-  }
-  else{
-
-     if(glcd_t.gTimer_colon_blink > 0){ //if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
-		glcd_t.gTimer_colon_blink=0;
-  
-		glcd_t.gtime_colon_symbol_flag= glcd_t.gtime_colon_symbol_flag ^ 0x01;
-  	 }
-
-  }
+ }
    
     
- }
+ 
 
 /*************************************************************************************
 	*

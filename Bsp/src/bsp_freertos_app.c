@@ -199,7 +199,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 		  Display_modeKey_switchTime_Handler();
 
 
-          LCD_Timer_Colon_Blink();
+          dispLCD_timeColon_handler();
 
 		  
          

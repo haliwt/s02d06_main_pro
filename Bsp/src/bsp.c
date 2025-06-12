@@ -18,7 +18,7 @@ static void Process_Dynamical_Action(void);
 **********************************************************************************************************/
 void mainboard_active_handler(void)
 {
-   if(gpro_t.gTimer_run_main_fun > 1){
+   if(gpro_t.gTimer_run_main_fun > 1 && gpro_t.receive_disp_mode != disp_timer_timing){
         gpro_t.gTimer_run_main_fun =0;
         if(gctl_t.interval_stop_run_flag  ==0){
             Process_Dynamical_Action();
@@ -28,7 +28,7 @@ void mainboard_active_handler(void)
         link_second_disp_board_handler();
     }
 
-    if(gpro_t.gTimer_disp_works_time > 24){
+    if(gpro_t.gTimer_disp_works_time > 24 && gpro_t.receive_disp_mode != disp_timer_timing){
        gpro_t.gTimer_disp_works_time=0;
 
         display_works_times_handler();

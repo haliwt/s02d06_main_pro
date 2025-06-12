@@ -167,7 +167,9 @@ void Lcd_Display_Off(void);
 
 
 void Lcd_Display_Off(void);
-void LCD_Timer_Colon_Blink(void);
+
+void dispLCD_timeColon_handler(void);
+
 
 void LCD_Number_ThreeFour_Temperature(void);
 
@@ -211,6 +213,9 @@ void display_works_times_handler(void);
 
 
 void display_timer_times_handler(void);
+
+
+
 
 #endif 
 
