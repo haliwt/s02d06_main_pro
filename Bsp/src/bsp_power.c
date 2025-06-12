@@ -67,7 +67,7 @@ void power_on_run_handler(void)
 
 		  case 0:
 		   
-           if(gpro_t.disp_power_on_flag == 1 || gpro_t.wifi_power_on_normal_flag==1||wifi_t.smartphone_app_power_on_flag==1){
+           if(gpro_t.disp_power_on_flag == 1 || gpro_t.wifi_power_on_normal_flag==1||wifi_t.smartphone_app_power_on_flag==1||wifi_t.smartphone_app_power_on_flag==2){
                 power_on_init_function();
 
            }

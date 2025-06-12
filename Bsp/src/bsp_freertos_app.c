@@ -47,7 +47,7 @@ uint8_t check_code;
 
 
 uint8_t rx_data_counter,rx_end_flag;
-uint8_t add_flag,dec_flag,smart_phone_sound;
+uint8_t add_flag,dec_flag;
 
 uint8_t recoder_flag;
 
@@ -178,18 +178,16 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           gpro_t.shut_Off_backlight_flag = turn_on;
         }
 		
-        if(smart_phone_sound == 1){
-            smart_phone_sound++;
-           
-            smartphone_power_on_handler();
-            
-
-          }
-		  if(gkey_t.power_on_flag ==1 && KEY_POWER_VALUE() == KEY_UP){
+    
+		if(gkey_t.power_on_flag ==1 && KEY_POWER_VALUE() == KEY_UP){
              key_power_shot_handler();//power_long_short_key_fun();
 
          }
-     
+         else if(wifi_t.smartphone_app_power_on_flag == 1){
+           wifi_t.smartphone_app_power_on_flag++;
+           SendData_Set_Command(0X21,0X01);
+           osDelay(5);
+          }
          
          
            if(gkey_t.key_power==power_on){
@@ -241,6 +239,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
                  wifi_auto_detected_link_state();
 
          }
+		 
         
       // receive_message_displaybord_handler();
        vTaskDelay(10);
