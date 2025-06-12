@@ -28,13 +28,13 @@ void mainboard_active_handler(void)
         link_second_disp_board_handler();
     }
 
-    if(gpro_t.gTimer_disp_works_time > 24 && gpro_t.receive_disp_mode != disp_timer_timing){
-       gpro_t.gTimer_disp_works_time=0;
-
-        display_works_times_handler();
-
-
-    }
+//    if(gpro_t.gTimer_disp_works_time > 24 && gpro_t.receive_disp_mode != disp_timer_timing){
+//       gpro_t.gTimer_disp_works_time=0;
+//
+//        display_works_times_handler();
+//
+//
+//    }
 
 
 

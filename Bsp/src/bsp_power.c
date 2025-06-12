@@ -186,7 +186,7 @@ void power_on_run_handler(void)
        break;
 
       case 6:
-	  	   if(gpro_t.receive_disp_mode==0xff){	
+	  	   if(gpro_t.receive_disp_mode != disp_timer_timing){	
               Display_WorksTimingr_Handler(gkey_t.key_mode);
 	  	   }
 	  	  
