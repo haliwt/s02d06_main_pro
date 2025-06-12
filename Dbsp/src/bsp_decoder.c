@@ -322,24 +322,33 @@ void receive_data_fromm_display(uint8_t *pdata)
 			  if(gctl_t.ai_flag ==1){
                   gpro_t.receive_disp_mode = disp_timer_timing;//gkey_t.key_mode=disp_timer_timing;
 				  gpro_t.gTimer_disp_short_time =0;
-			      dispLCD_worksTimer_fun();
+			     // dispLCD_worksTime_fun();
+			     if(gkey_t.set_timer_timing_success ==1){
+                       dispLCD_timerTime_fun();
+
+				  }
+				  else{
+				     gctl_t.ai_flag = 0; // DISPLAY AI ICON
+					  donot_disp_ai_symbol();
+                      display_timer_times_handler(); 
+				  }
 				  gkey_t.key_mode = disp_timer_timing;
 
 			  
 		      }
-			  else{ //display don't AI MODE ,disp_works_item
+			  else if(gctl_t.ai_flag==0){ //display don't AI MODE ,disp_works_item
 			  	 
 				  gpro_t.receive_disp_mode= disp_works_timing ;//gkey_t.key_mode=disp_works_timing;
 				  gpro_t.gTimer_disp_short_time =0;
 
-				  gctl_t.ai_flag = 1; // DISPLAY AI ICON
-			      disp_ai_symbol();
+				   dispLCD_worksTime_fun();
 				  gkey_t.key_mode = disp_works_timing;
+				  }
 
 			  }
            
 	      } 
-	  }
+	  
 
 	 break;
 
@@ -457,14 +466,15 @@ void receive_data_fromm_display(uint8_t *pdata)
          gpro_t.gTimer_shut_off_backlight =0;
          if(pdata[4]==0x01){
 
-            gkey_t.key_mode = mode_set_timer;
+            gkey_t.key_mode = disp_timer_timing;
         
-        
+            gkey_t.set_timer_timing_success = 1;
             gkey_t.gTimer_disp_set_timer = 0; 
             gpro_t.set_timer_timing_minutes =0;
           
             gpro_t.set_timer_timing_hours = pdata[5];
-           // Set_Timer_Timing_Lcd_Blink();
+			dispLCD_timerTime_fun();
+            
          }
 
 

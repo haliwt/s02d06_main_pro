@@ -123,6 +123,12 @@ void sendDisplayCommand(uint8_t command,uint8_t data)
     
 }
 
+void SendData_Data(uint8_t cmd, uint8_t data) 
+{
+    uint8_t cmdData[1] = {data};
+    FillFrame(outputBuf, cmd, cmdData, 1);
+    TransmitData(outputBuf, 7);
+}
 
 
 /********************************************************************************

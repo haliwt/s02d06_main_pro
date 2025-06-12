@@ -38,6 +38,7 @@
 
 
 #include "bsp_power.h"
+#include "bsp_tm1723.h"
 
 #include "bsp_ultrasonic.h"
 #include "bsp_delay.h"

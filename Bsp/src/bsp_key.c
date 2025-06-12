@@ -277,6 +277,39 @@ void key_mode_short_handler(void)
 
         gkey_t.key_mode_long_counter=0;
         gkey_t.key_mode_flag++;
+
+		 if(gctl_t.ai_flag ==1){
+                  gpro_t.receive_disp_mode = disp_timer_timing;//gkey_t.key_mode=disp_timer_timing;
+				  gpro_t.gTimer_disp_short_time =0;
+			     // dispLCD_worksTime_fun();
+			     if(gkey_t.set_timer_timing_success ==1){
+                       dispLCD_timerTime_fun();
+
+				  }
+				  else{
+				     gctl_t.ai_flag = 0; // DISPLAY AI ICON
+					  donot_disp_ai_symbol();
+                      display_timer_times_handler(); 
+				  }
+				  gkey_t.key_mode = disp_timer_timing;
+
+			  
+		      }
+			  else if(gctl_t.ai_flag==0){ //display don't AI MODE ,disp_works_item
+			  	 
+				  gpro_t.receive_disp_mode= disp_works_timing ;//gkey_t.key_mode=disp_works_timing;
+				  gpro_t.gTimer_disp_short_time =0;
+
+				   dispLCD_worksTime_fun();
+				  gkey_t.key_mode = disp_works_timing;
+				  }
+
+			  
+               Buzzer_KeySound();
+			    SendData_Set_Command(0x07,0x02); //timer timing.
+                 osDelay(5);//HAL_Delay(10);
+
+		#if 0
      
          if(gkey_t.key_mode  == disp_works_timing){
              gkey_t.key_mode  = disp_timer_timing;
@@ -320,7 +353,7 @@ void key_mode_short_handler(void)
             osDelay(5);//HAL_Delay(10);
          }
 
-
+         #endif 
      }
      if(KEY_MODE_VALUE() == KEY_UP && gkey_t.key_mode_flag==1 && gctl_t.fan_warning==0 &&  gctl_t.ptc_warning==0\
 	 	&& gkey_t.key_mode_long_counter == 150){
@@ -331,7 +364,6 @@ void key_mode_short_handler(void)
 
      }
 
-   // key_mode_be_pressed_send_data_wifi();
 
  }
 
@@ -754,12 +786,7 @@ void set_temp_value_compare_dht11_temp_value(void)
 void set_timer_value_handler(void)
 {
 
- 
-  // if( gkey_t.key_add_dec_mode == mode_set_timer && gkey_t.gTimer_disp_set_timer < 2){
-
-	//Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
-       
-        if(gkey_t.gTimer_disp_set_timer > 1 && gkey_t.key_add_dec_mode == mode_set_timer &&  gkey_t.key_mode_shot_flag ==0){
+ if(gkey_t.gTimer_disp_set_timer > 1 && gkey_t.key_add_dec_mode == mode_set_timer &&  gkey_t.key_mode_shot_flag ==0){
 
             if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
 
@@ -771,7 +798,7 @@ void set_timer_value_handler(void)
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
                     
-                    SendData_Tx_Data(0x4C,0x0);
+                    SendData_Data(0x4C,0x0);
 				    osDelay(5);
 
                  
@@ -789,14 +816,15 @@ void set_timer_value_handler(void)
                 
                 LCD_Disp_Timer_Timing_Init();
 
-                if(gpro_t.tencent_link_success==1){
+              
+              
+                    SendData_Data(0x4C, gpro_t.set_timer_timing_hours); //set up timer timing value .
+                    osDelay(5);
+
+					if(gpro_t.tencent_link_success==1){
                     MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
                     osDelay(50);//HAL_Delay(200);
                 }
-              
-                    
-                    SendData_Tx_Data(0x4C, gpro_t.set_timer_timing_hours); //set up timer timing value .
-                    osDelay(5);
                  
              
             }

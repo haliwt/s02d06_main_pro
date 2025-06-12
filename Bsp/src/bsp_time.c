@@ -261,25 +261,7 @@ void Display_modeKey_switchTime_Handler(void)
 		case disp_works_timing :
 		     if(gpro_t.gTimer_disp_short_time <4 ){
 	
-				 gctl_t.ai_flag = 1; //  DISPLAY AI ICON
-				 disp_ai_symbol();
-
-				  
-				    glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
-					glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
-
-
-					glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
-					glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
-
-
-			        glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-					glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
-
-
-					glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-					glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
-				 	display_works_times_handler(); //Display_Works_Timing();
+				dispLCD_worksTime_fun();
 	
 			}
 			else if(gpro_t.gTimer_disp_short_time > 3 ){
@@ -361,27 +343,50 @@ void Display_modeKey_switchTime_Handler(void)
 
 
 
-void dispLCD_worksTimer_fun(void)
+void dispLCD_worksTime_fun(void)
 {
        gctl_t.ai_flag = 1; //  DISPLAY AI ICON
 	   disp_ai_symbol();
 
 	  
 	    glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
-		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+		glcd_t.number5_high = glcd_t.number5_low;
 
 
 		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
-		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+		glcd_t.number6_high = glcd_t.number6_low;
 
 
         glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-		glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+		glcd_t.number7_high = glcd_t.number7_low;
 
 
 		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+		glcd_t.number8_high = glcd_t.number8_low;
 	 	display_works_times_handler(); //Display_Works_Timing();
 
 
 }
+
+void dispLCD_timerTime_fun(void)
+{
+	gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
+	donot_disp_ai_symbol();
+
+	glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+	glcd_t.number5_high =   glcd_t.number6_low / 10;
+
+
+	glcd_t.number6_low = gpro_t.set_timer_timing_hours  % 10;
+	glcd_t.number6_high =   glcd_t.number6_low;
+
+
+	glcd_t.number7_low =    gpro_t.set_timer_timing_minutes / 10;
+	glcd_t.number7_high = glcd_t.number7_low;
+
+
+	glcd_t.number8_low = gpro_t.set_timer_timing_minutes % 10;
+	glcd_t.number8_high = glcd_t.number8_low;
+	display_works_times_handler(); //Display_Works_Timing();
+}
+

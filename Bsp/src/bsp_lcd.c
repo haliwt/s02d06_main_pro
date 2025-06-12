@@ -179,13 +179,13 @@ static void TM1723_Write_OneByte(uint8_t data)
 		  
 	 }
    
-    delay_us(100);
+    delay_us(80);//delay_us(100)
     data =data>>1;//
 	 
 	 TM1723_CLK_SetHigh();
-	 //data =data>>1;//
-	  delay_us(2);
-	// data >>=1;//
+	
+	// delay_us(10); //delay_us(2);
+	
 	
   
      
@@ -205,14 +205,22 @@ void TIM1723_Write_Cmd(uint8_t cmd)
 void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat)
 {
   
+   #if 1
    TM1723_CLK_SetHigh();
    TM1723_STB_SetLow();
+   
    TM1723_Write_OneByte(addr);
   
    TM1723_Write_OneByte(dat);
    
    TM1723_STB_SetHigh();
-
+   
+   #else 
+   TM1723_CLK_SetHigh();
+   TM1723_STB_SetLow();
+   TM1723_WriteData(addr,dat);
+   TM1723_STB_SetHigh();
+   #endif
 }
 
 
