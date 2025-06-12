@@ -1011,6 +1011,7 @@ void Wifi_Rx_Link_Net_InputInfo_Handler(void)
             gpro_t.linking_tencent_cloud_doing=0;
             wifi_t.gTimer_auto_detected_net_state_times=0;
             gkey_t.wifi_led_fast_blink_flag =0;
+			wifi_t.get_rx_beijing_time_enable=0;//WT.EDIT 2025.06.12
 
             wifi_t.soft_ap_config_flag=0;
     }

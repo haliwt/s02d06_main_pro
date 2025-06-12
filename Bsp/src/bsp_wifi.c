@@ -49,10 +49,10 @@ void  wifi_get_beijing_time_handler(void)
                 osDelay(50);
                 gpro_t.get_beijing_step = 1;
             }
-            else{
+            else if(alternate_flag > 1){
               
                gpro_t.get_beijing_step = 1;
-                wifi_t.get_rx_beijing_time_enable=0;
+               wifi_t.get_rx_beijing_time_enable=0;
 
             }
          
@@ -129,7 +129,8 @@ void  wifi_get_beijing_time_handler(void)
          else if(gpro_t.tencent_link_success==0){
               
                SendWifiData_To_Data(0x1F,0x0); //0x1F: 0x1=wifi link net is succes ,0x0 = wifi link net is fail
-               gpro_t.get_beijing_step = 10;
+               osDelay(5);
+		       gpro_t.get_beijing_step = 10;
                gpro_t.linking_tencent_cloud_doing  =1; //receive from tencent command state .
           }
          
@@ -189,7 +190,7 @@ void  wifi_get_beijing_time_handler(void)
 
 
           case 2:
-
+              wifi_t.get_rx_beijing_time_enable=0;//WT.EDIT 2025.06.12
             if(wifi_t.wifi_data[50]== 0x32){
 
                  
@@ -209,7 +210,7 @@ void  wifi_get_beijing_time_handler(void)
                     gpro_t.get_beijing_step = 0;
 
                     SendWifiData_To_PanelTime(gpro_t.disp_works_hours_value,gpro_t.disp_works_minutes_value, gpro_t.gTimer_works_counter_sencods);
-                      osDelay(10);
+                      osDelay(5);
 
                      wifi_t.wifi_data[50] =0;//memset(wifi_t.wifi_data,'\0',60);
 
