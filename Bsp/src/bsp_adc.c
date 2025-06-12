@@ -131,34 +131,11 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
     fan_detect_voltage  =(uint16_t)((adc_fan_hex * 3300)/4096); //amplification 1000 ,3.111V -> 3111
 	
    
-     #if 0
-
-    #if BALL_FAN
-      if(fan_detect_voltage >   520  &&  fan_detect_voltage < 1400){ //
-                   detect_error_times=0;
-    		   #ifdef DEBUG
-                     printf("adc= %d",run_t.fan_detect_voltage);
-    		   #endif 
-                   gctl_t.fan_warning = 0;
-     }
-
-
-    #else
-
-	if(fan_detect_voltage < 510 ){
-           detect_error_times=0;
-		   #ifdef DEBUG
-             printf("adc= %d",run_t.fan_detect_voltage);
-		   #endif 
-           gctl_t.fan_warning = 0;
-    }
-   #endif 
-   #endif 
    
-   if(fan_detect_voltage < 510 ){
+   if(fan_detect_voltage < 390 ){
          detect_error_times ++;
 	          
-		if(detect_error_times >1){
+		if(detect_error_times >2){
 			detect_error_times = 3;
 		  gctl_t.fan_warning = 1;
           gkey_t.key_mode = disp_fan_error_number; //disp_error_number;
@@ -184,6 +161,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 			SendData_Set_Command(0x09,0x01); //fan error codes
 
           }
+		
 		
 
         
@@ -250,6 +228,14 @@ void detected_ptc_fan_error_handler(void)
 		    Detected_Ptc_Error();
 
 		}
+
+	   if(gctl_t.fan_warning ==1){
+
+	       Buzzer_Fan_Error_Sound();
+
+
+	   }
+    
        
       }
 }

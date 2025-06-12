@@ -373,7 +373,7 @@ void power_on_init_function(void)
 	gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
 	gkey_t.key_mode = disp_works_timing;
 	gctl_t.gSet_temperature_value =40;
-
+    gpro_t.receive_disp_mode = 0xff;
 
 	if(gpro_t.tencent_link_success==1){
 

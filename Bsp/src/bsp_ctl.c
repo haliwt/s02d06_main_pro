@@ -71,8 +71,7 @@ void bsp_ctl_init(void)
 
 void main_fun_init(void)
 {
-   gctl_t.fan_warning =0;
-   gctl_t.ptc_warning = 0;
+  
    gctl_t.ptc_flag=1;
    gctl_t.plasma_flag =1;
    gctl_t.ultrasonic_flag =1;
