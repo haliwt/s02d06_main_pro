@@ -441,18 +441,18 @@ void wifi_auto_detected_link_state(void)
         
           if(gkey_t.key_power == power_off){
 		     MqttData_Publish_PowerOff_Ref();
-               HAL_Delay(200);
+               osDelay(200);//HAL_Delay(200);
 
           }
           else{
              MqttData_Publish_Update_Data();
-		     HAL_Delay(100);
+		     osDelay(100);//HAL_Delay(100);
 
 
           }
 
           Subscriber_Data_FromCloud_Handler();
-          osDelay(200);//HAL_Delay(200);
+          osDelay(300);//HAL_Delay(200);
 
           
         
@@ -481,10 +481,7 @@ void wifi_auto_detected_link_state(void)
         osDelay(200);//HAL_Delay(200); //osDelay(200)
 
         
-        
-      
-
-    }
+      }
    
    
 }
