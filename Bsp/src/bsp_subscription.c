@@ -888,6 +888,7 @@ static void smartphone_app_timer_power_on_handler(void)
 		if(strstr((char *)wifi_t.wifi_data_rx,"open\":1")){
 		    wifi_t.smartphone_app_power_on_flag=1;
 		    gkey_t.key_power=power_on;
+		     wifi_t.set_wind_speed_value=0;
             
 		}
         if(strstr((char *)wifi_t.wifi_data_rx,"ptc\":1")){
@@ -929,15 +930,8 @@ static void smartphone_app_timer_power_on_handler(void)
 
 	if(app_step==1){
 	  	app_step=0;
-		buzzer_sound();
-
-		wifi_t.smartphone_app_power_on_flag=1;
-        wifi_t.set_wind_speed_value=0;
-
-      
-       
-		
-      #if 0
+		Buzzer_KeySound();//buzzer_sound();
+        #if 0
        
        MqttData_Publis_App_PowerOn_Ref();
   
@@ -947,9 +941,9 @@ static void smartphone_app_timer_power_on_handler(void)
         SendWifiData_Ref_three(gctl_t.ptc_flag,gctl_t.plasma_flag,gctl_t.ultrasonic_flag);
 		osDelay(100);//HAL_Delay(50);//
 		#endif 
-		smartphone_turn_on_handler();
+		//smartphone_turn_on_handler();
         
-        
+   
 	
 
 	  memset(wifi_t.wifi_data_rx,'\0',40);

@@ -49,7 +49,7 @@ uint8_t check_code;
 uint8_t rx_data_counter,rx_end_flag;
 uint8_t add_flag,dec_flag;
 
-uint8_t recoder_flag;
+
 
 /***********************************************************************************************************
 											函数声明
@@ -102,16 +102,14 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 {
 
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(6000); /* 设置最大等待时间为100ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20000); /* 设置最大等待时间为100ms */
 	uint32_t ulValue;
 	
 	while(1)
 	{
 
-    // receive_message_displaybord_handler();
-
-	// vTaskDelay(50);
-        #if 1
+    
+    
 		xResult = xTaskNotifyWait(0x00000000,	   
 							   		0xFFFFFFFF,	  
 							    	&ulValue,		  /* 保存ulNotifiedValue到变量ulValue中 */
@@ -129,13 +127,8 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
            if(check_code == mess_t.bcc_check_code ){
            
               receive_data_fromm_display(mess_t.mesData);
-			  recoder_flag++;
-//              if(gpro_t.buzzer_sound_flag == 1){
-//                  gpro_t.buzzer_sound_flag++ ;
-//                  buzzer_sound();
-//
-//
-//              }
+			
+
            }
 
 		}
@@ -144,7 +137,7 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 
 
 		}
-		#endif 
+		
 	}
 }
 #endif 

@@ -359,17 +359,16 @@ void SendWifiData_Ref_three(uint8_t ptc,uint8_t plasma,uint8_t ultra)
     outputBuf[0]=0x5A; //mainboard head : displayBoard = 0xA5
 	outputBuf[1]=0x10; //mainboard device No: 01
 	outputBuf[2]=0x20; //command : is data of hours and minutes and seconds.
-	outputBuf[3]=0x10; // many command 
-	outputBuf[4]= 0x04; //data of length: 0x01 - 3 byte.
-	outputBuf[5]= 0x01;  // turn on power on
-	outputBuf[6]= ptc; //	
-	outputBuf[7]= plasma; //	
-	outputBuf[8]= ultra; //	
+	outputBuf[3]=0x0F; // is data tx
+	outputBuf[4]= 0x03; // has three data.
+	outputBuf[5]= ptc; //	
+	outputBuf[6]= plasma; //	
+	outputBuf[7]= ultra; //	
 
-    outputBuf[9] = 0xFE;
-    outputBuf[10] = bcc_check(outputBuf,10);
+    outputBuf[8] = 0xFE;
+    outputBuf[9] = bcc_check(outputBuf,9);
 
-	transferSize=11;
+	transferSize=10;
 	#if 0
 	if(transferSize)
 	{
