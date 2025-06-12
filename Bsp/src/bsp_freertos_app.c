@@ -210,13 +210,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
           Disip_Wifi_Icon_State();
 
 		 
-		  
-          if(gkey_t.gTimer_disp_set_timer  > 1 && gkey_t.key_mode_long_counter > 100 ){
 
-             gkey_t.key_mode_long_counter =0;
-             gkey_t.key_mode_flag=0;
-
-          }
           
          
         }

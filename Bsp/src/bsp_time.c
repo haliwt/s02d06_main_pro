@@ -257,14 +257,14 @@ void Display_modeKey_switchTime_Handler(void)
 		switch(gpro_t.receive_disp_mode){
 	  
 		case disp_works_timing :
-		     if(gpro_t.gTimer_disp_short_time <6 && gkey_t.set_timer_timing_success ==1){
+		     if(gpro_t.gTimer_disp_short_time <4 && gkey_t.set_timer_timing_success ==1){
 	
 				 gctl_t.ai_flag = 1; //  DISPLAY AI ICON
 				 disp_ai_symbol();
 				 display_works_times_handler(); //Display_Works_Timing();
 	
 			}
-			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success ==1){
+			else if(gpro_t.gTimer_disp_short_time > 3 && gkey_t.set_timer_timing_success ==1){
 				 
 					gpro_t.gTimer_disp_short_time=0;
 					gkey_t.key_mode = disp_timer_timing;
@@ -279,14 +279,14 @@ void Display_modeKey_switchTime_Handler(void)
 		
 		case disp_timer_timing:
 	   
-		    if(gkey_t.set_timer_timing_success == 0 && gpro_t.gTimer_disp_short_time < 6){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+		    if(gkey_t.set_timer_timing_success == 0 && gpro_t.gTimer_disp_short_time < 4){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
 	
 				 gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
 				 donot_disp_ai_symbol();
 				 display_timer_times_handler();
 			  
 			}
-			else if(gpro_t.gTimer_disp_short_time > 5 && gkey_t.set_timer_timing_success == 0){
+			else if(gpro_t.gTimer_disp_short_time > 3 && gkey_t.set_timer_timing_success == 0){
 				    
 					gpro_t.gTimer_disp_short_time=0;
 					gkey_t.key_mode = disp_works_timing;

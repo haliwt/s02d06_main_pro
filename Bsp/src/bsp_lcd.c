@@ -1102,9 +1102,17 @@ void dispLCD_timeColon_handler(void)
          
          case disp_works_timing :
 
+		  if(gkey_t.set_timer_timing_success == 0 && gpro_t.receive_disp_mode == disp_timer_timing){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+					   
+							   glcd_t.number7_low=0;
+							   glcd_t.number7_high=0;
+		  }
+		  else{
 
-          glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-		  glcd_t.number7_high = glcd_t.number7_low ;
+	          glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
+			  glcd_t.number7_high = glcd_t.number7_low ;
+
+		  }
 		 
 		  if(glcd_t.gtime_colon_symbol_flag ==0)
              TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
