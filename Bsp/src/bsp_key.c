@@ -7,7 +7,12 @@
 #include "cmsis_os.h"
 
 
+
+
 key_fun_t gkey_t;
+
+
+
 
 uint8_t set_timer_blink_counter;
 
@@ -830,14 +835,5 @@ void set_timer_value_handler(void)
             }
         }
    
-//    if(gkey_t.gTimer_disp_set_timer > 1 && gkey_t.key_add_dec_mode == mode_set_timer){
-//
-//
-//	    gkey_t.key_add_dec_mode = set_temp_value_item;
-//
-//	}
-//    
-
 }
-
 

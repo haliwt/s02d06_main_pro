@@ -170,7 +170,6 @@ static void TM1723_Write_OneByte(uint8_t data)
 	for(i=0;i<8;i++){
 		
 	TM1723_CLK_SetLow();
-	 //delay_us(1);
 	 if(data & 0x01){
 	     TM1723_DIO_SetHigh(); //TM1723 high of data to IC
 		  
@@ -180,12 +179,12 @@ static void TM1723_Write_OneByte(uint8_t data)
 		  
 	 }
    
-    //delay_us(50);//delay_us(100)
-    TM1723_CLK_SetHigh();
+    //delay_us(50);//delay_us(100)//big error add delay function
+    TM1723_CLK_SetHigh(); //along up edge is write data 
    
-	// delay_us(10);
+	// delay_us(10);//big error add delay function
 	 data =data>>1;//
-	// delay_us(2);
+	// delay_us(2);//big error add delay function
 	}
     
 }

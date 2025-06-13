@@ -51,6 +51,8 @@
 #include "bsp_time.h"
 #include "bsp_lcd_app.h"
 #include "bsp_sensor.h"//#include "bsp_dht11.h"
+#include "bsp_dht11_app.h"
+
 #include "bsp_freertos_app.h"
 
 
@@ -200,6 +202,7 @@ void read_senson_dht11_data(void);
 void  record_time_or_timer_handler(void);
 
 void power_off_init_function(void);
+
 
 
 #endif 
