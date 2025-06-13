@@ -15,7 +15,7 @@ uint8_t check_code;
 
 /*
 **********************************************************************************************************
-											宏定义
+											宏定�?
 **********************************************************************************************************
 */
 #define POWER_KEY_0	        (1 << 0)
@@ -70,20 +70,20 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 /**********************************************************************************************************
-*	函 数 名: main
-*	功能说明: 标准c程序入口。
-*	形    参：无
-*	返 回 值: 无
+*	�? �? �?: main
+*	功能说明: 标准c程序入口�?
+*	�?    参：�?
+*	�? �? �?: �?
 **********************************************************************************************************/
 void freeRTOS_Handler(void)
 {
 	/* 创建任务 */
 	AppTaskCreate();
 
-	/* 创建任务通信机制 */
+	/* �����*/
 //	AppObjCreate();
 	
-    /* 启动调度，开始执行任务 */
+    /* 启动调度，开始执行任�? */
     vTaskStartScheduler();
 }
 
@@ -91,10 +91,10 @@ void freeRTOS_Handler(void)
 /**********************************************************************************************************
 	*
 	*Funtion Name:static void vTaskUsartPro(void *pvParameters)
-	*Funtion:送的事件标志位设置
-	*Input Ref:的形参
-	*	返 回 
-	*   优 先  
+	*Funtion:送的事件标志位设�?
+	*Input Ref:的形�?
+	*	�? �? 
+	*   �? �?  
 	*
 **********************************************************************************************************/
 #if 1
@@ -102,7 +102,7 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 {
 
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20000); /* 设置最大等待时间为100ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20000); /* 设置�?大等待时间为100ms */
 	uint32_t ulValue;
 	
 	while(1)
@@ -112,8 +112,8 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
     
 		xResult = xTaskNotifyWait(0x00000000,	   
 							   		0xFFFFFFFF,	  
-							    	&ulValue,		  /* 保存ulNotifiedValue到变量ulValue中 */
-									xMaxBlockTime );  /* 最大允许延迟时间 */
+							    	&ulValue,		  /* 保存ulNotifiedValue到变量ulValue�? */
+									xMaxBlockTime );  /* �?大允许延迟时�? */
 		   
 		if( xResult == pdPASS )
 		{
@@ -142,16 +142,16 @@ static void vTaskUsartPro(void *pvParameters)//static void vTaskMsgPro(void *pvP
 }
 #endif 
 /**********************************************************************************************************
-*	函 数 名: vTaskStart
-*	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 4  
+*	�? �? �?: vTaskStart
+*	功能说明: 启动任务，也就是�?高优先级任务，这里用作按键扫描�??
+*	�?    �?: pvParameters 是在创建该任务时传�?�的形参
+*	�? �? �?: �?
+*   �? �? �?: 4  
 **********************************************************************************************************/
 static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvParameters)
 {
    //BaseType_t xResult;
-  // const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为30ms */
+  // const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置�?大等待时间为30ms */
  
   // uint32_t ulValue;
    static uint8_t dc_power_on_flag;
@@ -160,7 +160,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
     {
 
 
-       //DC the first power on run prcess once times.      
+       //DC the first power on run prcess once times.    //
         if(dc_power_on_flag==0){
          dc_power_on_flag++;
           
@@ -234,17 +234,17 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
     }
 /**********************************************************************************************************
-*	函 数 名: vTaskMsgPro
-*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 3  
+*	�? �? �?: vTaskMsgPro
+*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发�?�的事件标志位设�?
+*	�?    �?: pvParameters 是在创建该任务时传�?�的形参
+*	�? �? �?: �?
+*   �? �? �?: 3  
 **********************************************************************************************************/
 static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
    // BaseType_t xResult;
-	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为100ms */
+	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置�?大等待时间为100ms */
 	//uint32_t ulValue;
    
    
@@ -259,36 +259,36 @@ static void vTaskStart(void *pvParameters)//static void vTaskMsgPro(void *pvPara
     }
 }
 /**********************************************************************************************************
-*	函 数 名: AppTaskCreate
+*	�? �? �?: AppTaskCreate
 *	功能说明: 创建应用任务
-*	形    参：无
-*	返 回 值: 无
+*	�?    参：�?
+*	�? �? �?: �?
 **********************************************************************************************************/
 static void AppTaskCreate (void)
 {
 
 
     xTaskCreate( vTaskUsartPro,     		/* 任务函数  */
-                 "vTaskUsartPro",   		/* 任务名    */
+                 "vTaskUsartPro",   		/* 任务�?    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
+                 2,               		/* 任务优先�?*/
                  &xHandleTaskUsartPro );  /* 任务句柄  */
 
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
-                 "vTaskMsgPro",   		/* 任务名    */
+                 "vTaskMsgPro",   		/* 任务�?    */
                  256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级*/
+                 1,               		/* 任务优先�?*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务名    */
+                 "vTaskStart",   		/* 任务�?    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,              		/* 任务优先级*/
+                 3,              		/* 任务优先�?*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 /********************************************************************************
@@ -352,10 +352,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
                  xTaskNotifyFromISR(xHandleTaskUsartPro,  /* 目标任务 */
                                     DECODER_BIT_7,     /* 设置目标任务事件标志位bit0  */
-                                    eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                                    eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                                     &xHigherPriorityTaskWoken);
 
-                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
                 portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
                 #endif 
                   
@@ -443,7 +443,7 @@ void smartphone_turn_on_handler(void)
    
     xTaskNotify(xHandleTaskMsgPro,  /* 目标任务 */
     PHONE_POWER_ON_RX_8,      /* 设置目标任务事件标志位bit0  */
-    eSetBits);  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+    eSetBits);  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
 
 }
 
@@ -455,10 +455,10 @@ void display_board_commnunication_handler(void)
 
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
          DECODER_BIT_10,     /* 设置目标任务事件标志位bit0  */
-         eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+         eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
             &xHigherPriorityTaskWoken);
 
-                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 

@@ -46,65 +46,38 @@ void Delay_us(uint16_t us) {
     HAL_Delay(us / 1000 + 1);  // 简单实现，至少保证 1ms 的延时
 }
 
-//Write one byte 
-// 模拟SPI写一个字节
+  /**
+ * @brief  TM1723写入一个字节
+ * @param  byte: 要写入的字节
+ * @retval None
+ */
 static void SoftSPI_WriteByte(uint8_t data)
 {
+
     uint8_t i;
-    #if 1
-    for(i = 0; i < 8; i++) {
-        // 设置MOSI
-        if(data & 0x80) {
-            HAL_GPIO_WritePin(TM1723_MOSI_PORT, TM1723_MOSI_PIN, GPIO_PIN_SET);
-        } else {
-            HAL_GPIO_WritePin(TM1723_MOSI_PORT, TM1723_MOSI_PIN, GPIO_PIN_RESET);
-        }
-        data <<= 1;
+    for(i = 0; i < 8; i++)
+    {
+        TM1723_CLK_SetLow();
+        delay_us(2);
         
-        // 上升沿
-        HAL_GPIO_WritePin(TM1723_SCK_PORT, TM1723_SCK_PIN, GPIO_PIN_SET);
-        delay_us(100);
-        
-        // 下降沿
-        HAL_GPIO_WritePin(TM1723_SCK_PORT, TM1723_SCK_PIN, GPIO_PIN_RESET);
-        delay_us(10);
+        if(data & 0x01)
+            TM1723_DIO_SetHigh(); //写入数据 ‘1’
+        else
+            TM1723_DIO_SetLow(); //写入数据 ‘0’
+            
+        delay_us(2);
+        TM1723_CLK_SetHigh();
+        delay_us(2);
+        data >>= 1;
     }
-	#else
-
-	  // 片选使能
-    HAL_GPIO_WritePin(TM1723_STB_PORT, TM1723_STB_PIN, GPIO_PIN_RESET);
-    
-    // 发送 8 位数据，高位在前
-    for(uint8_t i = 0; i < 8; i++) {
-        // 设置 MOSI
-        if(data & 0x80) {
-            HAL_GPIO_WritePin(TM1723_MOSI_PORT, TM1723_MOSI_PIN, GPIO_PIN_SET);
-        } else {
-            HAL_GPIO_WritePin(TM1723_MOSI_PORT, TM1723_MOSI_PIN, GPIO_PIN_RESET);
-        }
-        data <<= 1;
-        
-        // 上升沿写入数据
-        HAL_GPIO_WritePin(TM1723_SCK_PORT, TM1723_SCK_PIN, GPIO_PIN_SET);
-        delay_us(100);//可根据需要调整延时
-        HAL_GPIO_WritePin(TM1723_SCK_PORT, TM1723_SCK_PIN, GPIO_PIN_RESET);
-        delay_us(100);
-    }
-    
-    // 片选失能
-    HAL_GPIO_WritePin(TM1723_STB_PORT, TM1723_STB_PIN, GPIO_PIN_SET);
-
-
-
-
-	#endif 
 }
+
 
 // 向指定地址写入数据
 void TM1723_WriteData(uint8_t addr, uint8_t data)
 {
 
-   #if 1
+   #if 0
 // 拉低CS
     HAL_GPIO_WritePin(TM1723_CS_PORT, TM1723_CS_PIN, GPIO_PIN_RESET);
     
