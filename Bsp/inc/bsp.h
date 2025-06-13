@@ -172,6 +172,7 @@ typedef struct {
    uint8_t gTimer_update_data_to_tencent ;
    uint8_t gTimer_disp_works_time;
    uint8_t gTimer_set_timer_value;
+   uint8_t gTimer_disp_smg_4bit;
   
 }BSP_process_t;
 

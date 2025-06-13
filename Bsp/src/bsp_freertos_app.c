@@ -196,7 +196,7 @@ static void vTaskMsgPro(void *pvParameters)//static void vTaskStart(void *pvPara
 
 		  set_timer_value_handler();
 
-		  Display_modeKey_switchTime_Handler();
+		 
 
 
           dispLCD_timeColon_handler();

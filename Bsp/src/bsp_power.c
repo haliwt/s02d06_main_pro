@@ -186,8 +186,14 @@ void power_on_run_handler(void)
        break;
 
       case 6:
-	  	   if(gpro_t.receive_disp_mode != disp_timer_timing && gpro_t.receive_disp_mode != disp_works_timing){	
-              Display_WorksTimingr_Handler(gkey_t.key_mode);
+		   if(gpro_t.receive_disp_mode == disp_timer_timing || gpro_t.receive_disp_mode == disp_works_timing){
+	        Display_modeKey_switchTime_Handler();
+		   }
+	  	   else if(gpro_t.receive_disp_mode != disp_timer_timing && gpro_t.receive_disp_mode != disp_works_timing){	
+              if(gpro_t.gTimer_disp_smg_4bit > 2){
+			  	gpro_t.gTimer_disp_smg_4bit =0;
+			  Display_WorksTimingr_Handler(gkey_t.key_mode);
+              }
 	  	   }
 	  	  
     	  gctl_t.step_process=7;
