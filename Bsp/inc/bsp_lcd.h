@@ -12,10 +12,10 @@
 
 
 
-#define TM1723_CLK_SetHigh()            do{TM1723_SCLK_GPIO_Port ->BSRR |=TM1723_SCLK_Pin; }while(0)//HAL_GPIO_WritePin(TM1723_SCLK_GPIO_Port,TM1723_SCLK_Pin ,GPIO_PIN_SET)    // ����ߵ�ƽ
-#define TM1723_CLK_SetLow()             do{TM1723_SCLK_GPIO_Port ->BSRR |=(uint32_t)TM1723_SCLK_Pin<<16; }while(0)//HAL_GPIO_WritePin(TM1723_SCLK_GPIO_Port,TM1723_SCLK_Pin ,GPIO_PIN_RESET)  // ����͵�ƽ
+#define TM1723_CLK_SetHigh()            do{TM1723_SCLK_GPIO_Port ->BSRR |=TM1723_SCLK_Pin; }while(0)//HAL_GPIO_WritePin(TM1723_SCLK_GPIO_Port,TM1723_SCLK_Pin ,GPIO_PIN_SET)    // ����ߵ��?
+#define TM1723_CLK_SetLow()             do{TM1723_SCLK_GPIO_Port ->BSRR |=(uint32_t)TM1723_SCLK_Pin<<16; }while(0)//HAL_GPIO_WritePin(TM1723_SCLK_GPIO_Port,TM1723_SCLK_Pin ,GPIO_PIN_RESET)  // ����͵��?
 
-#define TM1723_DIO_SetHigh()            do{TM1723_DIO_GPIO_Port->BSRR |=TM1723_DIO_Pin;}while(0)//HAL_GPIO_WritePin(TM1723_DIO_GPIO_Port,TM1723_DIO_Pin,GPIO_PIN_SET)    // ����ߵ�ƽ
+#define TM1723_DIO_SetHigh()            do{TM1723_DIO_GPIO_Port->BSRR |=TM1723_DIO_Pin;}while(0)//HAL_GPIO_WritePin(TM1723_DIO_GPIO_Port,TM1723_DIO_Pin,GPIO_PIN_SET)    // ����ߵ��?
 #define TM1723_DIO_SetLow()             do{TM1723_DIO_GPIO_Port->BSRR |=(uint32_t)TM1723_DIO_Pin<<16;}while(0)//HAL_GPIO_WritePin(TM1723_DIO_GPIO_Port,TM1723_DIO_Pin,GPIO_PIN_RESET)    // output low level
 
 #define TM1723_STB_SetHigh()            do{TM1723_STB_GPIO_Port->BSRR |=TM1723_STB_Pin;}while(0)//HAL_GPIO_WritePin(TM1723_STB_GPIO_Port,TM1723_STB_Pin,GPIO_PIN_SET)
@@ -38,7 +38,7 @@
 #define TM1723Default          	0x87
 #define CloseDispTM1723		    0x80//  
 
-#define LUM_VALUE      0X97//0x94//0x92//0x93//0x95//0x94//0x97(max)
+#define LUM_VALUE        0x94//0x92//0x93//0x95//0x94//0x97(max)
 
 
  //Display Address 

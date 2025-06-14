@@ -374,7 +374,7 @@ void dispLCD_timerTime_fun(void)
 	donot_disp_ai_symbol();
 
 	glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
-	glcd_t.number5_high =   glcd_t.number6_low / 10;
+	glcd_t.number5_high = glcd_t.number5_low;
 
 
 	glcd_t.number6_low = gpro_t.set_timer_timing_hours  % 10;
@@ -387,6 +387,7 @@ void dispLCD_timerTime_fun(void)
 
 	glcd_t.number8_low = gpro_t.set_timer_timing_minutes % 10;
 	glcd_t.number8_high = glcd_t.number8_low;
+	
 	display_works_times_handler(); //Display_Works_Timing();
 }
 
