@@ -209,10 +209,10 @@ void key_power_shot_handler(void)
 }
 /*********************************************************************************
 *
-*	å‡½ æ•° å:void smartphone_power_on_handler(uint8_t phone_on)
+*	å‡? æ•? å?:void smartphone_power_on_handler(uint8_t phone_on)
 *	åŠŸèƒ½è¯´æ˜: 
-*	å½¢    å‚: 
-*	è¿” å› å€¼: æ— 
+*	å½?    å?: 
+*	è¿? å›? å€?: æ—?
 *   
 *********************************************************************************/
 void smartphone_power_on_handler(void)
@@ -235,10 +235,10 @@ void smartphone_power_on_handler(void)
 }
 /*********************************************************************************
 *
-*	å‡½ æ•° å:static void mode_long_short_key_fun(void)
+*	å‡? æ•? å?:static void mode_long_short_key_fun(void)
 *	åŠŸèƒ½è¯´æ˜: 
-*	å½¢    å‚: 
-*	è¿” å› å€¼: æ— 
+*	å½?    å?: 
+*	è¿? å›? å€?: æ—?
 *   
 *********************************************************************************/
 void key_mode_long_handler(void)
@@ -803,8 +803,8 @@ void set_timer_value_handler(void)
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
                     
-                    SendData_Data(0x4C,0x0);
-				    osDelay(5);
+                  //  SendData_Data(0x4C,0x0);
+				  //  osDelay(5);
 
                  
                  
@@ -823,7 +823,7 @@ void set_timer_value_handler(void)
 
               
               
-                    SendData_Data(0x4C, gpro_t.set_timer_timing_hours); //set up timer timing value .
+                    SendData_Data(0x2B, gpro_t.set_timer_timing_hours); //set up timer timing value .
                     osDelay(5);
 
 					if(gpro_t.tencent_link_success==1){

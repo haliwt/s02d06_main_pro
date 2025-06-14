@@ -30,7 +30,8 @@ void FillFrame(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen)
     buf[0] = FRAME_HEADER;
     buf[1] = 0x10; // Mainboard device number
     buf[2] = cmd;
-    buf[3] = (dataLen > 0) ? 0x0F : 0x00; // Data or command
+	if(dataLen ==0) buf[3]=0;
+    else buf[3] = 0x0F ; // Data or command
 
 	if(buf[3] ==0){
        buf[4] = data[0];
@@ -51,32 +52,32 @@ void FillFrame(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen)
 	}
 }
 
-// 发
+// �?
 
 void FillFrame_Response(uint8_t *buf, uint8_t cmd, uint8_t *data, uint8_t dataLen) 
 {
     buf[0] = FRAME_HEADER;          // 帧头
-    buf[1] = 0x10;                  // 主板设备号
+    buf[1] = 0x10;                  // 主板设备�?
     buf[2] = 0xFF;                  // 应答信号标志
     buf[3] = cmd;                   // 命令类型
-    buf[4] = (dataLen > 0) ? 0x0F : 0x00; // 数据标志：0x0F 表示有数据，0x00 表示无数据
+    buf[4] = (dataLen > 0) ? 0x0F : 0x00; // 数据标志�?0x0F 表示有数据，0x00 表示无数�?
 
     if (buf[4] == 0x00) {           // 无数据的情况
         buf[5] = data[0];           // 具体指令
         buf[6] = FRAME_END;         // 帧尾
-        buf[7] = bcc_check(buf, 7); // 校验码
+        buf[7] = bcc_check(buf, 7); // 校验�?
     } else {                        // 有数据的情况
         buf[5] = dataLen;           // 数据长度
-        if (data != NULL) {         // 检查数据指针是否有效
+        if (data != NULL) {         // �?查数据指针是否有�?
             for (uint8_t i = 0; i < dataLen; i++) {
                 buf[6 + i] = data[i]; // 填充数据
             }
         }
         buf[6 + dataLen] = FRAME_END;         // 帧尾
-        buf[7 + dataLen] = bcc_check(buf, 7 + dataLen); // 校验码
+        buf[7 + dataLen] = bcc_check(buf, 7 + dataLen); // 校验�?
     }
 }
-// 公共函数：发送数据
+// 公共函数：发送数�?
 void TransmitData(uint8_t *buf, uint8_t size) 
 {
     transferSize = size;
@@ -91,7 +92,7 @@ void TransmitData(uint8_t *buf, uint8_t size)
     	HAL_UART_Transmit_DMA(&huart1, buf, transferSize);
     #endif
 }
-//送命令响应
+//送命令响�?
 void SendWifiData_Answer_Cmd(uint8_t cmd, uint8_t cmdata) 
 {
     uint8_t cmdData[1] = {cmdata};
@@ -103,12 +104,12 @@ void SendWifiData_Answer_Cmd(uint8_t cmd, uint8_t cmdata)
 /******************************************************************************
 	*
 	*Function Name:void set_timer_timing_value_handler(void)
-	*Funcion: // 发送显示命令
+	*Funcion: // 发�?�显示命�?
 	*Input Ref: NO
 	*Return Ref:NO
 	*
 ******************************************************************************/
-// 发送命令数据
+// 发�?�命令数�?
 void SendData_Set_Command(uint8_t cmd, uint8_t data) 
 {
     uint8_t cmdData[1] = {data};
@@ -127,7 +128,7 @@ void SendData_Data(uint8_t cmd, uint8_t data)
 {
     uint8_t cmdData[1] = {data};
     FillFrame(outputBuf, cmd, cmdData, 1);
-    TransmitData(outputBuf, 7);
+    TransmitData(outputBuf, 8);
 }
 
 

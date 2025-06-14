@@ -45,7 +45,7 @@ void receive_data_fromm_display(uint8_t *pdata)
 
      break;
 
-     case 0x01: //表示开机指令
+     case 0x01: //表示�?机指�?
         //wake_up_backlight_on();
         gpro_t.gTimer_shut_off_backlight =0;
 
@@ -116,7 +116,7 @@ void receive_data_fromm_display(uint8_t *pdata)
       
      break;
 
-     case 0x22: //notification :ccompare set temp value ->PTC打开关闭指令,没有蜂鸣器声音。
+     case 0x22: //notification :ccompare set temp value ->PTC打开关闭指令,没有蜂鸣器声音�??
      // wake_up_backlight_on();
      // gpro_t.gTimer_shut_off_backlight =0;
 
@@ -374,7 +374,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
 
-      case 0x1A: //read DHT11 of sensor temperature and humidity value 读取传感的温度数据
+      case 0x1A: //read DHT11 of sensor temperature and humidity value 读取传感的温度数�?
           //wake_up_backlight_on();
           //gpro_t.gTimer_shut_off_backlight =0;
         if(pdata[4] == 0x0F){ //
@@ -390,7 +390,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
       break;
 
-      case 0x2A:   //set up temperature value 按键设置的温度值
+      case 0x2A:   //set up temperature value 按键设置的温度�??
 
        //  wake_up_backlight_on();
         if(pdata[4] == 0x01){ 
@@ -420,7 +420,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
       break;
 
-      case 0x1C: //表示时间：小时，分，秒
+      case 0x1C: //表示时间：小时，分，�?
 
         if(pdata[3] == 0x0F){ //数据
 
@@ -430,7 +430,7 @@ void receive_data_fromm_display(uint8_t *pdata)
         }
       break;
 
-        case 0x1D: //表示日期： 年，月，日
+        case 0x1D: //表示日期�? 年，月，�?
 
         if(pdata[3] == 0x0F){ //数据
 
@@ -467,7 +467,7 @@ void receive_data_fromm_display(uint8_t *pdata)
      break;
 
 
-     case 0x4C: //display #1 or display #2  timer timing .
+     case 0x2B: //display #1 or display #2  timer timing .
          wake_up_backlight_on();
          gpro_t.gTimer_shut_off_backlight =0;
          if(pdata[4]==0x01){
