@@ -468,21 +468,22 @@ void receive_data_fromm_display(uint8_t *pdata)
 
 
      case 0x2B: //display #1 or display #2  timer timing .
-         wake_up_backlight_on();
-         gpro_t.gTimer_shut_off_backlight =0;
-         if(pdata[4]==0x01){
+         //wake_up_backlight_on();
+         ///gpro_t.gTimer_shut_off_backlight =0;
+         if(pdata[3]==0x0F){
+	         if(pdata[4]==0x01){
 
-            gkey_t.key_mode = disp_timer_timing;
-        
-            gkey_t.set_timer_timing_success = 1;
-            gkey_t.gTimer_disp_set_timer = 0; 
-            gpro_t.set_timer_timing_minutes =0;
-          
-            gpro_t.set_timer_timing_hours = pdata[5];
-			dispLCD_timerTime_fun();
-            
+	            gkey_t.key_mode = disp_timer_timing;
+	        
+	            gkey_t.set_timer_timing_success = 1;
+	            gkey_t.gTimer_disp_set_timer = 0; 
+	            gpro_t.set_timer_timing_minutes =0;
+	          
+	            gpro_t.set_timer_timing_hours = pdata[5];
+				dispLCD_timerTime_fun();
+	            
+	         }
          }
-
 
      break;
         
